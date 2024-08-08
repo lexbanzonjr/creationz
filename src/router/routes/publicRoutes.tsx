@@ -1,5 +1,6 @@
-import Login from "../../views/auth/Login";
-import Register from "../../views/auth/Register";
+import { lazy } from "react";
+const Login = lazy(() => import("../../views/auth/Login"));
+const Register = lazy(() => import("../../views/auth/Register"));
 
 const publicRoutes = [
   {
