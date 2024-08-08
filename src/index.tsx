@@ -5,6 +5,9 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 
+///
+if (process.env.NODE_ENV !== "development") console.log = () => {};
+
 const App = lazy(() => import("./App"));
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
