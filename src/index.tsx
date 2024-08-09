@@ -1,4 +1,4 @@
-import React, { lazy } from "react";
+import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom/client";
 
 import "./index.css";
@@ -14,7 +14,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <BrowserRouter>
-    <App />
+    <Suspense>
+      <App />
+    </Suspense>
   </BrowserRouter>
 );
 
