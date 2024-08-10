@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 
 const AdminLogin = () => {
   const [state, setState] = useState({
@@ -65,15 +64,6 @@ const AdminLogin = () => {
             <button className="bg-slate-800 w-full hover:shadow-blue-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3">
               Sign in
             </button>
-
-            <div className="flex items-center mb-3 gap-3 justify-center">
-              <p>
-                Don't have an account?
-                <Link className="font-bold" to="/register">
-                  Sign up
-                </Link>
-              </p>
-            </div>
           </form>
         </div>
       </div>
