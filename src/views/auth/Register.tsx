@@ -1,7 +1,27 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Link } from "react-router-dom";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
+import { ChangeEvent, useState } from "react";
 
 const Register = () => {
+  const [state, setState] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const inputHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setState({
+      ...state,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const submit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(state);
+  };
+
   return (
     <div className="min-w-screen min-h-screen bg-[#cbcae9] flex justify-center items-center">
       <div className="w-[350px] text-[#ffffff] p-2">
@@ -11,10 +31,12 @@ const Register = () => {
             Please register your account
           </p>
 
-          <form>
+          <form onSubmit={submit}>
             <div className="flex flex-col w-full gap-1 mb-3">
               <label htmlFor="name">Name</label>
               <input
+                onChange={inputHandle}
+                value={state.name}
                 className="px-3 py-2 outline-none border border-slate-700 bg-transparent rounded-md"
                 type="text"
                 name="name"
@@ -27,6 +49,8 @@ const Register = () => {
             <div className="flex flex-col w-full gap-1 mb-3">
               <label htmlFor="email">Email</label>
               <input
+                onChange={inputHandle}
+                value={state.email}
                 className="px-3 py-2 outline-none border border-slate-700 bg-transparent rounded-md"
                 type="text"
                 name="email"
@@ -39,6 +63,8 @@ const Register = () => {
             <div className="flex flex-col w-full gap-1 mb-3">
               <label htmlFor="password">Password</label>
               <input
+                onChange={inputHandle}
+                value={state.password}
                 className="px-3 py-2 outline-none border border-slate-700 bg-transparent rounded-md"
                 type="password"
                 name="password"
