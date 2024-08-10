@@ -1,6 +1,10 @@
 import { useState } from "react";
+import { admin_login } from "../../store/Reducers/authReducer";
+import { useAppDispatch } from "../../store/hook";
 
 const AdminLogin = () => {
+  const dispatch = useAppDispatch();
+
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -15,7 +19,7 @@ const AdminLogin = () => {
 
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(state);
+    dispatch(admin_login(state));
   };
 
   return (
