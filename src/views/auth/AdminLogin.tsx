@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/img-redundant-alt */
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -29,7 +28,7 @@ const AdminLogin = () => {
               <img
                 className="w-full h-full"
                 src="/Creationz-8-9-2024.png"
-                alt="image"
+                alt="logo"
               />
             </div>
           </div>

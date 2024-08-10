@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Link } from "react-router-dom";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 
 const Register = () => {
   const [state, setState] = useState({
@@ -26,7 +25,15 @@ const Register = () => {
     <div className="min-w-screen min-h-screen bg-[#cbcae9] flex justify-center items-center">
       <div className="w-[350px] text-[#ffffff] p-2">
         <div className="bg-[#6f68d1] p-4 rounded-md">
-          <h2 className="text-xl mb-3 font-bold">Welome to Creationz</h2>
+          <div className="h-[70px] flex justify-center items-center">
+            <div className="w-[180px] h-[50px]">
+              <img
+                className="w-full h-full"
+                src="/Creationz-8-9-2024.png"
+                alt="logo"
+              />
+            </div>
+          </div>
           <p className="text-sm mb-3 font-medium">
             Please register your account
           </p>
