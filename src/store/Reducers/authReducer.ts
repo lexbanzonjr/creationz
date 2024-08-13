@@ -8,7 +8,9 @@ export const admin_login = createAsyncThunk(
       const { data } = await api.post("/admin-login", info, {
         withCredentials: true,
       });
-    } catch (error) {}
+    } catch (error: any) {
+      console.error(error.response.data);
+    }
   }
 );
 
