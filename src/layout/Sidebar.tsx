@@ -1,6 +1,15 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { getNav, Nav } from "../navigation";
 
 const Sidebar = () => {
+  const [allNav, setAllNav] = useState<Nav[]>([]);
+  useEffect(() => {
+    const navs = getNav("admin");
+    setAllNav(navs);
+    console.log(navs);
+  }, []);
+
   return (
     <div>
       <div></div>
@@ -16,6 +25,7 @@ const Sidebar = () => {
             />
           </Link>
         </div>
+        <div className="px-[16px]"></div>
       </div>
     </div>
   );
