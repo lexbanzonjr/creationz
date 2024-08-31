@@ -29,7 +29,7 @@ const Sidebar = () => {
         <div className="px-[16px]">
           <ul>
             {allNav.map((n, i) => (
-              <li key={1}>
+              <li key={i}>
                 <Link
                   to={n.path}
                   className={`${
