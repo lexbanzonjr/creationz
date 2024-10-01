@@ -1,9 +1,6 @@
 import { AiOutlineDashboard, AiOutlineShoppingCart } from "react-icons/ai";
-import { BiCategory } from "react-icons/bi";
-import { FaUsers, FaUserTimes } from "react-icons/fa";
-import { FaCodePullRequest } from "react-icons/fa6";
+import { FaStore, FaUsers } from "react-icons/fa";
 import { IoIosChatbubbles } from "react-icons/io";
-import { MdPayment } from "react-icons/md";
 
 export const allNav = [
   {
@@ -22,41 +19,20 @@ export const allNav = [
   },
   {
     id: 3,
-    title: "Category",
-    icon: <BiCategory />,
+    title: "Store",
+    icon: <FaStore />,
     role: "admin",
     path: "/admin/dashboard/category",
   },
   {
     id: 4,
-    title: "Seller",
+    title: "Customers",
     icon: <FaUsers />,
     role: "admin",
-    path: "/admin/dashboard/seller",
+    path: "/admin/dashboard/customers",
   },
   {
     id: 5,
-    title: "Payment Request",
-    icon: <MdPayment />,
-    role: "admin",
-    path: "/admin/dashboard/payment-request",
-  },
-  {
-    id: 6,
-    title: "Deactive Sellers",
-    icon: <FaUserTimes />,
-    role: "admin",
-    path: "/admin/dashboard/deactive-sellers",
-  },
-  {
-    id: 7,
-    title: "Seller Request",
-    icon: <FaCodePullRequest />,
-    role: "admin",
-    path: "/admin/dashboard/seller-request",
-  },
-  {
-    id: 8,
     title: "Live Chat",
     icon: <IoIosChatbubbles />,
     role: "admin",
