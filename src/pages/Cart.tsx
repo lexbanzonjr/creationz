@@ -1,6 +1,6 @@
 import React from "react";
 import { useCart } from "../context/CartContext";
-
+import styles from "./Cart.module.css";
 const Cart: React.FC = () => {
   const { cart, updateCartItem, removeCartItem } = useCart();
 
@@ -10,8 +10,8 @@ const Cart: React.FC = () => {
       .toFixed(2);
 
   return (
-    <div className="cart">
-      <h1>Your Cart</h1>
+    <div className={styles.cart}>
+      <h1 className={styles.h1}>Your Cart</h1>
       {cart.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (

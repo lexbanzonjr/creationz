@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./AddProduct.css";
+import styles from "./AddProduct.module.css";
 
 interface Product {
   name: string;
@@ -34,7 +34,7 @@ const AddProduct: React.FC = () => {
   };
 
   return (
-    <div className="add-product">
+    <div className={styles["add-product"]}>
       <h2>Add Product</h2>
       <form onSubmit={handleSubmit}>
         <label>

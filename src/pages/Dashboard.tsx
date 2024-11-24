@@ -1,7 +1,7 @@
 import React from "react";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext"; // Assumes a CartContext is already implemented
-import "./Dashboard.css";
+import styles from "./Dashboard.module.css";
 
 // Mock Data
 const userInfo = {
@@ -24,11 +24,11 @@ const Dashboard: React.FC = () => {
   const { getId } = useAuth();
 
   return (
-    <div className="dashboard">
+    <div className={styles.dashboard}>
       <h1>User Dashboard</h1>
 
       {/* User Information Section */}
-      <section className="user-info">
+      <section className={styles["user-info"]}>
         <h2>User Information</h2>
         <p>
           <strong>Name:</strong> {getId.name}
@@ -39,7 +39,7 @@ const Dashboard: React.FC = () => {
       </section>
 
       {/* Cart Section */}
-      <section className="cart-info">
+      <section className={styles["cart-info"]}>
         <h2>Cart</h2>
         {cart.length > 0 ? (
           <ul>
@@ -55,7 +55,7 @@ const Dashboard: React.FC = () => {
       </section>
 
       {/* Order History Section */}
-      <section className="order-history">
+      <section className={styles["order-history"]}>
         <h2>Order History</h2>
         {orderHistory.length > 0 ? (
           <ul>

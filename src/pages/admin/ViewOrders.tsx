@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./ViewOrders.css";
+import styles from "./ViewOrders.module.css";
 
 interface Order {
   id: number;
@@ -37,7 +37,7 @@ const ViewOrders: React.FC = () => {
   }, []);
 
   return (
-    <div className="view-orders">
+    <div className={styles["view-orders"]}>
       <h2>View Orders</h2>
       {orders.length > 0 ? (
         <table>

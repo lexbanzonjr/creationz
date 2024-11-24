@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import "./Navbar.css";
+import styles from "./Navbar.module.css";
 
 const Navbar: React.FC = () => {
   const { isAuthenticated, logout } = useAuth();
@@ -14,11 +14,11 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="navbar">
-      <div className="navbar-brand">
+    <nav className={styles.navbar}>
+      <div className={styles["navbar-brand"]}>
         <Link to="/">Creationz by CC</Link>
       </div>
-      <ul className="navbar-links">
+      <ul className={styles["navbar-links"]}>
         <li>
           <Link to="/">Home</Link>
         </li>
