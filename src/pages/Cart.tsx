@@ -1,48 +1,13 @@
 import React from "react";
-import "./Cart.css";
-
-interface CartItem {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-  image: string;
-}
+import { useCart } from "../context/CartContext";
 
 const Cart: React.FC = () => {
-  const [cart, setCart] = React.useState<CartItem[]>([
-    {
-      id: 1,
-      name: "Classic Tee",
-      price: 19.99,
-      quantity: 1,
-      image: "/images/classic-tee.jpg",
-    },
-    {
-      id: 2,
-      name: "V-Neck Tee",
-      price: 21.99,
-      quantity: 2,
-      image: "/images/vneck-tee.jpg",
-    },
-  ]);
+  const { cart, updateCartItem, removeCartItem } = useCart();
 
-  const updateQuantity = (id: number, quantity: number) => {
-    if (quantity < 1) return;
-    setCart((prevCart) =>
-      prevCart.map((item) => (item.id === id ? { ...item, quantity } : item))
-    );
-  };
-
-  const removeItem = (id: number) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== id));
-  };
-
-  const calculateTotal = () => {
-    return cart
+  const calculateTotal = () =>
+    cart
       .reduce((total, item) => total + item.price * item.quantity, 0)
       .toFixed(2);
-  };
 
   return (
     <div className="cart">
@@ -50,8 +15,8 @@ const Cart: React.FC = () => {
       {cart.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
-        <div>
-          <table className="cart-table">
+        <>
+          <table>
             <thead>
               <tr>
                 <th>Product</th>
@@ -64,9 +29,9 @@ const Cart: React.FC = () => {
             <tbody>
               {cart.map((item) => (
                 <tr key={item.id}>
-                  <td className="product-info">
-                    <img src={item.image} alt={item.name} />
-                    <span>{item.name}</span>
+                  <td>
+                    <img src={item.image} alt={item.name} width="50" />
+                    {item.name}
                   </td>
                   <td>${item.price.toFixed(2)}</td>
                   <td>
@@ -74,24 +39,23 @@ const Cart: React.FC = () => {
                       type="number"
                       value={item.quantity}
                       onChange={(e) =>
-                        updateQuantity(item.id, parseInt(e.target.value))
+                        updateCartItem(item.id, parseInt(e.target.value))
                       }
                       min="1"
                     />
                   </td>
                   <td>${(item.price * item.quantity).toFixed(2)}</td>
                   <td>
-                    <button onClick={() => removeItem(item.id)}>Remove</button>
+                    <button onClick={() => removeCartItem(item.id)}>
+                      Remove
+                    </button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <div className="cart-summary">
-            <h2>Total: ${calculateTotal()}</h2>
-            <button className="checkout-button">Proceed to Checkout</button>
-          </div>
-        </div>
+          <h2>Total: ${calculateTotal()}</h2>
+        </>
       )}
     </div>
   );
