@@ -45,3 +45,21 @@
 .add-category form button:hover {
   background-color: #27ae60;
 }
+
+.property-fields {
+  display: flex;
+  gap: 16px; /* Add space between fields */
+  align-items: center; /* Align input fields vertically */
+}
+
+.property-fields label {
+  flex: 1; /* Ensure labels and inputs grow evenly */
+}
+
+.property-fields input {
+  width: 100%; /* Inputs take full width of their container */
+  padding: 8px;
+  margin-top: 4px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  font-size: 14px;
+}
