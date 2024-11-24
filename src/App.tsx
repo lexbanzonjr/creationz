@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import AdminDashboard from "./pages/admin/Dashboard";
 import Cart from "./pages/Cart";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
@@ -19,6 +20,8 @@ const App: React.FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/shop" element={<Shop />} />
+
+        <Route path="/admin/*" element={<AdminDashboard />} />
       </Routes>
     </Router>
   );
