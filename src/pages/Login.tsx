@@ -1,26 +1,50 @@
 import React, { useState } from "react";
-import "./Auth.css";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Perform login logic here (e.g., API call)
-    if (!email || !password) {
-      alert("Please enter both email and password");
-      return;
-    }
+    // Clear previous error
+    setError(null);
 
-    alert(`Logged in as ${email}`);
+    try {
+      const authHeader = `Basic ${btoa(`${email}:${password}`)}`;
+
+      // API call for authentication
+      const response = await axios.post(
+        "https://localhost:5000/auth/login", // Replace with your API URL
+        {}, // No body needed for Basic Authentication
+        {
+          headers: {
+            Authorization: authHeader,
+          },
+        }
+      );
+
+      // Handle success (e.g., store token, redirect user)
+      alert("Login successful");
+      const token = response.data.token;
+      localStorage.setItem("authToken", token);
+      navigate("/dashboard");
+    } catch (err: any) {
+      // Handle errors (e.g., invalid credentials)
+      setError(
+        err.response?.data?.message || "Login failed. Please try again."
+      );
+    }
   };
 
   return (
     <div className="auth-container">
       <h1>Login</h1>
-      <form onSubmit={handleSubmit} className="auth-form">
+      <form onSubmit={handleLogin} className="auth-form">
         <div className="form-group">
           <label htmlFor="email">Email:</label>
           <input
@@ -41,6 +65,7 @@ const Login: React.FC = () => {
             required
           />
         </div>
+        {error && <p className="error-message">{error}</p>}
         <button type="submit" className="auth-button">
           Login
         </button>

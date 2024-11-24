@@ -1,27 +1,57 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./Auth.css";
 
 const SignUp: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Perform sign-up logic here (e.g., API call)
+    // Clear previous messages
+    setError(null);
+    setSuccess(null);
+
+    // Validate passwords match
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      setError("Passwords do not match.");
       return;
     }
 
-    alert(`Signed up as ${email}`);
+    setLoading(true);
+    try {
+      // API call to register the account
+      const response = await axios.post(
+        "https://localhost:5000/auth/register",
+        {
+          email,
+          password,
+        }
+      );
+
+      // Handle success
+      setSuccess("Account created successfully! You can now log in.");
+      setTimeout(() => navigate("/login"), 2000); // Redirect after 2 seconds
+    } catch (err: any) {
+      // Handle errors
+      setError(
+        err.response?.data?.message || "Sign up failed. Please try again."
+      );
+    }
+    setLoading(false);
   };
 
   return (
     <div className="auth-container">
       <h1>Sign Up</h1>
-      <form onSubmit={handleSubmit} className="auth-form">
+      <form onSubmit={handleSignUp} className="auth-form">
         <div className="form-group">
           <label htmlFor="email">Email:</label>
           <input
@@ -52,12 +82,11 @@ const SignUp: React.FC = () => {
             required
           />
         </div>
+        {error && <p className="error-message">{error}</p>}
+        {success && <p className="success-message">{success}</p>}
         <button type="submit" className="auth-button">
           Sign Up
         </button>
-        <p>
-          Already have an account? <a href="/login">Login</a>
-        </p>
       </form>
     </div>
   );

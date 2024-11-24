@@ -46,6 +46,18 @@ h1 {
   background-color: #0056b3;
 }
 
+.error-message {
+  color: red;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.success-message {
+  color: green;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
 p {
   text-align: center;
   margin-top: 1rem;
