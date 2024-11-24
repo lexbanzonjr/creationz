@@ -29,11 +29,17 @@ const Navbar: React.FC = () => {
           <Link to="/cart">Cart</Link>
         </li>
         {isAuthenticated ? (
-          <li>
-            <Link to="/" onClick={handleLogout}>
-              Logout
-            </Link>
-          </li>
+          <>
+            <li>
+              <Link to="/dashboard">Dashboard</Link>
+            </li>
+
+            <li>
+              <Link to="/" onClick={handleLogout}>
+                Logout
+              </Link>
+            </li>
+          </>
         ) : (
           <li>
             <Link to="/login">Login</Link>
