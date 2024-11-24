@@ -33,8 +33,10 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
+const blankId = { name: "", email: "", roles: [] };
+
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [getId, setId] = useState<IdParams>({ name: "", email: "", roles: [] });
+  const [getId, setId] = useState<IdParams>(blankId);
   const [isAuthenticated, setAuthenticated] = useState(false);
 
   const login = (params: LoginParams) => {
@@ -47,6 +49,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("idToken");
+    setId(blankId);
     setAuthenticated(false);
   };
 
