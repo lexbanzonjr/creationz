@@ -14,6 +14,7 @@ const ProductCard: React.FC<ProductProps> = ({ id, name, price, image }) => {
   const handleAddToCart = () => {
     // Call addToCart with the product details
     addToCart({ id, name, price, quantity: 1, image });
+    alert(`${name} added to cart!`);
   };
 
   return (
