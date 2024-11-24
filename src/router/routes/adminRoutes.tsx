@@ -1,4 +1,5 @@
 import { lazy } from "react";
+import Dashboard from "../../views/yahoo/Dashboard";
 const AdminDashboard = lazy(() => import("../../views/admin/AdminDashboard"));
 const Category = lazy(() => import("../../views/admin/Category"));
 const Customers = lazy(() => import("../../views/admin/Customers"));
@@ -23,6 +24,11 @@ export const adminRoutes = [
   {
     path: "admin/dashboard/customers",
     element: <Customers />,
+    role: "admin",
+  },
+  {
+    path: "yahoo",
+    element: <Dashboard />,
     role: "admin",
   },
 ];

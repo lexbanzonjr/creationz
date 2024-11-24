@@ -1,6 +1,7 @@
 import { AiOutlineDashboard, AiOutlineShoppingCart } from "react-icons/ai";
 import { FaStore, FaUsers } from "react-icons/fa";
 import { IoIosChatbubbles } from "react-icons/io";
+import YahooDashboard from "../views/yahoo/Dashboard";
 
 export const allNav = [
   {
@@ -37,5 +38,12 @@ export const allNav = [
     icon: <IoIosChatbubbles />,
     role: "admin",
     path: "/admin/dashboard/seller-request",
+  },
+  {
+    id: 6,
+    title: "Yahoo",
+    icon: <YahooDashboard />,
+    role: "admin",
+    path: "/yahoo",
   },
 ];
