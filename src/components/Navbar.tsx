@@ -5,12 +5,16 @@ import { useAuth } from "../context/AuthContext";
 import styles from "./Navbar.module.css";
 
 const Navbar: React.FC = () => {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, getId, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
     navigate("/login"); // Redirect to the login page
+  };
+
+  const isAdmin = () => {
+    return getId.roles.includes("admin");
   };
 
   return (
@@ -44,6 +48,15 @@ const Navbar: React.FC = () => {
           <li>
             <Link to="/login">Login</Link>
           </li>
+        )}
+        {isAdmin() ? (
+          <>
+            <li>
+              <Link to="/admin/dashboard">Admin Dashboard</Link>
+            </li>
+          </>
+        ) : (
+          <></>
         )}
       </ul>
     </nav>
