@@ -30,8 +30,8 @@ const Login: React.FC = () => {
 
       // Handle success (e.g., store token, redirect user)
       alert("Login successful");
-      const token = response.data.token;
-      localStorage.setItem("authToken", token);
+      const accessToken = response.data.accessToken;
+      localStorage.setItem("accesstoken", accessToken);
       navigate("/dashboard");
     } catch (err: any) {
       // Handle errors (e.g., invalid credentials)
