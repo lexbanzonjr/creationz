@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import "./Home.css";
 
 const Home: React.FC = () => {
@@ -7,18 +6,9 @@ const Home: React.FC = () => {
     <div className="home">
       {/* Hero Section */}
       <section className="hero">
-        <div className="hero-content">
-          <h1>Welcome to T-Shirt Haven</h1>
-          <p>
-            Explore the best t-shirts for every occasion. Comfortable, stylish,
-            and affordable!
-          </p>
-          <Link to="/shop" className="cta-button">
-            Shop Now
-          </Link>
-        </div>
+        <div className="hero-content"></div>
         <div className="hero-image">
-          <img src="/images/hero-tshirt.jpg" alt="T-Shirts" />
+          <img src="/banner.jpg" alt="T-Shirts" />
         </div>
       </section>
 
@@ -45,16 +35,6 @@ const Home: React.FC = () => {
             <button>Add to Cart</button>
           </div>
         </div>
-      </section>
-
-      {/* Call to Action Section */}
-      <section className="cta-section">
-        <h2>Don't Miss Out!</h2>
-        <p>Sign up for our newsletter and get 10% off your first order.</p>
-        <form className="cta-form">
-          <input type="email" placeholder="Enter your email" />
-          <button type="submit">Subscribe</button>
-        </form>
       </section>
     </div>
   );
