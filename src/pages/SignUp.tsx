@@ -5,6 +5,7 @@ import "./Auth.css";
 
 const SignUp: React.FC = () => {
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -31,6 +32,7 @@ const SignUp: React.FC = () => {
       const response = await axios.post(
         "https://localhost:5000/auth/register",
         {
+          name,
           email,
           password,
         }
@@ -52,6 +54,16 @@ const SignUp: React.FC = () => {
     <div className="auth-container">
       <h1>Sign Up</h1>
       <form onSubmit={handleSignUp} className="auth-form">
+        <div className="form-group">
+          <label htmlFor="name">Name:</label>
+          <input
+            type="name"
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
         <div className="form-group">
           <label htmlFor="email">Email:</label>
           <input
