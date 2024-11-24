@@ -1,4 +1,5 @@
 import React from "react";
+import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext"; // Assumes a CartContext is already implemented
 import "./Dashboard.css";
 
@@ -20,6 +21,7 @@ const orderHistory = [
 
 const Dashboard: React.FC = () => {
   const { cart } = useCart(); // Retrieve cart data from context
+  const { getId } = useAuth();
 
   return (
     <div className="dashboard">
@@ -29,10 +31,10 @@ const Dashboard: React.FC = () => {
       <section className="user-info">
         <h2>User Information</h2>
         <p>
-          <strong>Name:</strong> {userInfo.name}
+          <strong>Name:</strong> {getId.name}
         </p>
         <p>
-          <strong>Email:</strong> {userInfo.email}
+          <strong>Email:</strong> {getId.email}
         </p>
       </section>
 
