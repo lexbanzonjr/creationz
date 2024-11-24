@@ -6,14 +6,23 @@ import React, {
   ReactNode,
 } from "react";
 
+interface IdParams {
+  name: string;
+  email: string;
+  roles: string[];
+}
+
 interface LoginParams {
   token: string;
   idToken: { roles: string[] };
 }
 
 interface AuthContextType {
+  getId: IdParams;
+  setId: (params: IdParams) => void;
   isAuthenticated: boolean;
   setAuthenticated: (auth: boolean) => void;
+
   login: (params: LoginParams) => void;
   logout: () => void;
 }
@@ -25,10 +34,10 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  const [getId, setId] = useState<IdParams>({ name: "", email: "", roles: [] });
   const [isAuthenticated, setAuthenticated] = useState(false);
 
   const login = (params: LoginParams) => {
-    console.log(params);
     localStorage.setItem("accessToken", params.token);
     localStorage.setItem("idToken", JSON.stringify(params.idToken));
     setAuthenticated(true);
@@ -43,12 +52,25 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     // Check if the token exists on initial load
     const token = localStorage.getItem("accessToken");
-    setAuthenticated(!!token);
+    const isAuth = !!token;
+    setAuthenticated(isAuth);
+
+    const idToken = localStorage.getItem("idToken");
+    if (idToken) {
+      setId(JSON.parse(idToken) as IdParams);
+    }
   }, []);
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, setAuthenticated, login, logout }}
+      value={{
+        getId,
+        setId,
+        isAuthenticated,
+        setAuthenticated,
+        login,
+        logout,
+      }}
     >
       {children}
     </AuthContext.Provider>
