@@ -6,10 +6,15 @@ import React, {
   ReactNode,
 } from "react";
 
+interface LoginParams {
+  token: string;
+  idToken: { roles: string[] };
+}
+
 interface AuthContextType {
   isAuthenticated: boolean;
   setAuthenticated: (auth: boolean) => void;
-  login: (token: string) => void;
+  login: (params: LoginParams) => void;
   logout: () => void;
 }
 
@@ -22,13 +27,16 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAuthenticated, setAuthenticated] = useState(false);
 
-  const login = (token: string) => {
-    localStorage.setItem("accessToken", token);
+  const login = (params: LoginParams) => {
+    console.log(params);
+    localStorage.setItem("accessToken", params.token);
+    localStorage.setItem("idToken", JSON.stringify(params.idToken));
     setAuthenticated(true);
   };
 
   const logout = () => {
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("idToken");
     setAuthenticated(false);
   };
 
