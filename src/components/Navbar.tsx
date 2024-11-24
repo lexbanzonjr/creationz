@@ -1,8 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import "./Navbar.css";
 
 const Navbar: React.FC = () => {
+  const { isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login"); // Redirect to the login page
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-brand">
@@ -18,9 +28,17 @@ const Navbar: React.FC = () => {
         <li>
           <Link to="/cart">Cart</Link>
         </li>
-        <li>
-          <Link to="/login">Login</Link>
-        </li>
+        {isAuthenticated ? (
+          <li>
+            <Link to="/" onClick={handleLogout}>
+              Logout
+            </Link>
+          </li>
+        ) : (
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
+        )}
       </ul>
     </nav>
   );

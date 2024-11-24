@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "../context/AuthContext";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -30,8 +32,7 @@ const Login: React.FC = () => {
 
       // Handle success (e.g., store token, redirect user)
       alert("Login successful");
-      const accessToken = response.data.accessToken;
-      localStorage.setItem("accesstoken", accessToken);
+      login(response.data.accessToken);
       navigate("/dashboard");
     } catch (err: any) {
       // Handle errors (e.g., invalid credentials)
