@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import styles from "./AddCategory.module.css";
+import axios from "axios";
+import { useAuth } from "../../context/AuthContext";
 
 interface Category {
   name: string;
@@ -13,6 +15,7 @@ const blankCategory: Category = {
 
 const AddCategory: React.FC = () => {
   const [category, setCategory] = useState<Category>(blankCategory);
+  const { getAccessToken } = useAuth();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -46,10 +49,17 @@ const AddCategory: React.FC = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Category Added:", category);
-    // Add API call here to save category to database
+    try {
+      await axios.post("https://localhost:5000/category", category, {
+        headers: {
+          Authorization: `Basic ${getAccessToken}`,
+        },
+      });
+    } catch (error: any) {
+      console.error(error.response.data.error);
+    }
 
     // Reset form
     setCategory(blankCategory);
