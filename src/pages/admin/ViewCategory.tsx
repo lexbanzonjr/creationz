@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import { ColDef } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
@@ -10,26 +10,14 @@ interface Property {
 }
 
 interface Category {
+  id: number;
   name: string;
   properties: Property[];
 }
 
-const categoriesData: Category[] = [
-  {
-    name: "Category 1",
-    properties: [
-      { name: "Property 1", type: "String" },
-      { name: "Property 2", type: "Number" },
-    ],
-  },
-  {
-    name: "Category 2",
-    properties: [{ name: "Property A", type: "Boolean" }],
-  },
-];
-
 const CategoryList: React.FC = () => {
-  const [categories] = useState<Category[]>(categoriesData);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [newCategoryName, setNewCategoryName] = useState("");
 
   // Define column definitions for AG Grid
   const columnDefs: ColDef[] = [
@@ -38,7 +26,8 @@ const CategoryList: React.FC = () => {
       field: "name",
       sortable: true,
       filter: true,
-      width: 250, // Fixed width (25% of a 1000px grid width)
+      flex: 1,
+      editable: true, // Allow inline editing for category name
     },
     {
       headerName: "Properties",
@@ -49,19 +38,110 @@ const CategoryList: React.FC = () => {
           .map((property) => `${property.name} (${property.type})`)
           .join(", ");
       },
-      width: 750, // Fixed width (75% of a 1000px grid width)
+      flex: 2,
+    },
+    {
+      headerName: "Actions",
+      cellRenderer: (params: any) => {
+        return (
+          <button
+            onClick={() => handleRemoveCategory(params.data.id)}
+            style={{ cursor: "pointer", padding: "5px 10px", color: "red" }}
+          >
+            Remove
+          </button>
+        );
+      },
+      flex: 0.5,
     },
   ];
 
+  // Fetch initial categories (replace with your API call)
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const sampleCategories: Category[] = [
+        {
+          id: 1,
+          name: "Category 1",
+          properties: [
+            { name: "Property 1", type: "String" },
+            { name: "Property 2", type: "Number" },
+          ],
+        },
+        {
+          id: 2,
+          name: "Category 2",
+          properties: [{ name: "Property A", type: "Boolean" }],
+        },
+      ];
+      setCategories(sampleCategories);
+    };
+    fetchCategories();
+  }, []);
+
+  // Handle adding a new category
+  const handleAddCategory = () => {
+    if (newCategoryName.trim()) {
+      setCategories((prevCategories) => [
+        ...prevCategories,
+        {
+          id: Date.now(), // Unique ID
+          name: newCategoryName,
+          properties: [], // Empty properties
+        },
+      ]);
+      setNewCategoryName(""); // Reset input field
+    }
+  };
+
+  // Handle removing a category
+  const handleRemoveCategory = (id: number) => {
+    setCategories((prevCategories) =>
+      prevCategories.filter((category) => category.id !== id)
+    );
+  };
+
   return (
-    <div className="ag-theme-alpine" style={{ height: 400, width: "100%" }}>
+    <div>
       <h2>Category List</h2>
-      <AgGridReact
-        rowData={categories}
-        columnDefs={columnDefs}
-        pagination={true}
-        paginationPageSize={5}
-      />
+      {/* Add Category Form */}
+      <div style={{ marginBottom: "20px" }}>
+        <input
+          type="text"
+          value={newCategoryName}
+          onChange={(e) => setNewCategoryName(e.target.value)}
+          placeholder="Enter category name"
+          style={{ padding: "8px", width: "300px", marginRight: "10px" }}
+        />
+        <button
+          onClick={handleAddCategory}
+          style={{
+            padding: "8px 16px",
+            backgroundColor: "green",
+            color: "white",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          Add Category
+        </button>
+      </div>
+      {/* AG Grid */}
+      <div className="ag-theme-alpine" style={{ height: 400, width: "100%" }}>
+        <AgGridReact
+          rowData={categories}
+          columnDefs={columnDefs}
+          defaultColDef={{ flex: 1, resizable: true }}
+          onCellValueChanged={(params) => {
+            const updatedCategory = params.data as Category;
+            setCategories((prevCategories) =>
+              prevCategories.map((category) =>
+                category.id === updatedCategory.id ? updatedCategory : category
+              )
+            );
+          }}
+        />
+      </div>
     </div>
   );
 };
