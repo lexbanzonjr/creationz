@@ -38,9 +38,15 @@ interface AuthProviderProps {
 const blankId = { name: "", email: "", roles: [] };
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [getAccessToken, setAccessToken] = useState("");
-  const [getId, setId] = useState<IdParams>(blankId);
-  const [isAuthenticated, setAuthenticated] = useState(false);
+  const [getAccessToken, setAccessToken] = useState(
+    () => localStorage.getItem("accessToken") ?? ""
+  );
+  const [getId, setId] = useState<IdParams>(() =>
+    JSON.parse(localStorage.getItem("idToken") ?? "{}")
+  );
+  const [isAuthenticated, setAuthenticated] = useState(
+    () => !!localStorage.getItem("accessToken")
+  );
 
   const login = (params: LoginParams) => {
     localStorage.setItem("accessToken", params.token);
@@ -57,19 +63,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setId(blankId);
     setAuthenticated(false);
   };
-
-  useEffect(() => {
-    // Check if the token exists on initial load
-    const token = localStorage.getItem("accessToken");
-    setAccessToken(token ?? "");
-    const isAuth = !!token;
-    setAuthenticated(isAuth);
-
-    const idToken = localStorage.getItem("idToken");
-    if (idToken) {
-      setId(JSON.parse(idToken) as IdParams);
-    }
-  }, []);
 
   return (
     <AuthContext.Provider
