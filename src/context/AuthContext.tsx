@@ -18,6 +18,8 @@ interface LoginParams {
 }
 
 interface AuthContextType {
+  getAccessToken: string;
+  setAccessToken: (accessToken: string) => void;
   getId: IdParams;
   setId: (params: IdParams) => void;
   isAuthenticated: boolean;
@@ -36,12 +38,14 @@ interface AuthProviderProps {
 const blankId = { name: "", email: "", roles: [] };
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  const [getAccessToken, setAccessToken] = useState("");
   const [getId, setId] = useState<IdParams>(blankId);
   const [isAuthenticated, setAuthenticated] = useState(false);
 
   const login = (params: LoginParams) => {
     localStorage.setItem("accessToken", params.token);
     localStorage.setItem("idToken", JSON.stringify(params.idToken));
+    setAccessToken(params.token);
     setId(params.idToken as IdParams);
     setAuthenticated(true);
   };
@@ -49,6 +53,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("idToken");
+    setAccessToken("");
     setId(blankId);
     setAuthenticated(false);
   };
@@ -56,6 +61,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     // Check if the token exists on initial load
     const token = localStorage.getItem("accessToken");
+    setAccessToken(token ?? "");
     const isAuth = !!token;
     setAuthenticated(isAuth);
 
@@ -68,6 +74,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
+        getAccessToken,
+        setAccessToken,
         getId,
         setId,
         isAuthenticated,
