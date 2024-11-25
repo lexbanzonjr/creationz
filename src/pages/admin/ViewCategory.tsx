@@ -3,6 +3,8 @@ import { AgGridReact } from "ag-grid-react";
 import { ColDef } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
+import axios from "axios";
+import { useAuth } from "../../context/AuthContext";
 
 interface Property {
   name: string;
@@ -18,6 +20,7 @@ interface Category {
 const CategoryList: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [newCategoryName, setNewCategoryName] = useState("");
+  const { getAccessToken } = useAuth();
 
   // Define column definitions for AG Grid
   const columnDefs: ColDef[] = [
@@ -59,25 +62,18 @@ const CategoryList: React.FC = () => {
   // Fetch initial categories (replace with your API call)
   useEffect(() => {
     const fetchCategories = async () => {
-      const sampleCategories: Category[] = [
-        {
-          id: 1,
-          name: "Category 1",
-          properties: [
-            { name: "Property 1", type: "String" },
-            { name: "Property 2", type: "Number" },
-          ],
-        },
-        {
-          id: 2,
-          name: "Category 2",
-          properties: [{ name: "Property A", type: "Boolean" }],
-        },
-      ];
-      setCategories(sampleCategories);
+      try {
+        // API call to register the account
+        const response = await axios.get("https://localhost:5000/category", {
+          headers: {
+            Authorization: `Bearer ${getAccessToken}`,
+          },
+        });
+        setCategories(response.data.categories);
+      } catch (err: any) {}
     };
     fetchCategories();
-  }, []);
+  }, [getAccessToken]);
 
   // Handle adding a new category
   const handleAddCategory = () => {
