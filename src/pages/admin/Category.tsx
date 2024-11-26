@@ -29,7 +29,13 @@ const Category = () => {
         },
       });
     } catch (error: any) {
-      console.error(error.response.data.error);
+      if (error.response.status !== 200)
+        alert(
+          "Status code: " +
+            error.response.status +
+            ". " +
+            error.response.data.error
+        );
     }
 
     setCategories((prevCategories) => [...prevCategories, category]);
