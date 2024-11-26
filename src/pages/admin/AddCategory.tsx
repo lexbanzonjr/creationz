@@ -8,7 +8,7 @@ interface AddCategoryProps {
 }
 
 const blankCategory: CategoryProps = {
-  id: 0,
+  _id: 0,
   name: "",
   designs: [],
 };

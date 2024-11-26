@@ -54,7 +54,7 @@ const CategoryList: React.FC<CategoryListProps> = (props) => {
   // Handle removing a category
   const handleRemoveCategory = (id: number) => {
     props.setCategories((prevCategories) =>
-      prevCategories.filter((category) => category.id !== id)
+      prevCategories.filter((category) => category._id !== id)
     );
   };
 
@@ -70,7 +70,9 @@ const CategoryList: React.FC<CategoryListProps> = (props) => {
             const updatedCategory = params.data as CategoryProps;
             props.setCategories((prevCategories) =>
               prevCategories.map((category) =>
-                category.id === updatedCategory.id ? updatedCategory : category
+                category._id === updatedCategory._id
+                  ? updatedCategory
+                  : category
               )
             );
           }}
