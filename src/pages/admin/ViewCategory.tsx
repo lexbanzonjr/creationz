@@ -5,7 +5,7 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 
 import styles from "./ViewCategory.module.css";
-import { CategoryProps, PropertyProps } from "./Category";
+import { CategoryProps, DesignProps } from "./Category";
 
 interface CategoryListProps {
   categories: CategoryProps[];
@@ -25,12 +25,12 @@ const CategoryList: React.FC<CategoryListProps> = (props) => {
       editable: true, // Allow inline editing for category name
     },
     {
-      headerName: "Properties",
-      field: "properties",
+      headerName: "Designs",
+      field: "designs",
       cellRenderer: (params: any) => {
-        const properties = params.value as PropertyProps[];
-        return properties
-          .map((property) => `${property.name} (${property.type})`)
+        const designs = params.value as DesignProps[];
+        return designs
+          .map((design) => `${design.name} (${design.type})`)
           .join(", ");
       },
       flex: 2,

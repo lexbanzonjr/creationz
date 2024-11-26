@@ -10,7 +10,7 @@ interface AddCategoryProps {
 const blankCategory: CategoryProps = {
   id: 0,
   name: "",
-  properties: [],
+  designs: [],
 };
 
 const AddCategory: React.FC<AddCategoryProps> = (props) => {
@@ -32,19 +32,19 @@ const AddCategory: React.FC<AddCategoryProps> = (props) => {
   ) => {
     const { name, value } = e.target;
     setCategory((prev) => {
-      const updatedProperties = [...prev.properties];
+      const updatedProperties = [...prev.designs];
       updatedProperties[index] = {
         ...updatedProperties[index],
         [name]: value,
       };
-      return { ...prev, properties: updatedProperties };
+      return { ...prev, designs: updatedProperties };
     });
   };
 
   const addProperty = () => {
     setCategory((prev) => ({
       ...prev,
-      properties: [...prev.properties, { name: "", type: "" }],
+      designs: [...prev.designs, { name: "", type: "" }],
     }));
   };
 
@@ -71,7 +71,7 @@ const AddCategory: React.FC<AddCategoryProps> = (props) => {
         </div>
 
         <h3>Properties</h3>
-        {category.properties.map((property, index) => (
+        {category.designs.map((property, index) => (
           <div key={index} className={styles["property"]}>
             <div className={styles["property-fields"]}>
               <label>

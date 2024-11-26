@@ -5,7 +5,7 @@ import AddCategory from "./AddCategory";
 import ViewCategory from "./ViewCategory";
 import { useAuth } from "../../context/AuthContext";
 
-export interface PropertyProps {
+export interface DesignProps {
   name: string;
   type: string;
 }
@@ -13,7 +13,7 @@ export interface PropertyProps {
 export interface CategoryProps {
   id: number;
   name: string;
-  properties: PropertyProps[];
+  designs: DesignProps[];
 }
 
 const Category = () => {
