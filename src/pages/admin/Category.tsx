@@ -20,6 +20,21 @@ const Category = () => {
   const [categories, setCategories] = useState<CategoryProps[]>([]);
   const { getAccessToken } = useAuth();
 
+  const handleAddCategory = async (category: CategoryProps) => {
+    console.log("Category added:", category);
+    try {
+      await axios.post("https://localhost:5000/category", category, {
+        headers: {
+          Authorization: `Basic ${getAccessToken}`,
+        },
+      });
+    } catch (error: any) {
+      console.error(error.response.data.error);
+    }
+
+    setCategories((prevCategories) => [...prevCategories, category]);
+  };
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -37,7 +52,7 @@ const Category = () => {
 
   return (
     <div>
-      <AddCategory />
+      <AddCategory addCategory={handleAddCategory} />
       <ViewCategory categories={categories} setCategories={setCategories} />
     </div>
   );

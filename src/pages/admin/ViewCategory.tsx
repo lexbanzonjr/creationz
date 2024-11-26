@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { AgGridReact } from "ag-grid-react";
 import { ColDef } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
@@ -14,8 +14,6 @@ interface CategoryListProps {
 }
 
 const CategoryList: React.FC<CategoryListProps> = (props) => {
-  const [newCategoryName, setNewCategoryName] = useState("");
-
   // Define column definitions for AG Grid
   const columnDefs: ColDef[] = [
     {
@@ -53,21 +51,6 @@ const CategoryList: React.FC<CategoryListProps> = (props) => {
     },
   ];
 
-  // Handle adding a new category
-  const handleAddCategory = () => {
-    if (newCategoryName.trim()) {
-      props.setCategories((prevCategories) => [
-        ...prevCategories,
-        {
-          id: Date.now(), // Unique ID
-          name: newCategoryName,
-          properties: [], // Empty properties
-        },
-      ]);
-      setNewCategoryName(""); // Reset input field
-    }
-  };
-
   // Handle removing a category
   const handleRemoveCategory = (id: number) => {
     props.setCategories((prevCategories) =>
@@ -78,29 +61,6 @@ const CategoryList: React.FC<CategoryListProps> = (props) => {
   return (
     <div className={styles["view-category"]}>
       <h2>Category List</h2>
-      {/* Add Category Form */}
-      <div style={{ marginBottom: "20px" }}>
-        <input
-          type="text"
-          value={newCategoryName}
-          onChange={(e) => setNewCategoryName(e.target.value)}
-          placeholder="Enter category name"
-          style={{ padding: "8px", width: "300px", marginRight: "10px" }}
-        />
-        <button
-          onClick={handleAddCategory}
-          style={{
-            padding: "8px 16px",
-            backgroundColor: "green",
-            color: "white",
-            border: "none",
-            cursor: "pointer",
-          }}
-        >
-          Add Category
-        </button>
-      </div>
-      {/* AG Grid */}
       <div className="ag-theme-alpine" style={{ height: 400, width: "100%" }}>
         <AgGridReact
           rowData={props.categories}

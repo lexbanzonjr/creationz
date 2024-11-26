@@ -1,21 +1,20 @@
 import React, { useState } from "react";
-import styles from "./AddCategory.module.css";
-import axios from "axios";
-import { useAuth } from "../../context/AuthContext";
 
-interface Category {
-  name: string;
-  properties: { name: string; type: string }[];
+import { CategoryProps } from "./Category";
+import styles from "./AddCategory.module.css";
+
+interface AddCategoryProps {
+  addCategory: (category: CategoryProps) => void;
 }
 
-const blankCategory: Category = {
+const blankCategory: CategoryProps = {
+  id: 0,
   name: "",
   properties: [],
 };
 
-const AddCategory: React.FC = () => {
-  const [category, setCategory] = useState<Category>(blankCategory);
-  const { getAccessToken } = useAuth();
+const AddCategory: React.FC<AddCategoryProps> = (props) => {
+  const [category, setCategory] = useState<CategoryProps>(blankCategory);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -51,18 +50,7 @@ const AddCategory: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      await axios.post("https://localhost:5000/category", category, {
-        headers: {
-          Authorization: `Basic ${getAccessToken}`,
-        },
-      });
-    } catch (error: any) {
-      console.error(error.response.data.error);
-    }
-
-    // Reset form
-    setCategory(blankCategory);
+    props.addCategory(category);
   };
 
   return (
