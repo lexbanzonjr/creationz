@@ -5,6 +5,7 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
+import styles from "./ViewCategory.module.css";
 
 interface Property {
   name: string;
@@ -98,7 +99,7 @@ const CategoryList: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className={styles["view-category"]}>
       <h2>Category List</h2>
       {/* Add Category Form */}
       <div style={{ marginBottom: "20px" }}>

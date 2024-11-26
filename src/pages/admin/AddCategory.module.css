@@ -1,5 +1,7 @@
 .add-category {
-  max-width: 600px;
+  float: left;
+  width: 400px; /* Adjust the width as needed */
+  height: 600px; /* Adjust the height as needed */
   margin: 0 auto;
   background-color: white;
   padding: 20px;
@@ -46,16 +48,19 @@
   background-color: #27ae60;
 }
 
+.category-name,
 .property-fields {
   display: flex;
   gap: 16px; /* Add space between fields */
   align-items: center; /* Align input fields vertically */
 }
 
+.category-name label,
 .property-fields label {
   flex: 1; /* Ensure labels and inputs grow evenly */
 }
 
+.category-name input,
 .property-fields input {
   width: 100%; /* Inputs take full width of their container */
   padding: 8px;

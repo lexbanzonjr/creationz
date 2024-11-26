@@ -69,16 +69,18 @@ const AddCategory: React.FC = () => {
     <div className={styles["add-category"]}>
       <h2>Add Category</h2>
       <form onSubmit={handleSubmit}>
-        <label>
-          Name:
-          <input
-            type="text"
-            name="name"
-            value={category.name}
-            onChange={handleChange}
-            required
-          />
-        </label>
+        <div className={styles["category-name"]}>
+          <label>
+            Name:
+            <input
+              type="text"
+              name="name"
+              value={category.name}
+              onChange={handleChange}
+              required
+            />
+          </label>
+        </div>
 
         <h3>Properties</h3>
         {category.properties.map((property, index) => (

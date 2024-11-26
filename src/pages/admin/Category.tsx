@@ -3,10 +3,10 @@ import ViewCategory from "./ViewCategory";
 
 const Category = () => {
   return (
-    <>
+    <div>
       <AddCategory />
       <ViewCategory />
-    </>
+    </div>
   );
 };
 
