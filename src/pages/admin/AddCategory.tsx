@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { ColDef } from "ag-grid-community";
+import { AgGridReact } from "ag-grid-react";
 
 import { CategoryProps } from "./Category";
 import styles from "./AddCategory.module.css";
@@ -16,6 +18,21 @@ const blankCategory: CategoryProps = {
 
 const AddCategory: React.FC<AddCategoryProps> = (props) => {
   const [category, setCategory] = useState<CategoryProps>(blankCategory);
+
+  const columnDefs: ColDef[] = [
+    {
+      headerName: "Name",
+      field: "name",
+      sortable: true,
+      filter: true,
+      flex: 1,
+    },
+    {
+      headerName: "Type",
+      field: "type",
+      flex: 2,
+    },
+  ];
 
   const addProperty = () => {
     setCategory((prev) => ({
@@ -78,51 +95,45 @@ const AddCategory: React.FC<AddCategoryProps> = (props) => {
           </label>
         </div>
 
-        <h3>Properties</h3>
-        {category.designs.map((property, index) => (
-          <div key={index} className={styles["property"]}>
-            <div className={styles["property-fields"]}>
-              <label>
-                Name:
-                <input
-                  type="text"
-                  name="name"
-                  value={property.name}
-                  onChange={(e) => handlePropertyChange(index, e)}
-                  required
-                />
-              </label>
-              <label>
-                Type:
-                <input
-                  type="text"
-                  name="type"
-                  value={property.type}
-                  onChange={(e) => handlePropertyChange(index, e)}
-                  required
-                />
-              </label>
-              <button
-                onClick={() => handleRemoveBtnClick(index)}
-                style={{
-                  backgroundColor: "red",
-                  border: "none",
-                  borderRadius: "50%",
-                  width: "40px",
-                  height: "40px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                }}
-                aria-label="Remove item"
-              >
-                <RemoveIcon style={{ color: "white" }} />
-              </button>
-            </div>
+        <div>
+          <label>Designs:</label>
+          <div className={styles["property-fields"]}>
+            <label>
+              Name:
+              <input type="text" name="name" required />
+            </label>
+            <label>
+              Type:
+              <input type="text" name="type" required />
+            </label>
+            <button
+              style={{
+                backgroundColor: "red",
+                border: "none",
+                borderRadius: "50%",
+                width: "40px",
+                height: "40px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+              }}
+              aria-label="Remove item"
+            >
+              <RemoveIcon style={{ color: "white" }} />
+            </button>
           </div>
-        ))}
+        </div>
 
+        <div className="ag-theme-alpine" style={{ height: 200, width: "100%" }}>
+          <AgGridReact
+            rowData={category.designs}
+            columnDefs={columnDefs}
+            defaultColDef={{ flex: 1, resizable: true }}
+          />
+        </div>
+
+        <br />
         <button type="button" onClick={addProperty}>
           Add Property
         </button>
