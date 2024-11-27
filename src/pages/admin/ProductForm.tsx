@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 
-import { ProductProps } from "./ProductPage";
+import { Product } from "../../types/Product";
 import styles from "./ProductForm.module.css";
 
 interface ProductFormProps {
-  addCategory: (category: ProductProps) => void;
+  addCategory: (category: Product) => void;
 }
 
-const blankProduct: ProductProps = {
+const blankProduct: Product = {
   _id: "",
   name: "",
   description: "",
@@ -15,7 +15,7 @@ const blankProduct: ProductProps = {
 };
 
 const ProductForm: React.FC<ProductFormProps> = (props) => {
-  const [product, setProduct] = useState<ProductProps>(blankProduct);
+  const [product, setProduct] = useState<Product>(blankProduct);
 
   const handleAddProductBtnClick = () => {
     props.addCategory(product);

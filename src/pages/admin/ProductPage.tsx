@@ -1,22 +1,19 @@
-import { useEffect, useState } from "react";
 import axios from "axios";
 
 import ProductForm from "./ProductForm";
 import ProductList from "./ProductList";
 import { useAuth } from "../../context/AuthContext";
+import { Product } from "../../types/Product";
 
-export interface ProductProps {
-  _id: string;
-  name: string;
-  description: string;
-  category_id: string;
+interface ProductPageProps {
+  products: Product[];
+  setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
 }
 
-const ProductPage = () => {
-  const [products, setProducts] = useState<ProductProps[]>([]);
+const ProductPage: React.FC<ProductPageProps> = (props) => {
   const { getAccessToken } = useAuth();
 
-  const handleAddProduct = async (product: ProductProps) => {
+  const handleAddProduct = async (product: Product) => {
     try {
       await axios.post("https://localhost:5000/product", product, {
         headers: {
@@ -33,10 +30,10 @@ const ProductPage = () => {
         );
     }
 
-    setProducts((prevProducts) => [...prevProducts, product]);
+    props.setProducts((prevProducts) => [...prevProducts, product]);
   };
 
-  const handleDeleteProduct = async (product: ProductProps) => {
+  const handleDeleteProduct = async (product: Product) => {
     try {
       await axios.delete("https://localhost:5000/product", {
         params: { _id: product._id },
@@ -54,33 +51,18 @@ const ProductPage = () => {
         );
     }
 
-    setProducts((prevProducts) =>
+    props.setProducts((prevProducts) =>
       prevProducts.filter((prod) => prod._id !== product._id)
     );
   };
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        // API call to register the account
-        const response = await axios.get("https://localhost:5000/product", {
-          headers: {
-            Authorization: `Bearer ${getAccessToken}`,
-          },
-        });
-        setProducts(response.data.products);
-      } catch (err: any) {}
-    };
-    fetchProducts();
-  }, [getAccessToken]);
 
   return (
     <div>
       <ProductForm addCategory={handleAddProduct} />
       <ProductList
-        products={products}
+        products={props.products}
         handleDeleteProduct={handleDeleteProduct}
-        setProducts={setProducts}
+        setProducts={props.setProducts}
       />
     </div>
   );

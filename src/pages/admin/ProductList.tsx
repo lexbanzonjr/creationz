@@ -5,13 +5,13 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 
 import styles from "./ProductList.module.css";
-import { ProductProps } from "./ProductPage";
+import { Product } from "../../types/Product";
 
 interface ProductListProps {
-  products: ProductProps[];
+  products: Product[];
 
-  handleDeleteProduct: (product: ProductProps) => void;
-  setProducts: React.Dispatch<React.SetStateAction<ProductProps[]>>;
+  handleDeleteProduct: (product: Product) => void;
+  setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
 }
 
 const ProductList: React.FC<ProductListProps> = (props) => {
@@ -32,13 +32,11 @@ const ProductList: React.FC<ProductListProps> = (props) => {
     },
     {
       headerName: "Actions",
-      cellRenderer: (params: ICellRendererParams<ProductProps>) => {
+      cellRenderer: (params: ICellRendererParams<Product>) => {
         return (
           <button
             type="button"
-            onClick={() =>
-              props.handleDeleteProduct(params.data as ProductProps)
-            }
+            onClick={() => props.handleDeleteProduct(params.data as Product)}
             style={{ cursor: "pointer", padding: "5px 10px", color: "red" }}
           >
             Remove
@@ -58,7 +56,7 @@ const ProductList: React.FC<ProductListProps> = (props) => {
           columnDefs={columnDefs}
           defaultColDef={{ flex: 1, resizable: true }}
           onCellValueChanged={(params) => {
-            const updatedProduct = params.data as ProductProps;
+            const updatedProduct = params.data as Product;
             props.setProducts((prevProducts) =>
               prevProducts.map((product) =>
                 product._id === updatedProduct._id ? updatedProduct : product
