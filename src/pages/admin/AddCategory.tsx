@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 import { CategoryProps } from "./Category";
 import styles from "./AddCategory.module.css";
@@ -48,6 +49,13 @@ const AddCategory: React.FC<AddCategoryProps> = (props) => {
     }));
   };
 
+  const handleRemoveBtnClick = (index: number) => {
+    setCategory((prev) => ({
+      ...prev,
+      designs: prev.designs.filter((_, i) => i !== index),
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     props.addCategory(category);
@@ -94,6 +102,23 @@ const AddCategory: React.FC<AddCategoryProps> = (props) => {
                   required
                 />
               </label>
+              <button
+                onClick={() => handleRemoveBtnClick(index)}
+                style={{
+                  backgroundColor: "red",
+                  border: "none",
+                  borderRadius: "50%",
+                  width: "40px",
+                  height: "40px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                }}
+                aria-label="Remove item"
+              >
+                <RemoveIcon style={{ color: "white" }} />
+              </button>
             </div>
           </div>
         ))}
