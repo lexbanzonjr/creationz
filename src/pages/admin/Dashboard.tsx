@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import Category from "./Category";
-import AddProduct from "./AddProduct";
+import Product from "./Product";
 import ViewOrders from "./ViewOrders";
 import styles from "./Dashboard.module.css";
 
@@ -15,7 +15,7 @@ const AdminDashboard: React.FC = () => {
               <Link to="/admin/category">Category</Link>
             </li>
             <li>
-              <Link to="/admin/add-product">Add Product</Link>
+              <Link to="/admin/product">Product</Link>
             </li>
             <li>
               <Link to="/admin/view-orders">View Orders</Link>
@@ -25,7 +25,7 @@ const AdminDashboard: React.FC = () => {
         <div className={styles.content}>
           <Routes>
             <Route path="/category" element={<Category />} />
-            <Route path="/add-product" element={<AddProduct />} />
+            <Route path="/product" element={<Product />} />
             <Route path="/view-orders" element={<ViewOrders />} />
           </Routes>
         </div>
