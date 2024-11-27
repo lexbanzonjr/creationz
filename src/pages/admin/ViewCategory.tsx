@@ -1,6 +1,6 @@
 import React from "react";
 import { AgGridReact } from "ag-grid-react";
-import { ColDef } from "ag-grid-community";
+import { ColDef, ICellRendererParams } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 
@@ -37,10 +37,11 @@ const CategoryList: React.FC<CategoryListProps> = (props) => {
     },
     {
       headerName: "Actions",
-      cellRenderer: (params: any) => {
+      cellRenderer: (params: ICellRendererParams<CategoryProps>) => {
         return (
           <button
-            onClick={() => handleRemoveCategory(params.data.id)}
+            type="button"
+            onClick={() => handleRemoveCategory(params.data?._id ?? "")}
             style={{ cursor: "pointer", padding: "5px 10px", color: "red" }}
           >
             Remove
@@ -52,9 +53,9 @@ const CategoryList: React.FC<CategoryListProps> = (props) => {
   ];
 
   // Handle removing a category
-  const handleRemoveCategory = (id: number) => {
+  const handleRemoveCategory = (_id: string) => {
     props.setCategories((prevCategories) =>
-      prevCategories.filter((category) => category._id !== id)
+      prevCategories.filter((category) => category._id !== _id)
     );
   };
 

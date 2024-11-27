@@ -11,7 +11,7 @@ export interface DesignProps {
 }
 
 export interface CategoryProps {
-  _id: number;
+  _id: string;
   name: string;
   designs: DesignProps[];
 }
