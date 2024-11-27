@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route, Link } from "react-router-dom";
-import Category from "./Category";
+import CategoryPage from "./Category";
 import Product from "./Product";
 import ViewOrders from "./ViewOrders";
 import styles from "./Dashboard.module.css";
@@ -24,7 +24,7 @@ const AdminDashboard: React.FC = () => {
         </nav>
         <div className={styles.content}>
           <Routes>
-            <Route path="/category" element={<Category />} />
+            <Route path="/category" element={<CategoryPage />} />
             <Route path="/product" element={<Product />} />
             <Route path="/view-orders" element={<ViewOrders />} />
           </Routes>

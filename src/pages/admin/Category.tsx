@@ -4,23 +4,13 @@ import axios from "axios";
 import CategoryForm from "./CategoryForm";
 import CategoryList from "./CategoryList";
 import { useAuth } from "../../context/AuthContext";
-
-export interface DesignProps {
-  name: string;
-  type: string;
-}
-
-export interface CategoryProps {
-  _id: string;
-  name: string;
-  designs: DesignProps[];
-}
+import { Category } from "../../types/Category";
 
 const Category = () => {
-  const [categories, setCategories] = useState<CategoryProps[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const { getAccessToken } = useAuth();
 
-  const handleAddCategory = async (category: CategoryProps) => {
+  const handleAddCategory = async (category: Category) => {
     try {
       await axios.post("https://localhost:5000/category", category, {
         headers: {
@@ -40,7 +30,7 @@ const Category = () => {
     setCategories((prevCategories) => [...prevCategories, category]);
   };
 
-  const handleDeleteCategory = async (category: CategoryProps) => {
+  const handleDeleteCategory = async (category: Category) => {
     try {
       await axios.delete("https://localhost:5000/category", {
         params: { _id: category._id },
@@ -90,4 +80,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default CategoryPage;

@@ -4,27 +4,28 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { ColDef, ICellRendererParams } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 
-import { CategoryProps, DesignProps } from "./Category";
+import { Design } from "../../types/Design";
+import { Category } from "../../types/Category";
 import styles from "./CategoryForm.module.css";
 
 interface CategoryFormProps {
-  addCategory: (category: CategoryProps) => void;
+  addCategory: (category: Category) => void;
 }
 
-const blankCategory: CategoryProps = {
+const blankCategory: Category = {
   _id: "",
   name: "",
   designs: [],
 };
 
-const blankDesign: DesignProps = {
+const blankDesign: Design = {
   name: "",
   type: "",
 };
 
 const CategoryForm: React.FC<CategoryFormProps> = (props) => {
-  const [category, setCategory] = useState<CategoryProps>(blankCategory);
-  const [design, setDesign] = useState<DesignProps>(blankDesign);
+  const [category, setCategory] = useState<Category>(blankCategory);
+  const [design, setDesign] = useState<Design>(blankDesign);
 
   const columnDefs: ColDef[] = [
     {
@@ -41,7 +42,7 @@ const CategoryForm: React.FC<CategoryFormProps> = (props) => {
     },
     {
       headerName: "Actions",
-      cellRenderer: (params: ICellRendererParams<DesignProps>) => {
+      cellRenderer: (params: ICellRendererParams<Design>) => {
         return (
           <button
             type="button"
