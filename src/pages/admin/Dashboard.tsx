@@ -57,9 +57,6 @@ const AdminDashboard: React.FC = () => {
             <li>
               <Link to="/admin/product">Product</Link>
             </li>
-            <li>
-              <Link to="/admin/view-orders">View Orders</Link>
-            </li>
           </ul>
         </nav>
         <div className={styles.content}>

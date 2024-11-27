@@ -1,7 +1,7 @@
 import axios from "axios";
 
-import CategoryForm from "./CategoryForm";
-import CategoryList from "./CategoryList";
+import CategoryForm from "../../components/admin/CategoryForm";
+import CategoryList from "../../components/admin/CategoryList";
 import { useAuth } from "../../context/AuthContext";
 import { Category } from "../../types/Category";
 

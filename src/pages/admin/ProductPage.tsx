@@ -1,7 +1,7 @@
 import axios from "axios";
 
-import ProductForm from "./ProductForm";
-import ProductList from "./ProductList";
+import ProductForm from "../../components/admin/ProductForm";
+import ProductList from "../../components/admin/ProductList";
 import { useAuth } from "../../context/AuthContext";
 import { Product } from "../../types/Product";
 

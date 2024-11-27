@@ -118,7 +118,12 @@ const CategoryForm: React.FC<CategoryFormProps> = (props) => {
       <form>
         <div className={styles["category-name"]}>
           <label>
-            Name:
+            Name: <br />
+            <small>
+              A category are used to group products together.
+              <br />
+              For example: t-shirts, sashes, headbands, bags
+            </small>
             <input
               type="text"
               name="category-name"
@@ -130,10 +135,17 @@ const CategoryForm: React.FC<CategoryFormProps> = (props) => {
         </div>
 
         <div>
-          <label>Designs:</label>
+          <label>
+            Designs:
+            <br />
+            <small>Designs offer customers to choose design options.</small>
+          </label>
+
           <div className={styles["category-designs"]}>
             <label>
               Name:
+              <br />
+              <small>For example: color shirt, color bag, color font.</small>
               <input
                 type="text"
                 name="design-name"
@@ -144,6 +156,11 @@ const CategoryForm: React.FC<CategoryFormProps> = (props) => {
             </label>
             <label>
               Type:
+              <br />
+              <small>
+                Select type of choice <br />
+                <br />
+              </small>
               <input
                 type="text"
                 name="design-type"
