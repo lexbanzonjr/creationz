@@ -55,13 +55,6 @@ const AddCategory: React.FC<AddCategoryProps> = (props) => {
     },
   ];
 
-  const addProperty = () => {
-    setCategory((prev) => ({
-      ...prev,
-      designs: [...prev.designs, { name: "", type: "" }],
-    }));
-  };
-
   const handleAddCategoryBtnClick = () => {
     props.addCategory(category);
     setCategory(blankCategory);
@@ -98,21 +91,6 @@ const AddCategory: React.FC<AddCategoryProps> = (props) => {
       designs: [design, ...prev.designs],
     }));
     setDesign(blankDesign);
-  };
-
-  const handlePropertyChange = (
-    index: number,
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const { name, value } = e.target;
-    setCategory((prev) => {
-      const updatedProperties = [...prev.designs];
-      updatedProperties[index] = {
-        ...updatedProperties[index],
-        [name]: value,
-      };
-      return { ...prev, designs: updatedProperties };
-    });
   };
 
   const handleRemoveBtnClick = (name: string) => {
