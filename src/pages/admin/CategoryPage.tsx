@@ -6,7 +6,7 @@ import CategoryList from "./CategoryList";
 import { useAuth } from "../../context/AuthContext";
 import { Category } from "../../types/Category";
 
-const Category = () => {
+const CategoryPage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const { getAccessToken } = useAuth();
 

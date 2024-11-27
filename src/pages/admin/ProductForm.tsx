@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { ProductProps } from "./Product";
+import { ProductProps } from "./ProductPage";
 import styles from "./ProductForm.module.css";
 
 interface ProductFormProps {

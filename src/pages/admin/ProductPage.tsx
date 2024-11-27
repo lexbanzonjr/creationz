@@ -12,7 +12,7 @@ export interface ProductProps {
   category_id: string;
 }
 
-const Product = () => {
+const ProductPage = () => {
   const [products, setProducts] = useState<ProductProps[]>([]);
   const { getAccessToken } = useAuth();
 
@@ -86,4 +86,4 @@ const Product = () => {
   );
 };
 
-export default Product;
+export default ProductPage;
