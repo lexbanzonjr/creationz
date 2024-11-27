@@ -14,7 +14,7 @@ const Navbar: React.FC = () => {
   };
 
   const isAdmin = () => {
-    return getId.roles.includes("admin");
+    return getId.roles?.includes("admin");
   };
 
   return (
