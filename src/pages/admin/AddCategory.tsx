@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
-import { ColDef } from "ag-grid-community";
+import { ColDef, ICellRendererParams } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 
 import { CategoryProps, DesignProps } from "./Category";
@@ -37,6 +37,21 @@ const AddCategory: React.FC<AddCategoryProps> = (props) => {
       headerName: "Type",
       field: "type",
       flex: 2,
+    },
+    {
+      headerName: "Actions",
+      cellRenderer: (params: ICellRendererParams<DesignProps>) => {
+        return (
+          <button
+            type="button"
+            onClick={() => handleRemoveBtnClick(params.data?.name ?? "")}
+            style={{ cursor: "pointer", padding: "5px 10px", color: "red" }}
+          >
+            Remove
+          </button>
+        );
+      },
+      flex: 0.5,
     },
   ];
 
@@ -100,10 +115,10 @@ const AddCategory: React.FC<AddCategoryProps> = (props) => {
     });
   };
 
-  const handleRemoveBtnClick = (index: number) => {
+  const handleRemoveBtnClick = (name: string) => {
     setCategory((prev) => ({
       ...prev,
-      designs: prev.designs.filter((_, i) => i !== index),
+      designs: prev.designs.filter((design) => design.name !== name),
     }));
   };
 
