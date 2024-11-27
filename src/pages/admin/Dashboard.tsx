@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import axios from "axios";
 
@@ -15,7 +15,7 @@ const AdminDashboard: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
 
-  const listCategories = async () => {
+  const listCategories = useCallback(async () => {
     try {
       // API call to register the account
       const response = await axios.get("https://localhost:5000/category", {
@@ -25,9 +25,10 @@ const AdminDashboard: React.FC = () => {
       });
       setCategories(response.data.categories);
     } catch (err: any) {}
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const listProducts = async () => {
+  const listProducts = useCallback(async () => {
     try {
       // API call to register the account
       const response = await axios.get("https://localhost:5000/product", {
@@ -37,12 +38,13 @@ const AdminDashboard: React.FC = () => {
       });
       setProducts(response.data.products);
     } catch (err: any) {}
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     listCategories();
     listProducts();
-  }, [getAccessToken]);
+  }, [listCategories, listProducts]);
 
   return (
     <div>
