@@ -21,7 +21,6 @@ const Category = () => {
   const { getAccessToken } = useAuth();
 
   const handleAddCategory = async (category: CategoryProps) => {
-    console.log("Category added:", category);
     try {
       await axios.post("https://localhost:5000/category", category, {
         headers: {
@@ -39,6 +38,29 @@ const Category = () => {
     }
 
     setCategories((prevCategories) => [...prevCategories, category]);
+  };
+
+  const handleDeleteCategory = async (category: CategoryProps) => {
+    try {
+      await axios.delete("https://localhost:5000/category", {
+        params: { _id: category._id },
+        headers: {
+          Authorization: `Basic ${getAccessToken}`,
+        },
+      });
+    } catch (error: any) {
+      if (error.response.status !== 200)
+        alert(
+          "Status code: " +
+            error.response.status +
+            ". " +
+            error.response.data.error
+        );
+    }
+
+    setCategories((prevCategories) =>
+      prevCategories.filter((cat) => cat._id !== category._id)
+    );
   };
 
   useEffect(() => {
@@ -59,7 +81,11 @@ const Category = () => {
   return (
     <div>
       <AddCategory addCategory={handleAddCategory} />
-      <ViewCategory categories={categories} setCategories={setCategories} />
+      <ViewCategory
+        categories={categories}
+        handleDeleteCategory={handleDeleteCategory}
+        setCategories={setCategories}
+      />
     </div>
   );
 };

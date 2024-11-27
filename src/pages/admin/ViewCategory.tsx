@@ -10,6 +10,7 @@ import { CategoryProps, DesignProps } from "./Category";
 interface CategoryListProps {
   categories: CategoryProps[];
 
+  handleDeleteCategory: (category: CategoryProps) => void;
   setCategories: React.Dispatch<React.SetStateAction<CategoryProps[]>>;
 }
 
@@ -41,7 +42,9 @@ const CategoryList: React.FC<CategoryListProps> = (props) => {
         return (
           <button
             type="button"
-            onClick={() => handleRemoveCategory(params.data?._id ?? "")}
+            onClick={() =>
+              props.handleDeleteCategory(params.data as CategoryProps)
+            }
             style={{ cursor: "pointer", padding: "5px 10px", color: "red" }}
           >
             Remove
@@ -51,13 +54,6 @@ const CategoryList: React.FC<CategoryListProps> = (props) => {
       flex: 0.5,
     },
   ];
-
-  // Handle removing a category
-  const handleRemoveCategory = (_id: string) => {
-    props.setCategories((prevCategories) =>
-      prevCategories.filter((category) => category._id !== _id)
-    );
-  };
 
   return (
     <div className={styles["view-category"]}>
