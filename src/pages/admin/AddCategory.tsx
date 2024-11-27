@@ -17,6 +17,13 @@ const blankCategory: CategoryProps = {
 const AddCategory: React.FC<AddCategoryProps> = (props) => {
   const [category, setCategory] = useState<CategoryProps>(blankCategory);
 
+  const addProperty = () => {
+    setCategory((prev) => ({
+      ...prev,
+      designs: [...prev.designs, { name: "", type: "" }],
+    }));
+  };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -40,13 +47,6 @@ const AddCategory: React.FC<AddCategoryProps> = (props) => {
       };
       return { ...prev, designs: updatedProperties };
     });
-  };
-
-  const addProperty = () => {
-    setCategory((prev) => ({
-      ...prev,
-      designs: [...prev.designs, { name: "", type: "" }],
-    }));
   };
 
   const handleRemoveBtnClick = (index: number) => {
