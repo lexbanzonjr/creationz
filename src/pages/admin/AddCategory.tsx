@@ -47,6 +47,12 @@ const AddCategory: React.FC<AddCategoryProps> = (props) => {
     }));
   };
 
+  const handleAddCategoryBtnClick = () => {
+    props.addCategory(category);
+    setCategory(blankCategory);
+    setDesign(blankDesign);
+  };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -101,15 +107,10 @@ const AddCategory: React.FC<AddCategoryProps> = (props) => {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    props.addCategory(category);
-  };
-
   return (
     <div className={styles["add-category"]}>
       <h2>Add Category</h2>
-      <form onSubmit={handleSubmit}>
+      <form>
         <div className={styles["category-name"]}>
           <label>
             Name:
@@ -176,7 +177,9 @@ const AddCategory: React.FC<AddCategoryProps> = (props) => {
         </div>
 
         <br />
-        <button type="submit">Add Category</button>
+        <button onClick={handleAddCategoryBtnClick} type="button">
+          Add Category
+        </button>
       </form>
     </div>
   );
