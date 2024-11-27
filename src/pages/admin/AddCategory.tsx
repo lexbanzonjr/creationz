@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 import { ColDef, ICellRendererParams } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 
@@ -45,9 +46,19 @@ const AddCategory: React.FC<AddCategoryProps> = (props) => {
           <button
             type="button"
             onClick={() => handleRemoveBtnClick(params.data?.name ?? "")}
-            style={{ cursor: "pointer", padding: "5px 10px", color: "red" }}
+            style={{
+              backgroundColor: "red",
+              border: "none",
+              borderRadius: "50%",
+              width: "25px",
+              height: "25px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+            }}
           >
-            Remove
+            <RemoveIcon style={{ color: "white" }} />
           </button>
         );
       },
