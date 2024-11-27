@@ -97,7 +97,7 @@ const AddCategory: React.FC<AddCategoryProps> = (props) => {
 
         <div>
           <label>Designs:</label>
-          <div className={styles["property-fields"]}>
+          <div className={styles["category-designs"]}>
             <label>
               Name:
               <input type="text" name="name" required />
