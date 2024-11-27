@@ -34,7 +34,7 @@ const ProductForm: React.FC<ProductFormProps> = (props) => {
 
   return (
     <div className={styles["product-form"]}>
-      <h2>Add Category</h2>
+      <h2>Add Product</h2>
       <form>
         <div className={styles["category-field"]}>
           <label>

@@ -51,7 +51,7 @@ const ProductList: React.FC<ProductListProps> = (props) => {
 
   return (
     <div className={styles["product-list"]}>
-      <h2>Category List</h2>
+      <h2>Product List</h2>
       <div className="ag-theme-alpine" style={{ height: 400, width: "100%" }}>
         <AgGridReact
           rowData={props.products}
