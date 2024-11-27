@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import RemoveIcon from "@mui/icons-material/Remove";
+import AddIcon from "@mui/icons-material/Add";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 
-import { CategoryProps } from "./Category";
+import { CategoryProps, DesignProps } from "./Category";
 import styles from "./AddCategory.module.css";
 
 interface AddCategoryProps {
@@ -16,8 +16,14 @@ const blankCategory: CategoryProps = {
   designs: [],
 };
 
+const blankDesign: DesignProps = {
+  name: "",
+  type: "",
+};
+
 const AddCategory: React.FC<AddCategoryProps> = (props) => {
   const [category, setCategory] = useState<CategoryProps>(blankCategory);
+  const [design, setDesign] = useState<DesignProps>(blankDesign);
 
   const columnDefs: ColDef[] = [
     {
@@ -45,10 +51,32 @@ const AddCategory: React.FC<AddCategoryProps> = (props) => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
+    if (name === "category-name") {
+      setCategory((prev) => ({
+        ...prev,
+        name: value,
+      }));
+    } else if (name === "design-name") {
+      setDesign((prev) => ({
+        ...prev,
+        name: value,
+      }));
+    } else if (name === "design-type") {
+      setDesign((prev) => ({
+        ...prev,
+        type: value,
+      }));
+    }
+  };
+
+  const handleAddDesignBtnClick = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     setCategory((prev) => ({
       ...prev,
-      [name]: value,
+      designs: [design, ...prev.designs],
     }));
+    setDesign(blankDesign);
   };
 
   const handlePropertyChange = (
@@ -87,7 +115,7 @@ const AddCategory: React.FC<AddCategoryProps> = (props) => {
             Name:
             <input
               type="text"
-              name="name"
+              name="category-name"
               value={category.name}
               onChange={handleChange}
               required
@@ -100,27 +128,41 @@ const AddCategory: React.FC<AddCategoryProps> = (props) => {
           <div className={styles["category-designs"]}>
             <label>
               Name:
-              <input type="text" name="name" required />
+              <input
+                type="text"
+                name="design-name"
+                value={design.name}
+                onChange={handleChange}
+                required
+              />
             </label>
             <label>
               Type:
-              <input type="text" name="type" required />
+              <input
+                type="text"
+                name="design-type"
+                value={design.type}
+                onChange={handleChange}
+                required
+              />
             </label>
             <button
+              type="button"
+              onClick={handleAddDesignBtnClick}
               style={{
-                backgroundColor: "red",
+                backgroundColor: "green",
                 border: "none",
                 borderRadius: "50%",
-                width: "40px",
-                height: "40px",
+                width: "25px",
+                height: "25px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 cursor: "pointer",
               }}
-              aria-label="Remove item"
+              aria-label="Add design"
             >
-              <RemoveIcon style={{ color: "white" }} />
+              <AddIcon style={{ color: "white" }} />
             </button>
           </div>
         </div>
@@ -133,10 +175,6 @@ const AddCategory: React.FC<AddCategoryProps> = (props) => {
           />
         </div>
 
-        <br />
-        <button type="button" onClick={addProperty}>
-          Add Property
-        </button>
         <br />
         <button type="submit">Add Category</button>
       </form>
