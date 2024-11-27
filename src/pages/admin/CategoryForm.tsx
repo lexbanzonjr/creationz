@@ -5,9 +5,9 @@ import { ColDef, ICellRendererParams } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 
 import { CategoryProps, DesignProps } from "./Category";
-import styles from "./AddCategory.module.css";
+import styles from "./CategoryForm.module.css";
 
-interface AddCategoryProps {
+interface CategoryFormProps {
   addCategory: (category: CategoryProps) => void;
 }
 
@@ -22,7 +22,7 @@ const blankDesign: DesignProps = {
   type: "",
 };
 
-const AddCategory: React.FC<AddCategoryProps> = (props) => {
+const CategoryForm: React.FC<CategoryFormProps> = (props) => {
   const [category, setCategory] = useState<CategoryProps>(blankCategory);
   const [design, setDesign] = useState<DesignProps>(blankDesign);
 
@@ -112,7 +112,7 @@ const AddCategory: React.FC<AddCategoryProps> = (props) => {
   };
 
   return (
-    <div className={styles["add-category"]}>
+    <div className={styles["category-form"]}>
       <h2>Add Category</h2>
       <form>
         <div className={styles["category-name"]}>
@@ -189,4 +189,4 @@ const AddCategory: React.FC<AddCategoryProps> = (props) => {
   );
 };
 
-export default AddCategory;
+export default CategoryForm;

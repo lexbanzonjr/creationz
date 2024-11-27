@@ -4,7 +4,7 @@ import { ColDef, ICellRendererParams } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 
-import styles from "./ViewCategory.module.css";
+import styles from "./CategoryList.module.css";
 import { CategoryProps, DesignProps } from "./Category";
 
 interface CategoryListProps {
@@ -56,7 +56,7 @@ const CategoryList: React.FC<CategoryListProps> = (props) => {
   ];
 
   return (
-    <div className={styles["view-category"]}>
+    <div className={styles["category-list"]}>
       <h2>Category List</h2>
       <div className="ag-theme-alpine" style={{ height: 400, width: "100%" }}>
         <AgGridReact

@@ -1,4 +1,4 @@
-.add-category {
+.category-form {
   float: left;
   width: 400px; /* Adjust the width as needed */
   height: 600px; /* Adjust the height as needed */
@@ -9,21 +9,21 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.add-category h2 {
+.category-form h2 {
   text-align: center;
   color: #2c3e50;
   margin-bottom: 20px;
 }
 
-.add-category form label {
+.category-form form label {
   display: block;
   margin: 10px 0 5px;
   font-weight: bold;
   color: #34495e;
 }
 
-.add-category form input,
-.add-category form textarea {
+.category-form form input,
+.category-form form textarea {
   width: 100%;
   padding: 10px;
   margin-bottom: 15px;
@@ -32,7 +32,7 @@
   font-size: 14px;
 }
 
-.add-category form button {
+.category-form form button {
   display: block;
   width: 100%;
   padding: 10px;
@@ -44,7 +44,7 @@
   cursor: pointer;
 }
 
-.add-category form button:hover {
+.category-form form button:hover {
   background-color: #27ae60;
 }
 

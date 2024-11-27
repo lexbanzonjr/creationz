@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-import AddCategory from "./AddCategory";
-import ViewCategory from "./ViewCategory";
+import CategoryForm from "./CategoryForm";
+import CategoryList from "./CategoryList";
 import { useAuth } from "../../context/AuthContext";
 
 export interface DesignProps {
@@ -80,8 +80,8 @@ const Category = () => {
 
   return (
     <div>
-      <AddCategory addCategory={handleAddCategory} />
-      <ViewCategory
+      <CategoryForm addCategory={handleAddCategory} />
+      <CategoryList
         categories={categories}
         handleDeleteCategory={handleDeleteCategory}
         setCategories={setCategories}
