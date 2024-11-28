@@ -6,15 +6,34 @@
 }
 
 .nav {
-  width: 200px;
   background-color: #2c3e50;
   color: white;
-  padding: 20px;
+  @apply min-w-40;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.nav-link-active {
+  @apply font-bold shadow-indigo-500/50 text-white duration-500;
+}
+
+.nav-link-not-active {
+  @apply text-[#030811]  duration-200;
+}
+
+.nav-link-icon {
+  margin-right: 8px;
 }
 
 .nav ul {
   list-style: none;
   padding: 0;
+  padding-left: 20px;
 }
 
 .nav li {

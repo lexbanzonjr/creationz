@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useLocation } from "react-router-dom";
+import { MdCategory, MdColorLens } from "react-icons/md";
+import { IoMdShirt } from "react-icons/io";
 import axios from "axios";
 
 import CategoryPage from "./CategoryPage";
@@ -12,6 +14,7 @@ import { Product } from "../../types/Product";
 
 const AdminDashboard: React.FC = () => {
   const { getAccessToken } = useAuth();
+  const { pathname } = useLocation();
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
 
@@ -48,14 +51,47 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <div>
-      <div className={styles["admin-dashboard"]}>
-        <nav className={styles.nav}>
+      <div className={`${styles["admin-dashboard"]} `}>
+        <nav className={`${styles.nav}`}>
           <ul>
             <li>
-              <Link to="/admin/category">Category</Link>
+              <Link
+                to="/admin/category"
+                className={`${styles["nav-link"]} ${
+                  pathname === "/admin/category"
+                    ? styles["nav-link-active"]
+                    : styles["nav-link-not-active"]
+                }`}
+              >
+                <MdCategory className={styles["nav-link-icon"]} />
+                <span>Category</span>
+              </Link>
             </li>
             <li>
-              <Link to="/admin/product">Product</Link>
+              <Link
+                to="/admin/type"
+                className={`${styles["nav-link"]} ${
+                  pathname === "/admin/type"
+                    ? styles["nav-link-active"]
+                    : styles["nav-link-not-active"]
+                }`}
+              >
+                <MdColorLens className={styles["nav-link-icon"]} />
+                <span>Type</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/admin/product"
+                className={`${styles["nav-link"]} ${
+                  pathname === "/admin/product"
+                    ? styles["nav-link-active"]
+                    : styles["nav-link-not-active"]
+                }`}
+              >
+                <IoMdShirt className={styles["nav-link-icon"]} />
+                <span>Product</span>
+              </Link>
             </li>
           </ul>
         </nav>
