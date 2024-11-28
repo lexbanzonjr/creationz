@@ -1,7 +1,7 @@
 .category-list {
   display: block;
-  width: 800px; /* Adjust the width as needed */
-  height: 700px; /* Adjust the height as needed */
+  width: 800px;
+  height: 800px;
   margin: 0 auto;
   background-color: white;
   padding: 20px;

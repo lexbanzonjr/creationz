@@ -57,7 +57,7 @@ const CategoryList: React.FC<CategoryListProps> = (props) => {
   return (
     <div className={styles["category-list"]}>
       <h2>Category List</h2>
-      <div className="ag-theme-alpine" style={{ height: 550, width: "100%" }}>
+      <div className="ag-theme-alpine" style={{ height: 650, width: "100%" }}>
         <AgGridReact
           rowData={props.categories}
           columnDefs={columnDefs}
