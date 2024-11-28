@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import { MdCategory, MdColorLens } from "react-icons/md";
 import { IoMdShirt } from "react-icons/io";
-import axios from "axios";
 
 import CategoryPage from "./CategoryPage";
 import ProductPage from "./ProductPage";
@@ -11,6 +10,8 @@ import styles from "./Dashboard.module.css";
 import { Category } from "../../types/Category";
 import { useAuth } from "../../context/AuthContext";
 import { Product } from "../../types/Product";
+import { getCategories } from "../../api/categoryApi";
+import { getProducts } from "../../api/productApi";
 
 const AdminDashboard: React.FC = () => {
   const { getAccessToken } = useAuth();
@@ -18,36 +19,18 @@ const AdminDashboard: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
 
-  const listCategories = useCallback(async () => {
-    try {
-      // API call to register the account
-      const response = await axios.get("https://localhost:5000/category", {
-        headers: {
-          Authorization: `Bearer ${getAccessToken}`,
-        },
-      });
-      setCategories(response.data.categories);
-    } catch (err: any) {}
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const listProducts = useCallback(async () => {
-    try {
-      // API call to register the account
-      const response = await axios.get("https://localhost:5000/product", {
-        headers: {
-          Authorization: `Bearer ${getAccessToken}`,
-        },
-      });
-      setProducts(response.data.products);
-    } catch (err: any) {}
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   useEffect(() => {
+    const params = { accessToken: getAccessToken };
+    const listCategories = async () => {
+      setCategories(await getCategories(params));
+    };
+    const listProducts = async () => {
+      setProducts(await getProducts(params));
+    };
+
     listCategories();
     listProducts();
-  }, [listCategories, listProducts]);
+  }, [getAccessToken]);
 
   return (
     <div>
