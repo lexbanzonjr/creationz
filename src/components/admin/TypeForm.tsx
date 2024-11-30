@@ -4,6 +4,7 @@ import { AgGridReact } from "ag-grid-react";
 
 import { Type } from "../../types/Type";
 import RemoveButton from "../RemoveButton";
+import GreenButton from "../GreenButton";
 
 interface TypeFormProps {
   types: Type[];
@@ -85,12 +86,13 @@ const TypeForm: React.FC<TypeFormProps> = (props) => {
               name="name"
               value={type.name}
               onChange={handleChange}
+              className="w-full p-2.5 mb-4 border border-[#bdc3c7] rounded-md text-sm"
               required
             />
           </label>
-          <button onClick={handleAddTypeBtnClick} type="button">
+          <GreenButton onClick={handleAddTypeBtnClick} type="button">
             Add Type
-          </button>
+          </GreenButton>
         </div>
         <br />
 
