@@ -5,6 +5,7 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 
 import { Type } from "../../types/Type";
+import GreenButton from "../GreenButton";
 
 interface TypePropertiesProps {
   type: Type;
@@ -24,12 +25,31 @@ const TypeProperties: React.FC<TypePropertiesProps> = (props) => {
   ];
 
   return (
-    <div className="block w-[800px] h-[800px] mx-auto bg-white p-5 rounded-lg shadow-md ml-[500px]">
+    <div>
       <h2 className="text-center text-black font-bold text-xl mb-5">
-        Type Properties
+        Edit type properties
       </h2>
-      <label className="block my-2 font-bold text-[#34495e]">Options:</label>
-      <div className="ag-theme-alpine" style={{ height: 650, width: "100%" }}>
+      <label className="block my-2 font-bold text-[#34495e]">Option:</label>
+      <form>
+        <div>
+          <label className="block my-2 font-bold text-[#34495e]">
+            Name: <br />
+            <small className="text-gray-500">Enter a name for the type</small>
+            <input
+              type="text"
+              name="name"
+              className="w-full p-2.5 mb-4 border border-[#bdc3c7] rounded-md text-sm"
+              required
+            />
+          </label>
+          <GreenButton type="button">Add Type</GreenButton>
+        </div>
+      </form>
+
+      <label className="block my-2 font-bold text-[#34495e]">
+        Option list:
+      </label>
+      <div className="ag-theme-alpine" style={{ height: 350, width: "100%" }}>
         <AgGridReact
           rowData={props.type.options}
           columnDefs={columnDefs}
