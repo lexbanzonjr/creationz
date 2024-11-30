@@ -10,14 +10,18 @@ import styles from "./Dashboard.module.css";
 import { Category } from "../../types/Category";
 import { useAuth } from "../../context/AuthContext";
 import { Product } from "../../types/Product";
+import { Type } from "../../types/Type";
 import { getCategories } from "../../api/categoryApi";
 import { getProducts } from "../../api/productApi";
+import TypePage from "./TypePage";
+import { getTypes } from "../../api/typeApi";
 
 const AdminDashboard: React.FC = () => {
   const { getAccessToken } = useAuth();
   const { pathname } = useLocation();
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
+  const [types, setTypes] = useState<Type[]>([]);
 
   useEffect(() => {
     const params = { accessToken: getAccessToken };
@@ -27,9 +31,13 @@ const AdminDashboard: React.FC = () => {
     const listProducts = async () => {
       setProducts(await getProducts(params));
     };
+    const listTypes = async () => {
+      setTypes(await getTypes(params));
+    };
 
     listCategories();
     listProducts();
+    listTypes();
   }, [getAccessToken]);
 
   return (
@@ -94,6 +102,10 @@ const AdminDashboard: React.FC = () => {
               element={
                 <ProductPage products={products} setProducts={setProducts} />
               }
+            />{" "}
+            <Route
+              path="/type"
+              element={<TypePage types={types} setTypes={setTypes} />}
             />
             <Route path="/view-orders" element={<ViewOrders />} />
           </Routes>

@@ -1,0 +1,38 @@
+.type-form {
+  float: left;
+  width: 475px;
+  height: 800px;
+  margin: 0 auto;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.type-form h2 {
+  text-align: center;
+  color: black;
+  font-weight: bold;
+  font-size: x-large;
+  margin-bottom: 20px;
+}
+
+.type-form label {
+  display: block;
+  margin: 10px 0 5px;
+  font-weight: bold;
+  color: #34495e;
+}
+
+.type-form small {
+  color: grey;
+}
+
+.type-form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #bdc3c7;
+  border-radius: 4px;
+  font-size: 14px;
+}
