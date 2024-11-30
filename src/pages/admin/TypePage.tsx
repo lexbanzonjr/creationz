@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 
 import TypeForm from "../../components/admin/TypeForm";
-import TypeList from "../../components/admin/TypeList";
+import TypeProperties from "../../components/admin/TypeProperties";
 import { useAuth } from "../../context/AuthContext";
 import { Type } from "../../types/Type";
 
@@ -73,7 +73,7 @@ const TypePage: React.FC<TypePageProps> = (props) => {
         addType={handleAddType}
         deleteType={handleDeleteType}
       />
-      <TypeList type={type} />
+      <TypeProperties type={type} />
     </div>
   );
 };

@@ -6,11 +6,11 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 
 import { Type } from "../../types/Type";
 
-interface CategoryListProps {
+interface TypePropertiesProps {
   type: Type;
 }
 
-const TypeList: React.FC<CategoryListProps> = (props) => {
+const TypeProperties: React.FC<TypePropertiesProps> = (props) => {
   // Define column definitions for AG Grid
   const columnDefs: ColDef[] = [
     {
@@ -40,4 +40,4 @@ const TypeList: React.FC<CategoryListProps> = (props) => {
   );
 };
 
-export default TypeList;
+export default TypeProperties;
