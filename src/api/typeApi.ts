@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Type } from "../types/Type";
+import { Option } from "../types/Option";
 
 export const addType = async ({
   accessToken,
@@ -20,6 +21,28 @@ export const addType = async ({
   } catch (error: any) {}
 
   return addedType;
+};
+
+export const addTypeOption = async ({
+  accessToken,
+  type,
+  option,
+}: {
+  accessToken: string;
+  type: Type;
+  option: Option;
+}) => {
+  const response = await axios.post(
+    `https://localhost:5000/type/${type._id}/option`,
+    { option },
+    {
+      headers: {
+        Authorization: `Basic ${accessToken}`,
+      },
+    }
+  );
+
+  return response.data;
 };
 
 export const deleteType = async ({

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import { ColDef } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
@@ -6,13 +6,25 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 
 import { Type } from "../../types/Type";
 import GreenButton from "../GreenButton";
+import { Option } from "../../types/Option";
+import { IHandleAddTypeOption } from "../../pages/admin/TypePage";
 
 interface TypePropertiesProps {
   type: Type;
-  setType: React.Dispatch<React.SetStateAction<Type>>;
+  addTypeOption: IHandleAddTypeOption;
 }
 
-const TypeProperties: React.FC<TypePropertiesProps> = ({ type, setType }) => {
+const blankOption: Option = {
+  _id: "",
+  name: "",
+};
+
+const TypeProperties: React.FC<TypePropertiesProps> = ({
+  type,
+  addTypeOption,
+}) => {
+  const [option, setOption] = useState(blankOption);
+
   // Define column definitions for AG Grid
   const columnDefs: ColDef[] = [
     {
@@ -25,11 +37,22 @@ const TypeProperties: React.FC<TypePropertiesProps> = ({ type, setType }) => {
     },
   ];
 
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    if (name.includes("option-")) {
+      const prop = name.split("-")[1];
+      setOption((prev) => ({
+        ...prev,
+        [prop]: value,
+      }));
+    }
+  };
+
   const handleAddOptionOnClick = () => {
-    setType((prevType) => {
-      const copyType = prevType;
-      return copyType;
-    });
+    addTypeOption(option);
+    setOption(blankOption);
   };
 
   return (
@@ -45,9 +68,10 @@ const TypeProperties: React.FC<TypePropertiesProps> = ({ type, setType }) => {
             <small className="text-gray-500">Enter a name for the type</small>
             <input
               type="text"
-              name="name"
+              name="option-name"
               className="w-full p-2.5 mb-4 border border-[#bdc3c7] rounded-md text-sm"
               required
+              onChange={handleChange}
             />
           </label>
           <GreenButton

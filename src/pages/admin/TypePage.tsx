@@ -5,12 +5,15 @@ import TypeList from "../../components/admin/TypeList";
 import TypeProperties from "../../components/admin/TypeProperties";
 import { useAuth } from "../../context/AuthContext";
 import { Type } from "../../types/Type";
-import { addType, deleteType } from "../../api/typeApi";
+import { addType, addTypeOption, deleteType } from "../../api/typeApi";
+import { Option } from "../../types/Option";
 
 interface TypePageProps {
   types: Type[];
   setTypes: React.Dispatch<React.SetStateAction<Type[]>>;
 }
+
+export type IHandleAddTypeOption = (option: Option) => Promise<void>;
 
 const blankType: Type = {
   _id: "",
@@ -29,6 +32,17 @@ const TypePage: React.FC<TypePageProps> = (props) => {
     return type;
   };
 
+  const handleAddTypeOption: IHandleAddTypeOption = async (option: Option) => {
+    const newOption = await addTypeOption({
+      accessToken: getAccessToken,
+      type,
+      option,
+    });
+    const copyType = type;
+    copyType.options.push(newOption);
+    setType(copyType);
+  };
+
   const handleDeleteType = async (type: Type) => {
     deleteType({ accessToken: getAccessToken, type });
     props.setTypes((prevTypes) =>
@@ -38,7 +52,7 @@ const TypePage: React.FC<TypePageProps> = (props) => {
 
   return (
     <div>
-      <div className="type-form float-left w-[475px] h-[800px] mx-auto bg-white p-5 rounded-lg shadow-md">
+      <div className="type-form float-left w-[475px] h-[800px] mx-auto bg-white p-5 rounded-lg shadow-md ">
         <TypeForm
           types={props.types}
           addType={handleAddType}
@@ -52,7 +66,7 @@ const TypePage: React.FC<TypePageProps> = (props) => {
         />
       </div>
       <div className="block w-[800px] h-[800px] mx-auto bg-white p-5 rounded-lg shadow-md ml-[500px]">
-        <TypeProperties type={type} setType={setType} />
+        <TypeProperties addTypeOption={handleAddTypeOption} type={type} />
       </div>
     </div>
   );
