@@ -68,8 +68,12 @@ const TypeForm: React.FC<TypeFormProps> = (props) => {
               required
             />
           </label>
-          <GreenButton onClick={handleAddTypeBtnClick} type="button">
-            Add Type
+          <GreenButton
+            className="rounded-md"
+            onClick={handleAddTypeBtnClick}
+            type="button"
+          >
+            Add type
           </GreenButton>
         </div>
       </form>

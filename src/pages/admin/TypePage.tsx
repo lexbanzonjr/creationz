@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState } from "react";
 
 import TypeForm from "../../components/admin/TypeForm";
@@ -6,6 +5,7 @@ import TypeList from "../../components/admin/TypeList";
 import TypeProperties from "../../components/admin/TypeProperties";
 import { useAuth } from "../../context/AuthContext";
 import { Type } from "../../types/Type";
+import { addType, deleteType } from "../../api/typeApi";
 
 interface TypePageProps {
   types: Type[];
@@ -23,45 +23,14 @@ const TypePage: React.FC<TypePageProps> = (props) => {
   const [type, setType] = useState<Type>(blankType);
 
   const handleAddType = async (type: Type) => {
-    try {
-      await axios.post("https://localhost:5000/type", type, {
-        headers: {
-          Authorization: `Basic ${getAccessToken}`,
-        },
-      });
-    } catch (error: any) {
-      if (error.response.status !== 200)
-        alert(
-          "Status code: " +
-            error.response.status +
-            ". " +
-            error.response.data.error
-        );
-    }
-
+    addType({ accessToken: getAccessToken, type });
     props.setTypes((prevTypes) => [...prevTypes, type]);
     setType(type);
     return type;
   };
 
   const handleDeleteType = async (type: Type) => {
-    try {
-      await axios.delete("https://localhost:5000/type", {
-        params: { _id: type._id },
-        headers: {
-          Authorization: `Basic ${getAccessToken}`,
-        },
-      });
-    } catch (error: any) {
-      if (error.response.status !== 200)
-        alert(
-          "Status code: " +
-            error.response.status +
-            ". " +
-            error.response.data.error
-        );
-    }
-
+    deleteType({ accessToken: getAccessToken, type });
     props.setTypes((prevTypes) =>
       prevTypes.filter((prod) => prod._id !== type._id)
     );
@@ -76,10 +45,14 @@ const TypePage: React.FC<TypePageProps> = (props) => {
           deleteType={handleDeleteType}
         />
         <br />
-        <TypeList types={props.types} deleteType={handleDeleteType} />
+        <TypeList
+          types={props.types}
+          deleteType={handleDeleteType}
+          setType={setType}
+        />
       </div>
       <div className="block w-[800px] h-[800px] mx-auto bg-white p-5 rounded-lg shadow-md ml-[500px]">
-        <TypeProperties type={type} />
+        <TypeProperties type={type} setType={setType} />
       </div>
     </div>
   );

@@ -9,9 +9,10 @@ import GreenButton from "../GreenButton";
 
 interface TypePropertiesProps {
   type: Type;
+  setType: React.Dispatch<React.SetStateAction<Type>>;
 }
 
-const TypeProperties: React.FC<TypePropertiesProps> = (props) => {
+const TypeProperties: React.FC<TypePropertiesProps> = ({ type, setType }) => {
   // Define column definitions for AG Grid
   const columnDefs: ColDef[] = [
     {
@@ -23,6 +24,13 @@ const TypeProperties: React.FC<TypePropertiesProps> = (props) => {
       editable: true, // Allow inline editing for category name
     },
   ];
+
+  const handleAddOptionOnClick = () => {
+    setType((prevType) => {
+      const copyType = prevType;
+      return copyType;
+    });
+  };
 
   return (
     <div>
@@ -42,7 +50,13 @@ const TypeProperties: React.FC<TypePropertiesProps> = (props) => {
               required
             />
           </label>
-          <GreenButton type="button">Add Type</GreenButton>
+          <GreenButton
+            onClick={handleAddOptionOnClick}
+            className="rounded-md"
+            type="button"
+          >
+            Add option
+          </GreenButton>
         </div>
       </form>
 
@@ -51,7 +65,7 @@ const TypeProperties: React.FC<TypePropertiesProps> = (props) => {
       </label>
       <div className="ag-theme-alpine" style={{ height: 350, width: "100%" }}>
         <AgGridReact
-          rowData={props.type.options}
+          rowData={type.options}
           columnDefs={columnDefs}
           defaultColDef={{ flex: 1, resizable: true }}
         />

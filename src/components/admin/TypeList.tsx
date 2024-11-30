@@ -10,9 +10,10 @@ interface TypeFormProps {
   types: Type[];
 
   deleteType: (type: Type) => void;
+  setType: React.Dispatch<React.SetStateAction<Type>>;
 }
 
-const TypeList: React.FC<TypeFormProps> = (props) => {
+const TypeList: React.FC<TypeFormProps> = ({ types, deleteType, setType }) => {
   const columnDefs: ColDef[] = [
     {
       headerName: "Name",
@@ -20,9 +21,6 @@ const TypeList: React.FC<TypeFormProps> = (props) => {
       sortable: true,
       filter: true,
       flex: 1,
-      onCellClicked: ({ data }) => {
-        console.log(data);
-      },
     },
     {
       headerName: "Actions",
@@ -30,12 +28,10 @@ const TypeList: React.FC<TypeFormProps> = (props) => {
         return (
           <div className="inline-block">
             <div className="float-left p-1">
-              <RemoveButton
-                onClick={() => props.deleteType(params.data as Type)}
-              ></RemoveButton>
+              <RemoveButton onClick={() => deleteType(params.data as Type)} />
             </div>
             <div className="float-left p-1">
-              <EditButton />
+              <EditButton onClick={() => setType(params.data as Type)} />
             </div>
           </div>
         );
@@ -58,7 +54,7 @@ const TypeList: React.FC<TypeFormProps> = (props) => {
         </label>
         <div className="ag-theme-alpine" style={{ height: 200, width: "100%" }}>
           <AgGridReact
-            rowData={props.types}
+            rowData={types}
             columnDefs={columnDefs}
             defaultColDef={{ flex: 1, resizable: true }}
           />
