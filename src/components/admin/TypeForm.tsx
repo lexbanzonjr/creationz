@@ -3,7 +3,6 @@ import { ColDef, ICellRendererParams } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 
 import { Type } from "../../types/Type";
-import styles from "./TypeForm.module.css";
 import RemoveButton from "../RemoveButton";
 
 interface TypeFormProps {
@@ -61,8 +60,8 @@ const TypeForm: React.FC<TypeFormProps> = (props) => {
   };
 
   return (
-    <div className={styles["type-form"]}>
-      <h2>Type</h2>
+    <div className="type-form float-left w-[475px] h-[800px] mx-auto bg-white p-5 rounded-lg shadow-md">
+      <h2 className="text-center text-black font-bold text-xl mb-5">Type</h2>
       <small>
         Configure types to describe characteristic values that your customers
         will use when you add designs to your product.
@@ -78,9 +77,9 @@ const TypeForm: React.FC<TypeFormProps> = (props) => {
       </small>
       <form>
         <div>
-          <label>
+          <label className="block my-2 font-bold text-[#34495e]">
             Name: <br />
-            <small>Enter a name for the type</small>
+            <small className="text-gray-500">Enter a name for the type</small>
             <input
               type="text"
               name="name"
@@ -95,14 +94,13 @@ const TypeForm: React.FC<TypeFormProps> = (props) => {
         </div>
         <br />
 
-        <label>
+        <label className="block my-2 font-bold text-[#34495e]">
           Type List: <br />
-          <small>Select a type to modify its properties</small>
+          <small className="text-gray-500">
+            Select a type to modify its properties
+          </small>
         </label>
-        <div
-          className={`${styles["type-name"]} ag-theme-alpine`}
-          style={{ height: 200, width: "100%" }}
-        >
+        <div className="ag-theme-alpine" style={{ height: 200, width: "100%" }}>
           <AgGridReact
             rowData={props.types}
             columnDefs={columnDefs}
