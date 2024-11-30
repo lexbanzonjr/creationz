@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
 import { ColDef, ICellRendererParams } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 
 import { Design } from "../../types/Design";
 import { Category } from "../../types/Category";
 import styles from "./CategoryForm.module.css";
+import RemoveButton from "./../RemoveButton";
 
 interface CategoryFormProps {
   addCategory: (category: Category) => void;
@@ -44,23 +44,9 @@ const CategoryForm: React.FC<CategoryFormProps> = (props) => {
       headerName: "Actions",
       cellRenderer: (params: ICellRendererParams<Design>) => {
         return (
-          <button
-            type="button"
+          <RemoveButton
             onClick={() => handleRemoveBtnClick(params.data?.name ?? "")}
-            style={{
-              backgroundColor: "red",
-              border: "none",
-              borderRadius: "50%",
-              width: "25px",
-              height: "25px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-            }}
-          >
-            <RemoveIcon style={{ color: "white" }} />
-          </button>
+          />
         );
       },
       flex: 0.5,
