@@ -26,8 +26,8 @@ const TypePage: React.FC<TypePageProps> = (props) => {
   const [type, setType] = useState<Type>(blankType);
 
   const handleAddType = async (type: Type) => {
-    addType({ accessToken: getAccessToken, type });
-    props.setTypes((prevTypes) => [...prevTypes, type]);
+    const newType = (await addType({ accessToken: getAccessToken, type })).type;
+    props.setTypes((prevTypes) => [...prevTypes, newType]);
     setType(type);
     return type;
   };

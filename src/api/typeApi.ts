@@ -9,18 +9,13 @@ export const addType = async ({
   accessToken: string;
   type: Type;
 }) => {
-  let addedType;
-  try {
-    const response = await axios.post("https://localhost:5000/type", type, {
-      headers: {
-        Authorization: `Basic ${accessToken}`,
-      },
-    });
+  const response = await axios.post("https://localhost:5000/type", type, {
+    headers: {
+      Authorization: `Basic ${accessToken}`,
+    },
+  });
 
-    addedType = response.data.type as Type;
-  } catch (error: any) {}
-
-  return addedType;
+  return response.data;
 };
 
 export const addTypeOption = async ({
