@@ -59,6 +59,14 @@ const TypeProperties: React.FC<TypePropertiesProps> = ({
     <div>
       <h2 className="text-center text-black font-bold text-xl mb-5">
         Edit type properties
+        <br />
+        <label className="text-center ">
+          <small className="text-gray-500 ">
+            {type.name === ""
+              ? "Select type in Type list to edit"
+              : "Editing " + type.name}
+          </small>
+        </label>
       </h2>
       <label className="block my-2 font-bold text-[#34495e]">Option:</label>
       <form>
@@ -72,6 +80,7 @@ const TypeProperties: React.FC<TypePropertiesProps> = ({
               className="w-full p-2.5 mb-4 border border-[#bdc3c7] rounded-md text-sm"
               required
               onChange={handleChange}
+              disabled={!type._id}
             />
           </label>
           <GreenButton
