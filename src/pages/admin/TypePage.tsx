@@ -4,9 +4,8 @@ import TypeForm from "../../components/admin/TypeForm";
 import TypeList from "../../components/admin/TypeList";
 import TypeProperties from "../../components/admin/TypeProperties";
 import { useAuth } from "../../context/AuthContext";
-import { Type } from "../../types/Type";
 import { addType, addTypeOption, deleteType } from "../../api/typeApi";
-import { Option } from "../../types/Option";
+import { Option, Type } from "../../types/global";
 
 interface TypePageProps {
   types: Type[];

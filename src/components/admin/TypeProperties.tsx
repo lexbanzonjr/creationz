@@ -4,9 +4,8 @@ import { ColDef } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 
-import { Type } from "../../types/Type";
+import { Option, Type } from "../../types/global";
 import GreenButton from "../GreenButton";
-import { Option } from "../../types/Option";
 import { IHandleAddTypeOption } from "../../pages/admin/TypePage";
 
 interface TypePropertiesProps {

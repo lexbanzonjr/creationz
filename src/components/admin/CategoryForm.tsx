@@ -3,8 +3,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { ColDef, ICellRendererParams } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 
-import { Design } from "../../types/Design";
-import { Category } from "../../types/Category";
+import { Category, Design } from "../../types/global";
 import styles from "./CategoryForm.module.css";
 import RemoveButton from "./../RemoveButton";
 

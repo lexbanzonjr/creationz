@@ -2,7 +2,7 @@ import React from "react";
 import { ColDef, ICellRendererParams } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 
-import { Type } from "../../types/Type";
+import { Type } from "../../types/global";
 import RemoveButton from "../RemoveButton";
 import EditButton from "../EditButton";
 

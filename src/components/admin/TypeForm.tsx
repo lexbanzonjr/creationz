@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Type } from "../../types/Type";
+import { Type } from "../../types/global";
 import GreenButton from "../GreenButton";
 
 interface TypeFormProps {

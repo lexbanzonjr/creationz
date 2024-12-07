@@ -1,12 +1,10 @@
-import React from "react";
 import { AgGridReact } from "ag-grid-react";
 import { ColDef, ICellRendererParams } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 
 import styles from "./CategoryList.module.css";
-import { Design } from "../../types/Design";
-import { Category } from "../../types/Category";
+import { Category, Design } from "../../types/global";
 
 interface CategoryListProps {
   categories: Category[];

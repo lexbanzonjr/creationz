@@ -1,9 +1,7 @@
-import axios from "axios";
-
 import ProductForm from "../../components/admin/ProductForm";
 import ProductList from "../../components/admin/ProductList";
 import { useAuth } from "../../context/AuthContext";
-import { Product } from "../../types/Product";
+import { Product } from "../../types/global";
 
 interface ProductPageProps {
   products: Product[];
@@ -58,12 +56,8 @@ const ProductPage: React.FC<ProductPageProps> = (props) => {
 
   return (
     <div>
-      <ProductForm addCategory={handleAddProduct} />
-      <ProductList
-        products={props.products}
-        handleDeleteProduct={handleDeleteProduct}
-        setProducts={props.setProducts}
-      />
+      <ProductForm />
+      <ProductList />
     </div>
   );
 };

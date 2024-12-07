@@ -1,9 +1,7 @@
-import axios from "axios";
-
 import CategoryForm from "../../components/admin/CategoryForm";
 import CategoryList from "../../components/admin/CategoryList";
 import { useAuth } from "../../context/AuthContext";
-import { Category } from "../../types/Category";
+import { Category } from "../../types/global";
 
 interface CategoryPageProps {
   categories: Category[];
@@ -58,12 +56,8 @@ const CategoryPage: React.FC<CategoryPageProps> = (props) => {
 
   return (
     <div>
-      <CategoryForm addCategory={handleAddCategory} />
-      <CategoryList
-        categories={props.categories}
-        handleDeleteCategory={handleDeleteCategory}
-        setCategories={props.setCategories}
-      />
+      <CategoryForm />
+      <CategoryList />
     </div>
   );
 };
