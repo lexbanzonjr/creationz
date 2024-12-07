@@ -1,4 +1,4 @@
-.category-list {
+.category-properties {
   display: block;
   width: 800px;
   height: 800px;
@@ -10,7 +10,7 @@
   margin-left: 500px;
 }
 
-.category-list h2 {
+.category-properties h2 {
   text-align: center;
   color: black;
   font-weight: bold;

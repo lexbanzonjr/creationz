@@ -1,11 +1,11 @@
 import CategoryForm from "../../components/admin/CategoryForm";
-import CategoryList from "../../components/admin/CategoryList";
+import CategoryProperties from "../../components/admin/CategoryProperties";
 
 const CategoryPage = () => {
   return (
     <div>
       <CategoryForm />
-      <CategoryList />
+      <CategoryProperties />
     </div>
   );
 };

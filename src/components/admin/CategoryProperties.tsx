@@ -3,7 +3,7 @@ import { ColDef, ICellRendererParams } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 
-import styles from "./CategoryList.module.css";
+import styles from "./CategoryProperties.module.css";
 import { Category, Design } from "../../types/global";
 import useStore from "../../hooks/useAdminStore";
 import { useAuth } from "../../context/AuthContext";
@@ -53,8 +53,8 @@ const CategoryList = () => {
   ];
 
   return (
-    <div className={styles["category-list"]}>
-      <h2>Category List</h2>
+    <div className={styles["category-properties"]}>
+      <h2>Category Properties</h2>
       <div className="ag-theme-alpine" style={{ height: 650, width: "100%" }}>
         <AgGridReact
           rowData={categories}
