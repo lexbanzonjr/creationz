@@ -75,6 +75,20 @@
   font-size: 14px;
 }
 
+.category-designs select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  font-size: 14px;
+  position: relative;
+  font-family: Arial;
+  border: 1px solid #bdc3c7;
+  border-radius: 4px;
+  top: -8px;
+  height: 43px;
+}
+
 .tooltip {
   position: absolute;
   top: 30px;

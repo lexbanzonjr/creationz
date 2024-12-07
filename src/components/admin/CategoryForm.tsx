@@ -23,7 +23,7 @@ const blankDesign: Design = {
 const CategoryForm = () => {
   const [category, setCategory] = useState<Category>(blankCategory);
   const [design, setDesign] = useState<Design>(blankDesign);
-  const { addCategory } = useStore();
+  const { types, addCategory } = useStore();
   const { getAccessToken } = useAuth();
 
   const columnDefs: ColDef[] = [
@@ -59,7 +59,7 @@ const CategoryForm = () => {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     if (name === "category-name") {
@@ -146,13 +146,17 @@ const CategoryForm = () => {
                 Select type of choice <br />
                 <br />
               </small>
-              <input
-                type="text"
+              <select
                 name="design-type"
-                value={design.type}
+                id="design-type"
                 onChange={handleChange}
-                required
-              />
+              >
+                {types.map((type, index) => (
+                  <option key={index} value={type.name}>
+                    {type.name}
+                  </option>
+                ))}
+              </select>
             </label>
             <button
               type="button"
