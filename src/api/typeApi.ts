@@ -1,14 +1,12 @@
 import axios from "axios";
-import { Type } from "../types/Type";
-import { Option } from "../types/Option";
+import { BaseApiProps } from "./type";
+import { Option, Type } from "../types/global";
 
-export const addType = async ({
-  accessToken,
-  type,
-}: {
-  accessToken: string;
+export interface AddTypeProps extends BaseApiProps {
   type: Type;
-}) => {
+}
+
+export const addType = async ({ accessToken, type }: AddTypeProps) => {
   const response = await axios.post("https://localhost:5000/type", type, {
     headers: {
       Authorization: `Basic ${accessToken}`,
@@ -57,12 +55,20 @@ export const deleteType = async ({
   } catch (error: any) {}
 };
 
-export const getTypes = async (props: { accessToken: string }) => {
+export const getTypes = async (
+  props: { accessToken: string; populate: boolean } = {
+    accessToken: "",
+    populate: false,
+  }
+) => {
   try {
     // API call to register the account
     const response = await axios.get("https://localhost:5000/type", {
       headers: {
         Authorization: `Bearer ${props.accessToken}`,
+      },
+      params: {
+        populate: props.populate,
       },
     });
     return response.data.types as Type[];

@@ -6,15 +6,13 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 
 import styles from "./ProductList.module.css";
 import { Product } from "../../types/global";
+import { useAuth } from "../../context/AuthContext";
+import useStore from "../../hooks/useAdminStore";
 
-interface ProductListProps {
-  products: Product[];
+const ProductList = () => {
+  const { getAccessToken } = useAuth();
+  const { products, deleteProduct, setProducts } = useStore();
 
-  handleDeleteProduct: (product: Product) => void;
-  setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
-}
-
-const ProductList: React.FC<ProductListProps> = (props) => {
   // Define column definitions for AG Grid
   const columnDefs: ColDef[] = [
     {
@@ -36,7 +34,9 @@ const ProductList: React.FC<ProductListProps> = (props) => {
         return (
           <button
             type="button"
-            onClick={() => props.handleDeleteProduct(params.data as Product)}
+            onClick={() =>
+              deleteProduct(getAccessToken, params.data as Product)
+            }
             style={{ cursor: "pointer", padding: "5px 10px", color: "red" }}
           >
             Remove
@@ -52,13 +52,13 @@ const ProductList: React.FC<ProductListProps> = (props) => {
       <h2>Product List</h2>
       <div className="ag-theme-alpine" style={{ height: 400, width: "100%" }}>
         <AgGridReact
-          rowData={props.products}
+          rowData={products}
           columnDefs={columnDefs}
           defaultColDef={{ flex: 1, resizable: true }}
           onCellValueChanged={(params) => {
             const updatedProduct = params.data as Product;
-            props.setProducts((prevProducts) =>
-              prevProducts.map((product) =>
+            setProducts(
+              products.map((product) =>
                 product._id === updatedProduct._id ? updatedProduct : product
               )
             );

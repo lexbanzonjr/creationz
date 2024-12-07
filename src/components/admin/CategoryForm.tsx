@@ -6,10 +6,8 @@ import { AgGridReact } from "ag-grid-react";
 import { Category, Design } from "../../types/global";
 import styles from "./CategoryForm.module.css";
 import RemoveButton from "./../RemoveButton";
-
-interface CategoryFormProps {
-  addCategory: (category: Category) => void;
-}
+import useStore from "../../hooks/useAdminStore";
+import { useAuth } from "../../context/AuthContext";
 
 const blankCategory: Category = {
   _id: "",
@@ -22,9 +20,11 @@ const blankDesign: Design = {
   type: "",
 };
 
-const CategoryForm: React.FC<CategoryFormProps> = (props) => {
+const CategoryForm = () => {
   const [category, setCategory] = useState<Category>(blankCategory);
   const [design, setDesign] = useState<Design>(blankDesign);
+  const { addCategory } = useStore();
+  const { getAccessToken } = useAuth();
 
   const columnDefs: ColDef[] = [
     {
@@ -53,7 +53,7 @@ const CategoryForm: React.FC<CategoryFormProps> = (props) => {
   ];
 
   const handleAddCategoryBtnClick = () => {
-    props.addCategory(category);
+    addCategory(getAccessToken, category);
     setCategory(blankCategory);
     setDesign(blankDesign);
   };

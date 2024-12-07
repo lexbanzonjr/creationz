@@ -5,15 +5,13 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 
 import styles from "./CategoryList.module.css";
 import { Category, Design } from "../../types/global";
+import useStore from "../../hooks/useAdminStore";
+import { useAuth } from "../../context/AuthContext";
 
-interface CategoryListProps {
-  categories: Category[];
+const CategoryList = () => {
+  const { getAccessToken } = useAuth();
+  const { categories, deleteCategory, setCategories } = useStore();
 
-  handleDeleteCategory: (category: Category) => void;
-  setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
-}
-
-const CategoryList: React.FC<CategoryListProps> = (props) => {
   // Define column definitions for AG Grid
   const columnDefs: ColDef[] = [
     {
@@ -41,7 +39,9 @@ const CategoryList: React.FC<CategoryListProps> = (props) => {
         return (
           <button
             type="button"
-            onClick={() => props.handleDeleteCategory(params.data as Category)}
+            onClick={() =>
+              deleteCategory(getAccessToken, params.data as Category)
+            }
             style={{ cursor: "pointer", padding: "5px 10px", color: "red" }}
           >
             Remove
@@ -57,13 +57,13 @@ const CategoryList: React.FC<CategoryListProps> = (props) => {
       <h2>Category List</h2>
       <div className="ag-theme-alpine" style={{ height: 650, width: "100%" }}>
         <AgGridReact
-          rowData={props.categories}
+          rowData={categories}
           columnDefs={columnDefs}
           defaultColDef={{ flex: 1, resizable: true }}
           onCellValueChanged={(params) => {
             const updatedCategory = params.data as Category;
-            props.setCategories((prevCategories) =>
-              prevCategories.map((category) =>
+            setCategories(
+              categories.map((category) =>
                 category._id === updatedCategory._id
                   ? updatedCategory
                   : category

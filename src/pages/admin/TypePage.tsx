@@ -5,12 +5,8 @@ import TypeList from "../../components/admin/TypeList";
 import TypeProperties from "../../components/admin/TypeProperties";
 import { useAuth } from "../../context/AuthContext";
 import { addType, addTypeOption, deleteType } from "../../api/typeApi";
+import useStore from "../../hooks/useAdminStore";
 import { Option, Type } from "../../types/global";
-
-interface TypePageProps {
-  types: Type[];
-  setTypes: React.Dispatch<React.SetStateAction<Type[]>>;
-}
 
 export type IHandleAddTypeOption = (option: Option) => Promise<void>;
 
@@ -20,13 +16,14 @@ const blankType: Type = {
   options: [],
 };
 
-const TypePage: React.FC<TypePageProps> = (props) => {
+const TypePage = () => {
   const { getAccessToken } = useAuth();
   const [type, setType] = useState<Type>(blankType);
+  const { types, setTypes } = useStore();
 
   const handleAddType = async (type: Type) => {
     const newType = (await addType({ accessToken: getAccessToken, type })).type;
-    props.setTypes((prevTypes) => [...prevTypes, newType]);
+    setTypes([...types, newType]);
     setType(type);
     return type;
   };
@@ -44,22 +41,20 @@ const TypePage: React.FC<TypePageProps> = (props) => {
 
   const handleDeleteType = async (type: Type) => {
     deleteType({ accessToken: getAccessToken, type });
-    props.setTypes((prevTypes) =>
-      prevTypes.filter((prod) => prod._id !== type._id)
-    );
+    setTypes(types.filter((prod) => prod._id !== type._id));
   };
 
   return (
     <div>
       <div className="type-form float-left w-[475px] h-[800px] mx-auto bg-white p-5 rounded-lg shadow-md ">
         <TypeForm
-          types={props.types}
+          types={types}
           addType={handleAddType}
           deleteType={handleDeleteType}
         />
         <br />
         <TypeList
-          types={props.types}
+          types={types}
           deleteType={handleDeleteType}
           setType={setType}
         />

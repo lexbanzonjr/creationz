@@ -1,44 +1,47 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import { MdCategory, MdColorLens } from "react-icons/md";
 import { IoMdShirt } from "react-icons/io";
 
-import CategoryPage from "./CategoryPage";
-import ProductPage from "./ProductPage";
 import ViewOrders from "./ViewOrders";
 import styles from "./Dashboard.module.css";
-import { Category } from "../../types/Category";
 import { useAuth } from "../../context/AuthContext";
-import { Product } from "../../types/Product";
-import { Type } from "../../types/Type";
 import { getCategories } from "../../api/categoryApi";
 import { getProducts } from "../../api/productApi";
 import TypePage from "./TypePage";
 import { getTypes } from "../../api/typeApi";
+import useAdminStore from "../../hooks/useAdminStore";
+import CategoryPage from "./CategoryPage";
+import ProductPage from "./ProductPage";
 
 const AdminDashboard: React.FC = () => {
   const { getAccessToken } = useAuth();
   const { pathname } = useLocation();
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [types, setTypes] = useState<Type[]>([]);
+  const { populate, setAllData } = useAdminStore();
 
   useEffect(() => {
-    const params = { accessToken: getAccessToken };
-    const listCategories = async () => {
-      setCategories(await getCategories(params));
-    };
-    const listProducts = async () => {
-      setProducts(await getProducts(params));
-    };
-    const listTypes = async () => {
-      setTypes(await getTypes(params));
+    const fetchData = async () => {
+      const params = { accessToken: getAccessToken, populate: true };
+      try {
+        // Replace these functions with your actual data-fetching logic
+        const [categories, products, types] = await Promise.all([
+          getCategories(params),
+          getProducts(params),
+          getTypes(params),
+        ]);
+
+        // Set all data at once to avoid multiple re-renders
+        setAllData({ categories, products, types, populate: true });
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
 
-    listCategories();
-    listProducts();
-    listTypes();
-  }, [getAccessToken]);
+    if (!populate) {
+      fetchData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div>
@@ -88,25 +91,9 @@ const AdminDashboard: React.FC = () => {
         </nav>
         <div className={styles.content}>
           <Routes>
-            <Route
-              path="/category"
-              element={
-                <CategoryPage
-                  categories={categories}
-                  setCategories={setCategories}
-                />
-              }
-            />
-            <Route
-              path="/product"
-              element={
-                <ProductPage products={products} setProducts={setProducts} />
-              }
-            />{" "}
-            <Route
-              path="/type"
-              element={<TypePage types={types} setTypes={setTypes} />}
-            />
+            <Route path="/category" element={<CategoryPage />} />
+            <Route path="/product" element={<ProductPage />} />
+            <Route path="/type" element={<TypePage />} />
             <Route path="/view-orders" element={<ViewOrders />} />
           </Routes>
         </div>

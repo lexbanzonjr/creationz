@@ -2,10 +2,8 @@ import React, { useState } from "react";
 
 import { Product } from "../../types/global";
 import styles from "./ProductForm.module.css";
-
-interface ProductFormProps {
-  addCategory: (category: Product) => void;
-}
+import useStore from "../../hooks/useAdminStore";
+import { useAuth } from "../../context/AuthContext";
 
 const blankProduct: Product = {
   _id: "",
@@ -14,11 +12,13 @@ const blankProduct: Product = {
   category_id: "",
 };
 
-const ProductForm: React.FC<ProductFormProps> = (props) => {
+const ProductForm = () => {
   const [product, setProduct] = useState<Product>(blankProduct);
+  const { getAccessToken } = useAuth();
+  const { addProduct } = useStore();
 
   const handleAddProductBtnClick = () => {
-    props.addCategory(product);
+    addProduct(getAccessToken, product);
     setProduct(blankProduct);
   };
 
