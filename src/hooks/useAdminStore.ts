@@ -15,6 +15,9 @@ interface DataState {
   types: Type[];
   populate: boolean;
 
+  activeCategory?: Category;
+  setActiveCategory: (activeCategory: Category) => void;
+
   addCategory: (accessToken: string, category: Category) => Promise<Category>;
   addProduct: (accessToken: string, product: Product) => Promise<Product>;
 
@@ -43,6 +46,11 @@ const useStore = create<DataState>((set) => ({
   products: [],
   types: [],
   populate: false,
+
+  activeCategory: undefined,
+  setActiveCategory: (activeCategory) => {
+    set({ activeCategory });
+  },
 
   addCategory: async (accessToken, category) => {
     const newCategory = await addCategoryApi({ accessToken, category });

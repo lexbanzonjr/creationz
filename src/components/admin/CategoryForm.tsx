@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import AddIcon from "@mui/icons-material/Add";
 import { ColDef, ICellRendererParams } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 
 import { Category, Design } from "../../types/global";
 import styles from "./CategoryForm.module.css";
-import RemoveButton from "./../RemoveButton";
 import useStore from "../../hooks/useAdminStore";
 import { useAuth } from "../../context/AuthContext";
 
@@ -15,37 +13,41 @@ const blankCategory: Category = {
   designs: [],
 };
 
-const blankDesign: Design = {
-  name: "",
-  type: "",
-};
-
 const CategoryForm = () => {
   const [category, setCategory] = useState<Category>(blankCategory);
-  const [design, setDesign] = useState<Design>(blankDesign);
-  const { types, addCategory } = useStore();
+  const {
+    activeCategory,
+    categories,
+    addCategory,
+    deleteCategory,
+    setActiveCategory,
+    setCategories,
+  } = useStore();
   const { getAccessToken } = useAuth();
 
+  // Define column definitions for AG Grid
   const columnDefs: ColDef[] = [
     {
-      headerName: "Name",
+      headerName: "Category Name",
       field: "name",
       sortable: true,
       filter: true,
       flex: 1,
-    },
-    {
-      headerName: "Type",
-      field: "type",
-      flex: 2,
+      editable: true,
     },
     {
       headerName: "Actions",
-      cellRenderer: (params: ICellRendererParams<Design>) => {
+      cellRenderer: (params: ICellRendererParams<Category>) => {
         return (
-          <RemoveButton
-            onClick={() => handleRemoveBtnClick(params.data?.name ?? "")}
-          />
+          <button
+            type="button"
+            onClick={() =>
+              deleteCategory(getAccessToken, params.data as Category)
+            }
+            style={{ cursor: "pointer", padding: "5px 10px", color: "red" }}
+          >
+            Remove
+          </button>
         );
       },
       flex: 0.5,
@@ -55,7 +57,6 @@ const CategoryForm = () => {
   const handleAddCategoryBtnClick = () => {
     addCategory(getAccessToken, category);
     setCategory(blankCategory);
-    setDesign(blankDesign);
   };
 
   const handleChange = (
@@ -67,34 +68,7 @@ const CategoryForm = () => {
         ...prev,
         name: value,
       }));
-    } else if (name === "design-name") {
-      setDesign((prev) => ({
-        ...prev,
-        name: value,
-      }));
-    } else if (name === "design-type") {
-      setDesign((prev) => ({
-        ...prev,
-        type: value,
-      }));
     }
-  };
-
-  const handleAddDesignBtnClick = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    setCategory((prev) => ({
-      ...prev,
-      designs: [design, ...prev.designs],
-    }));
-    setDesign(blankDesign);
-  };
-
-  const handleRemoveBtnClick = (name: string) => {
-    setCategory((prev) => ({
-      ...prev,
-      designs: prev.designs.filter((design) => design.name !== name),
-    }));
   };
 
   return (
@@ -119,79 +93,30 @@ const CategoryForm = () => {
           </label>
         </div>
 
-        <div>
-          <label>
-            Designs:
-            <br />
-            <small>Designs offer customers to choose design options.</small>
-          </label>
-
-          <div className={styles["category-designs"]}>
-            <label>
-              Name:
-              <br />
-              <small>For example: color shirt, color bag, color font.</small>
-              <input
-                type="text"
-                name="design-name"
-                value={design.name}
-                onChange={handleChange}
-                required
-              />
-            </label>
-            <label>
-              Type:
-              <br />
-              <small>
-                Select type of choice <br />
-                <br />
-              </small>
-              <select
-                name="design-type"
-                id="design-type"
-                onChange={handleChange}
-              >
-                {types.map((type, index) => (
-                  <option key={index} value={type.name}>
-                    {type.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <button
-              type="button"
-              onClick={handleAddDesignBtnClick}
-              style={{
-                backgroundColor: "green",
-                border: "none",
-                borderRadius: "50%",
-                width: "25px",
-                height: "25px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-              }}
-              aria-label="Add design"
-            >
-              <AddIcon style={{ color: "white" }} />
-            </button>
-          </div>
-        </div>
-
-        <div className="ag-theme-alpine" style={{ height: 200, width: "100%" }}>
-          <AgGridReact
-            rowData={category.designs}
-            columnDefs={columnDefs}
-            defaultColDef={{ flex: 1, resizable: true }}
-          />
-        </div>
-
         <br />
         <button onClick={handleAddCategoryBtnClick} type="button">
           Add Category
         </button>
       </form>
+      <br />
+      <h2>Category List</h2>
+      <div className="ag-theme-alpine" style={{ height: "50%", width: "100%" }}>
+        <AgGridReact
+          rowData={categories}
+          columnDefs={columnDefs}
+          defaultColDef={{ flex: 1, resizable: true }}
+          onCellValueChanged={(params) => {
+            const updatedCategory = params.data as Category;
+            setCategories(
+              categories.map((category) =>
+                category._id === updatedCategory._id
+                  ? updatedCategory
+                  : category
+              )
+            );
+          }}
+        />
+      </div>
     </div>
   );
 };
