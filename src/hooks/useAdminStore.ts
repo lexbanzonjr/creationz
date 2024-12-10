@@ -8,6 +8,7 @@ import {
   addProduct as addProductApi,
   deleteProduct as deleteProductApi,
 } from "../api/productApi";
+import { deleteType as deleteTypeApi } from "../api/typeApi";
 
 interface DataState {
   categories: Category[];
@@ -23,6 +24,7 @@ interface DataState {
 
   deleteCategory: (accessToken: string, category: Category) => Promise<void>;
   deleteProduct: (accessToken: string, product: Product) => Promise<void>;
+  deleteType: (accessToken: string, type: Type) => Promise<void>;
 
   setCategories: (categories: Category[]) => void;
   setProducts: (products: Product[]) => void;
@@ -75,6 +77,12 @@ const useStore = create<DataState>((set) => ({
     await deleteProductApi({ accessToken, product });
     set((state) => ({
       products: state.products.filter((item) => item._id !== product._id),
+    }));
+  },
+  deleteType: async (accessToken, type) => {
+    await deleteTypeApi({ accessToken, type });
+    set((state) => ({
+      types: state.types.filter((item) => item._id !== type._id),
     }));
   },
 
