@@ -67,12 +67,20 @@ const TypeProperties: React.FC<TypePropertiesProps> = ({
           </small>
         </label>
       </h2>
-      <label className="block my-2 font-bold text-[#34495e]">Option:</label>
+      <label className="block my-2 font-bold text-[#34495e]">
+        Options:
+        <br />
+        <small className="text-gray-500">
+          Provides selectable options for the type
+        </small>
+      </label>
       <form>
-        <div>
-          <label className="block my-2 font-bold text-[#34495e]">
-            Name: <br />
-            <small className="text-gray-500">Enter a name for the type</small>
+        <fieldset className="border border-gray-300 rounded-md p-4">
+          <div>
+            <legend className="font-bold text-[#34495e]">Name:</legend>
+            <small className="text-gray-500 block mb-4">
+              Enter a name for the type
+            </small>
             <input
               type="text"
               name="option-name"
@@ -81,27 +89,30 @@ const TypeProperties: React.FC<TypePropertiesProps> = ({
               onChange={handleChange}
               disabled={!type._id}
             />
-          </label>
-          <GreenButton
-            onClick={handleAddOptionOnClick}
-            className="rounded-md"
-            type="button"
-          >
-            Add option
-          </GreenButton>
-        </div>
-      </form>
+            <GreenButton
+              onClick={handleAddOptionOnClick}
+              className="rounded-md"
+              type="button"
+            >
+              Add option
+            </GreenButton>
+          </div>
 
-      <label className="block my-2 font-bold text-[#34495e]">
-        Option list:
-      </label>
-      <div className="ag-theme-alpine" style={{ height: 350, width: "100%" }}>
-        <AgGridReact
-          rowData={type.options}
-          columnDefs={columnDefs}
-          defaultColDef={{ flex: 1, resizable: true }}
-        />
-      </div>
+          <label className="block my-2 font-bold text-[#34495e]">
+            Option list:
+          </label>
+          <div
+            className="ag-theme-alpine"
+            style={{ height: 350, width: "100%" }}
+          >
+            <AgGridReact
+              rowData={type.options}
+              columnDefs={columnDefs}
+              defaultColDef={{ flex: 1, resizable: true }}
+            />
+          </div>
+        </fieldset>
+      </form>
     </div>
   );
 };
