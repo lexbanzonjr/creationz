@@ -1,12 +1,13 @@
 import axios from "axios";
-import { BaseApiProps } from "./type";
 import { Option, Type } from "../types/global";
 
-export interface AddTypeProps extends BaseApiProps {
+export const addType = async ({
+  accessToken,
+  type,
+}: {
+  accessToken: string;
   type: Type;
-}
-
-export const addType = async ({ accessToken, type }: AddTypeProps) => {
+}) => {
   const response = await axios.post("https://localhost:5000/type", type, {
     headers: {
       Authorization: `Basic ${accessToken}`,
