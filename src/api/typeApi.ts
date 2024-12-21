@@ -14,18 +14,14 @@ export const addType = async ({
     },
   });
 
-  return response.data;
+  return response.data.type as Type;
 };
 
-export const addTypeOption = async ({
-  accessToken,
-  type,
-  option,
-}: {
-  accessToken: string;
-  type: Type;
-  option: Option;
-}) => {
+export const addTypeOption = async (
+  accessToken: string,
+  type: Type,
+  option: Option
+) => {
   const response = await axios.post(
     `https://localhost:5000/type/${type._id}/option`,
     { option },
@@ -36,7 +32,7 @@ export const addTypeOption = async ({
     }
   );
 
-  return response.data;
+  return response.data.option as Option;
 };
 
 export const deleteType = async ({
