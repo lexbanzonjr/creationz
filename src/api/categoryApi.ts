@@ -58,3 +58,23 @@ export const getCategories = async (
   } catch (err: any) {}
   return [];
 };
+
+export const updateCategory = async ({
+  accessToken,
+  category,
+}: {
+  accessToken: string;
+  category: Category;
+}) => {
+  const response = await axios.put(
+    "https://localhost:5000/category",
+    category,
+    {
+      headers: {
+        Authorization: `Basic ${accessToken}`,
+      },
+    }
+  );
+
+  return response.data.category as Category;
+};
