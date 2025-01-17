@@ -38,6 +38,27 @@ export const deleteCategory = async ({
   } catch (error: any) {}
 };
 
+export const getCateogy = async ({
+  accessToken,
+  __id,
+}: {
+  accessToken: string;
+  __id: string;
+}) => {
+  try {
+    const response = await axios.get(
+      `https://localhost:5000/category/${__id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data.categories as Category[];
+  } catch (err: any) {}
+  return null;
+};
+
 export const getCategories = async (
   props: { accessToken: string; populate: boolean } = {
     accessToken: "",

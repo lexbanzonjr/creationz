@@ -3,12 +3,13 @@ import { ColDef, ICellRendererParams } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 
-import styles from "./Admin.module.css";
 import { Design } from "../../types/global";
 import useStore from "../../hooks/useAdminStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RemoveButton from "../RemoveButton";
 import GreenButton from "../GreenButton";
+import { useAuth } from "../../context/AuthContext";
+import useDebounce from "../../hooks/useDebounce";
 
 const blankDesign: Design = {
   name: "",
@@ -17,7 +18,17 @@ const blankDesign: Design = {
 
 const CategoryProperties = () => {
   const [design, setDesign] = useState<Design>(blankDesign);
-  const { activeCategory, types, setActiveCategory } = useStore();
+  const { activeCategory, types, setActiveCategory, updateCategory } =
+    useStore();
+  const { getAccessToken } = useAuth();
+  const debouncedValue = useDebounce(activeCategory, 1000);
+
+  useEffect(() => {
+    if (debouncedValue._id !== "") {
+      updateCategory(getAccessToken, debouncedValue);
+    }
+  }, [debouncedValue, getAccessToken, updateCategory]);
+
   const columnDefs: ColDef[] = [
     {
       headerName: "Name",
@@ -58,13 +69,15 @@ const CategoryProperties = () => {
         ...prev,
         type: value,
       }));
+    } else if (name === "category-name" && value !== activeCategory.name) {
+      setActiveCategory({
+        ...activeCategory,
+        name: value,
+      });
     }
   };
 
   const handleAddDesignBtnClick = () => {
-    if (activeCategory === undefined) {
-      return;
-    }
     setActiveCategory({
       ...activeCategory,
       designs: [...activeCategory.designs, design],
@@ -83,87 +96,87 @@ const CategoryProperties = () => {
   };
 
   return (
-    <div className={styles["admin"]}>
-      <h2>Category Properties</h2>
-      <div>
-        <div>
-          <label>
-            Designs:
-            <br />
-            <small>Designs offer customers to choose design options.</small>
-          </label>
+    <div id="category-properties">
+      <h2 className="text-center text-black font-bold text-xl mb-5">
+        Category Properties
+      </h2>
 
-          <div>
-            <label>
-              Name:
-              <br />
-              <small>For example: color shirt, color bag, color font.</small>
-              <input
-                type="text"
-                name="design-name"
-                value={design.name}
-                onChange={handleChange}
-                required
-              />
-            </label>
-          </div>
+      <label className="block my-2 font-bold text-[#34495e]">
+        Category name:
+      </label>
+      <input
+        type="text"
+        name="category-name"
+        value={activeCategory._id === "" ? "" : activeCategory.name}
+        className="w-full p-2.5 mb-4 border border-[#bdc3c7] rounded-md text-sm disabled:cursor-not-allowed"
+        onChange={handleChange}
+        disabled={activeCategory._id === ""}
+        required
+      />
 
-          <div>
-            <label>
-              Type:
-              <br />
-              <small>
-                Select type of choice <br />
-              </small>
-              <select
-                name="design-type"
-                id="design-type"
-                onChange={handleChange}
-              >
-                {types.map((type, index) => (
-                  <option key={index} value={type.name}>
-                    {type.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
+      <fieldset className="border border-gray-300 rounded-md p-4">
+        <legend className="block my-2 font-bold text-[#34495e]">
+          Designs: {"  "}
+          <small className="text-gray-500">
+            Designs offer customers to choose design options.
+          </small>
+        </legend>
+
+        <label className="block my-2 font-bold text-[#34495e]">
+          Design name:
           <br />
-          {/* <button
-            type="button"
-            onClick={handleAddDesignBtnClick}
-            style={{
-              backgroundColor: "green",
-              border: "none",
-              borderRadius: "50%",
-              width: "25px",
-              height: "25px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-            }}
-            aria-label="Add design"
-          >
-            <AddIcon style={{ color: "white" }} />
-          </button> */}
-          <GreenButton
-            className="rounded-md"
-            onClick={handleAddDesignBtnClick}
-            type="button"
-          >
-            Add type
-          </GreenButton>
-        </div>
-      </div>
-      <br />
-      <div className="ag-theme-alpine" style={{ height: 200, width: "100%" }}>
-        <AgGridReact
-          rowData={activeCategory?.designs}
-          columnDefs={columnDefs}
-          defaultColDef={{ flex: 1, resizable: true }}
+          <small className="text-gray-500">
+            For example: color shirt, color bag, color font.
+          </small>
+        </label>
+        <input
+          type="text"
+          name="design-name"
+          value={design.name}
+          className="w-full p-2.5 mb-4 border border-[#bdc3c7] rounded-md text-sm disabled:cursor-not-allowed"
+          onChange={handleChange}
+          disabled={activeCategory._id === ""}
+          required
         />
-      </div>
+
+        <label className="block my-2 font-bold text-[#34495e]">
+          Design type:
+          <br />
+          <small className="text-gray-500">
+            Select type of choice <br />
+          </small>
+        </label>
+        <select
+          name="design-type"
+          id="design-type"
+          onChange={handleChange}
+          className="w-full p-2.5 mb-4 border border-[#bdc3c7] rounded-md text-sm disabled:cursor-not-allowed"
+          disabled={activeCategory._id === ""}
+        >
+          {types.map((type, index) => (
+            <option key={index} value={type.name}>
+              {type.name}
+            </option>
+          ))}
+        </select>
+
+        <GreenButton
+          className="rounded-md"
+          onClick={handleAddDesignBtnClick}
+          type="button"
+          disabled={activeCategory._id === ""}
+        >
+          Add design
+        </GreenButton>
+        <br />
+        <div className="ag-theme-alpine" style={{ height: 200, width: "100%" }}>
+          <AgGridReact
+            rowData={activeCategory?.designs}
+            columnDefs={columnDefs}
+            defaultColDef={{ flex: 1, resizable: true }}
+          />
+        </div>
+      </fieldset>
     </div>
   );
 };
