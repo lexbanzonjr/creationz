@@ -43,7 +43,7 @@ const AdminDashboard: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
+  return !populate ? null : (
     <div>
       <div className={`${styles["admin-dashboard"]} `}>
         <nav className={`${styles.nav}`}>
