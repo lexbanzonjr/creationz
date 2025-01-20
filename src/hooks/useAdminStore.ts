@@ -8,6 +8,7 @@ import {
 import {
   addProduct as addProductApi,
   deleteProduct as deleteProductApi,
+  updateProduct as updateProductApi,
 } from "../api/productApi";
 import {
   addType as addTypeApi,
@@ -25,6 +26,15 @@ const blankCategory: Category = {
 const blankOption: Option = {
   _id: "",
   name: "",
+};
+
+const blankProduct: Product = {
+  _id: "",
+  cost: 0.0,
+  name: "",
+  description: "",
+  image_id: [],
+  category_id: "",
 };
 
 const blankType: Type = {
@@ -54,7 +64,7 @@ interface DataState {
   activeType: Type;
 
   addCategory: (accessToken: string, category?: Category) => Promise<Category>;
-  addProduct: (accessToken: string, product: Product) => Promise<Product>;
+  addProduct: (accessToken: string, product?: Product) => Promise<Product>;
   addType: (accessToken: string, type: Type) => Promise<Type>;
   addTypeOption: (
     accessToken: string,
@@ -93,6 +103,7 @@ interface DataState {
     accessToken: string,
     category: Category
   ) => Promise<Category>;
+  updateProduct: (accessToken: string, product: Product) => Promise<Product>;
 }
 
 const useStore = create<DataState>((set) => ({
@@ -138,7 +149,11 @@ const useStore = create<DataState>((set) => ({
     return newCategory;
   },
   addProduct: async (accessToken, product) => {
-    const newProduct = await addProductApi({ accessToken, product });
+    let newProduct = blankProduct;
+    if (product) {
+      newProduct = { ...newProduct, ...product };
+    }
+    newProduct = await addProductApi({ accessToken, product: newProduct });
     set((state) => ({ products: [...state.products, newProduct] }));
     return newProduct;
   },
@@ -217,6 +232,15 @@ const useStore = create<DataState>((set) => ({
       ),
     }));
     return updateCategory;
+  },
+  updateProduct: async (accessToken: string, product: Product) => {
+    const updateProduct = await updateProductApi({ accessToken, product });
+    set((state) => ({
+      categories: state.categories.map((cat) =>
+        cat._id === product._id ? { ...cat, ...product } : cat
+      ),
+    }));
+    return updateProduct;
   },
 }));
 

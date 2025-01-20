@@ -44,3 +44,19 @@ export const getProducts = async (props: { accessToken: string }) => {
   } catch (err: any) {}
   return [];
 };
+
+export const updateProduct = async ({
+  accessToken,
+  product,
+}: {
+  accessToken: string;
+  product: Product;
+}) => {
+  const response = await axios.put("https://localhost:5000/product", product, {
+    headers: {
+      Authorization: `Basic ${accessToken}`,
+    },
+  });
+
+  return response.data.product as Product;
+};

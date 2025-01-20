@@ -11,7 +11,7 @@ import useStore from "../../hooks/useAdminStore";
 
 const ProductList = () => {
   const { getAccessToken } = useAuth();
-  const { products, deleteProduct, setProducts } = useStore();
+  const { types: products, deleteProduct, setProducts } = useStore();
 
   // Define column definitions for AG Grid
   const columnDefs: ColDef[] = [
@@ -55,14 +55,6 @@ const ProductList = () => {
           rowData={products}
           columnDefs={columnDefs}
           defaultColDef={{ flex: 1, resizable: true }}
-          onCellValueChanged={(params) => {
-            const updatedProduct = params.data as Product;
-            setProducts(
-              products.map((product) =>
-                product._id === updatedProduct._id ? updatedProduct : product
-              )
-            );
-          }}
         />
       </div>
     </div>

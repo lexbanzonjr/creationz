@@ -7,8 +7,10 @@ import { useAuth } from "../../context/AuthContext";
 
 const blankProduct: Product = {
   _id: "",
+  cost: 0.0,
   name: "",
   description: "",
+  image_id: [],
   category_id: "",
 };
 

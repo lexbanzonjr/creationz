@@ -17,8 +17,10 @@ export interface Option {
 
 export interface Product {
   _id: string;
+  cost: number;
   name: string;
   description: string;
+  image_id: string[];
   category_id: string;
 }
 
