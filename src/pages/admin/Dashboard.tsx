@@ -8,7 +8,6 @@ import styles from "./Dashboard.module.css";
 import { useAuth } from "../../context/AuthContext";
 import { getCategories } from "../../api/categoryApi";
 import { getProducts } from "../../api/productApi";
-import TypePage from "./TypePage";
 import { getTypes } from "../../api/typeApi";
 import useAdminStore from "../../hooks/useAdminStore";
 import CategoryPage from "./CategoryPage";
@@ -93,7 +92,6 @@ const AdminDashboard: React.FC = () => {
           <Routes>
             <Route path="/category" element={<CategoryPage />} />
             <Route path="/product" element={<ProductPage />} />
-            <Route path="/type" element={<TypePage />} />
             <Route path="/view-orders" element={<ViewOrders />} />
           </Routes>
         </div>
