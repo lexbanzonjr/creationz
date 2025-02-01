@@ -84,6 +84,13 @@ const ProductDetailFrame = ({
         })}
         label="Category:"
         name="category"
+        onValueChange={(value: string) => {
+          setState((prevState) => ({
+            ...prevState,
+            changed: true,
+            product: { ...prevState.product, category_id: value },
+          }));
+        }}
       />
       <TextInput
         label="Description:"

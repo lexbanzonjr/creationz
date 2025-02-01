@@ -4,10 +4,12 @@ const Dropdown = ({
   items,
   label,
   name,
+  onValueChange,
 }: {
   items: { key: string; value: string; text: string }[];
   label: string;
   name: string;
+  onValueChange: (value: string) => void;
 }) => {
   const [value, setValue] = useState<string>("");
 
@@ -29,7 +31,9 @@ const Dropdown = ({
         }}
         value={value}
         onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-          setValue(event.target.value);
+          const newvalue = event.target.value;
+          setValue(newvalue);
+          onValueChange(newvalue);
         }}
       >
         <option disabled value="">
