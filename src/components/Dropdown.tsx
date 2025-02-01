@@ -4,14 +4,16 @@ const Dropdown = ({
   items,
   label,
   name,
+  value,
   onValueChange,
 }: {
   items: { key: string; value: string; text: string }[];
   label: string;
   name: string;
+  value: () => string;
   onValueChange: (value: string) => void;
 }) => {
-  const [value, setValue] = useState<string>("");
+  const [selectedValue, setSelectedValue] = useState<string>(value);
 
   return (
     <div>
@@ -29,10 +31,10 @@ const Dropdown = ({
             e.stopPropagation();
           };
         }}
-        value={value}
+        value={selectedValue}
         onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
           const newvalue = event.target.value;
-          setValue(newvalue);
+          setSelectedValue(newvalue);
           onValueChange(newvalue);
         }}
       >

@@ -84,6 +84,7 @@ const ProductDetailFrame = ({
         })}
         label="Category:"
         name="category"
+        value={() => state.product.category_id}
         onValueChange={(value: string) => {
           setState((prevState) => ({
             ...prevState,
