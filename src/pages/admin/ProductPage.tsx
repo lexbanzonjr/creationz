@@ -62,7 +62,7 @@ const ProductPage: React.FC = () => {
             <div className="inline-block w-full">
               <div className="float-left p-1">{currentProduct.name}</div>
               <br />
-              <div className="overflow-y-scroll p-4 h-96">
+              <div className="overflow-y-scroll p-4 h-96 w-full">
                 <ProductDetailFrame
                   show={params.data!.expanded}
                   product={currentProduct}
