@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 const Dropdown = ({
   items,
@@ -9,6 +9,8 @@ const Dropdown = ({
   label: string;
   name: string;
 }) => {
+  const [value, setValue] = useState<string>("");
+
   return (
     <div>
       <label htmlFor={name} className="block mr-4 font-bold text-[#34495e]">
@@ -25,10 +27,9 @@ const Dropdown = ({
             e.stopPropagation();
           };
         }}
-        value={""}
+        value={value}
         onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-          const value = event.target.value;
-          console.log("Selected value:", value); // Log the selected value
+          setValue(event.target.value);
         }}
       >
         <option disabled value="">
