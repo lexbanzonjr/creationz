@@ -38,15 +38,18 @@ const ProductPage: React.FC = () => {
         headerName: "Product",
         flex: 4,
         cellRenderer: (params: ICellRendererParams<RowData>) => {
-          const product = params.data?.product!;
-          const handleUpdateProduct = async (params: any, product: Product) => {
+          const currentProduct = params.data?.product!;
+          const handleUpdateProduct = async (
+            newProduct: Product,
+            currentProduct: Product
+          ) => {
             const updatedProduct = await updateProduct(getAccessToken, {
-              ...product,
-              ...params,
+              ...currentProduct,
+              ...newProduct,
             });
             setRowData((prevData) => {
               const index = prevData.findIndex(
-                (data) => data.product?._id === product._id
+                (data) => data.product?._id === currentProduct._id
               );
               if (index > -1) {
                 prevData[index].product = updatedProduct;
@@ -57,13 +60,14 @@ const ProductPage: React.FC = () => {
           };
           return (
             <div className="inline-block w-full">
-              <div className="float-left p-1">{product.name}</div>
+              <div className="float-left p-1">{currentProduct.name}</div>
               <br />
               <div className="overflow-y-scroll p-4 h-96">
                 <ProductDetailFrame
-                  product={product}
-                  updateProduct={(params) =>
-                    handleUpdateProduct(params, product)
+                  show={params.data!.expanded}
+                  product={currentProduct}
+                  updateProduct={async (newProduct: Product) =>
+                    await handleUpdateProduct(newProduct, currentProduct)
                   }
                 />
               </div>
@@ -109,11 +113,12 @@ const ProductPage: React.FC = () => {
         },
       },
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
   const getRowHeight = (params: any) => {
-    return params.data.expanded ? 500 : 50;
+    return params.data.expanded ? 500 : 45;
   };
 
   const handleAddRow = async () => {

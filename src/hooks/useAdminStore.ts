@@ -1,5 +1,10 @@
 import { create } from "zustand";
-import { Category, Option, Product, Type } from "../types/global";
+import { Binary, Category, Option, Product, Type } from "../types/global";
+import {
+  addBinary as addBinaryApi,
+  deleteBinary as deleteBinaryApi,
+  getBinary,
+} from "../api/binaryApi";
 import {
   addCategory as addCategoryApi,
   deleteCategory as deleteCategoryApi,
@@ -15,33 +20,12 @@ import {
   addTypeOption as addTypeOptionApi,
   deleteType as deleteTypeApi,
 } from "../api/typeApi";
-
-const blankCategory: Category = {
-  _id: "",
-  name: "",
-  description: "",
-  designs: [],
-};
-
-const blankOption: Option = {
-  _id: "",
-  name: "",
-};
-
-const blankProduct: Product = {
-  _id: "",
-  cost: 0.0,
-  name: "",
-  description: "",
-  image_id: [],
-  category_id: "",
-};
-
-const blankType: Type = {
-  _id: "",
-  name: "",
-  options: [],
-};
+import {
+  blankCategory,
+  blankOption,
+  blankProduct,
+  blankType,
+} from "../types/blank";
 
 const getNext = <T>(current: T, list: T[], blankObject: T) => {
   const index = list.findIndex((value) => current === value);
@@ -63,6 +47,7 @@ interface DataState {
   activeOption: Option;
   activeType: Type;
 
+  addBinary: (accessToken: string, binary: Binary) => Promise<Binary>;
   addCategory: (accessToken: string, category?: Category) => Promise<Category>;
   addProduct: (accessToken: string, product?: Product) => Promise<Product>;
   addType: (accessToken: string, type: Type) => Promise<Type>;
@@ -72,9 +57,12 @@ interface DataState {
     option: Option
   ) => Promise<Option>;
 
+  deleteBinary: (accessToken: string, binary: Binary) => Promise<void>;
   deleteCategory: (accessToken: string, category: Category) => Promise<void>;
   deleteProduct: (accessToken: string, product: Product) => Promise<void>;
   deleteType: (accessToken: string, type: Type) => Promise<void>;
+
+  getBinary: (accessToken: string, _id: string) => Promise<Binary>;
 
   resetActiveCategory: () => void;
   resetActiveType: () => void;
@@ -137,6 +125,9 @@ const useStore = create<DataState>((set) => ({
     return option;
   },
 
+  addBinary: async (accessToken, binary) => {
+    return await addBinaryApi({ accessToken, binary });
+  },
   addCategory: async (accessToken, category) => {
     let newCategory = blankCategory;
     if (category) {
@@ -173,6 +164,9 @@ const useStore = create<DataState>((set) => ({
     return newOption;
   },
 
+  deleteBinary: async (accessToken, binary) => {
+    await deleteBinaryApi({ accessToken, binary });
+  },
   deleteCategory: async (accessToken, category) => {
     await deleteCategoryApi({ accessToken, category });
     set((state) => ({
@@ -198,6 +192,10 @@ const useStore = create<DataState>((set) => ({
           ? getNext(type, state.types, blankType)
           : state.activeType,
     }));
+  },
+
+  getBinary: async (accessToken, _id) => {
+    return await getBinary({ accessToken, _id });
   },
 
   setCategories: (categories) => {

@@ -1,38 +1,50 @@
 import { useEffect, useState } from "react";
+import { Binary } from "../types/global";
 
 const ImagePreview = ({
-  file,
+  binary,
   className,
-  handleImageDelete,
+  id,
+  onImageDelete: handleImageDelete,
 }: {
-  file: File;
+  binary: Binary;
   className?: string;
-  handleImageDelete: (file: File) => void;
+  id?: string;
+  onImageDelete: (binary: Binary) => void;
 }) => {
   const [objectURL, setObjectURL] = useState<string | null>(null);
 
   useEffect(() => {
-    if (file) {
-      const url = URL.createObjectURL(file);
+    if (binary.data) {
+      const url = URL.createObjectURL(binary.data);
       setObjectURL(url);
-
       return () => {
         // Clean up when the component unmounts
         URL.revokeObjectURL(url);
       };
     }
-  }, [file]);
+  }, [binary.data]);
 
   return objectURL ? (
     <div className="relative  max-w-sm">
       <img
-        src={objectURL}
         alt="Preview"
         className={`rounded shadow ${className}`}
+        id={id}
+        src={objectURL}
       />
       <button
-        onClick={() => handleImageDelete(file)}
         className="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded-full shadow hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300"
+        id={id}
+        ref={(ref: HTMLButtonElement | null) => {
+          if (!ref) {
+            return;
+          }
+          ref.onkeydown = (e) => {
+            e.stopPropagation();
+          };
+        }}
+        onClick={() => handleImageDelete(binary)}
       >
         X
       </button>

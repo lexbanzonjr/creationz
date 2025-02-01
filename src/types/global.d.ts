@@ -1,3 +1,10 @@
+export interface Binary {
+  _id: string;
+  name: string;
+  data?: File;
+  "content-type": string;
+}
+
 export interface Category {
   _id: string;
   name: string;

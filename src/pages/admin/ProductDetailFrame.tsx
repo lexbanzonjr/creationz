@@ -1,152 +1,167 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import GreenButton from "../../components/GreenButton";
-import { Product } from "../../types/global";
-import ImagePreview from "../../components/ImagePreview";
+import { Binary, Product } from "../../types/global";
 import CurrencyInput from "../../components/CurrencyInput";
+import useStore from "../../hooks/useAdminStore";
+import { useAuth } from "../../context/AuthContext";
+import TextInput from "../../components/TextInput";
+import Dropdown from "../../components/Dropdown";
+import ImageListEditor, {
+  ImageListEditorHandle,
+} from "../../components/ImageListEditor";
 
 const ProductDetailFrame = ({
   product,
+  show,
   updateProduct,
 }: {
   product: Product;
-  updateProduct: (product: any) => void;
+  show: boolean;
+  updateProduct: (product: Product) => Promise<void>;
 }) => {
   const [state, setState] = useState<{
+    fetch: boolean;
     changed: boolean;
-    description: string;
-    name: string;
-    image_file: File[];
+    product: Product;
+    images: Binary[];
+    new_images: Binary[];
+    remove_images: Binary[];
   }>({
+    fetch: false,
     changed: false,
-    description: product.description,
-    name: product.name,
-    image_file: [],
+    product,
+    images: [],
+    new_images: [],
+    remove_images: [],
   });
+  const { categories, addBinary, deleteBinary, getBinary } = useStore();
+  const { getAccessToken } = useAuth();
 
-  const handleChange = (param: any) => {
-    const targetName = param.target.name;
-    const value = param.target.value;
-    if (targetName === "name") {
-      setState((prevState) => ({
-        ...prevState,
-        changed: true,
-        name: value,
-      }));
-    } else if (targetName === "description") {
-      setState((prevState) => ({
-        ...prevState,
-        changed: true,
-        description: value,
-      }));
-    } else if (targetName === "file" && param.target.files[0]!) {
-      const files = param.target.files;
-      setState((prevState) => ({
-        ...prevState,
-        changed: true,
-        image_file: [...prevState.image_file, ...files],
-      }));
-    }
-  };
+  useEffect(() => {
+    const goFetch = async () => {
+      const images: Binary[] = [];
 
-  const handleClick = () => {
-    updateProduct({
-      name: state.name,
-      description: state.description,
-    });
-    setState((prevState) => ({ ...prevState, changed: false }));
-  };
-
-  const handleImageDelete = (file: File) => {
-    setState((prevState) => ({
-      ...prevState,
-      image_file: prevState.image_file.filter((item) => item !== file),
-    }));
-  };
-
-  const handleRef = (ref: HTMLInputElement | null) => {
-    if (!ref) {
-      return;
-    }
-    ref.onkeydown = (e) => {
-      e.stopPropagation();
+      for (const id of state.product.image_id) {
+        images.push(await getBinary(getAccessToken, id));
+      }
+      setState((prevState) => ({ ...prevState, fetch: true, images }));
     };
-  };
+    if (!state.fetch && show) {
+      // clear out the lists
+      setState((prevState) => ({
+        ...prevState,
+        images: [],
+        new_images: [],
+        remove_images: [],
+      }));
+      goFetch();
+    }
+  }, [state.fetch, state.product.image_id, show, getBinary, getAccessToken]);
+  const imageRef = useRef<ImageListEditorHandle>(null);
 
-  return (
+  return !state.fetch ? null : (
     <div>
+      <TextInput
+        label="Name:"
+        name="name"
+        required
+        value={state.product.name}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          setState((prevState) => ({
+            ...prevState,
+            changed: true,
+            product: { ...prevState.product, name: e.target.value },
+          }));
+        }}
+      />
+      <Dropdown
+        items={categories.map((category) => {
+          return {
+            key: category._id,
+            value: category._id,
+            text: category.name,
+          };
+        })}
+        label="Category:"
+        name="category"
+      />
+      <TextInput
+        label="Description:"
+        name="description"
+        value={state.product.description}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          setState((prevState) => ({
+            ...prevState,
+            changed: true,
+            product: { ...prevState.product, description: e.target.value },
+          }));
+        }}
+      />
       <div>
-        <label className="block mr-4 font-bold text-[#34495e]">Name:</label>
-        <input
-          ref={handleRef}
-          type="text"
-          name="name"
-          value={state.name}
-          onChange={handleChange}
-          className="w-full p-2.5 border border-[#bdc3c7] rounded-md text-sm"
-          required
+        <CurrencyInput
+          name="cost"
+          value={String(state.product.cost)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setState((prevState) => ({
+              ...prevState,
+              changed: true,
+              product: {
+                ...product,
+                cost: Number(
+                  Number(e.target.value.replace(/[^0-9.]/g, "")).toFixed(2)
+                ),
+              },
+            }));
+          }}
         />
       </div>
-      <div>
-        <label className="block mr-4 font-bold text-[#34495e]">
-          Description:
-        </label>
-        <input
-          ref={handleRef}
-          type="text"
-          name="description"
-          value={state.description}
-          onChange={handleChange}
-          className="w-full p-2.5 border border-[#bdc3c7] rounded-md text-sm"
-          required
-        />
-      </div>
-      <div>
-        <CurrencyInput className="w-full p-2.5 border border-[#bdc3c7] rounded-md text-sm" />
-      </div>
-      <div>
-        <label className="block mr-4 font-bold text-[#34495e]">Images:</label>
-
-        {state.image_file.length > 0 && (
-          <div className="flex flex-wrap gap-4">
-            {state.image_file.map((file, index) => (
-              <ImagePreview
-                key={index}
-                handleImageDelete={handleImageDelete}
-                file={file}
-                className="h-48"
-              />
-            ))}
-          </div>
-        )}
-
-        <div>
-          <label
-            htmlFor="file"
-            className="bg-green-500 text-white py-2 px-4 rounded cursor-pointer hover:bg-green-600"
-          >
-            Select image
-          </label>
-          <input
-            type="file"
-            id="file"
-            name="file"
-            accept="image/*"
-            className="hidden"
-            onChange={handleChange}
-            multiple
-          />
-        </div>
-        <label>Upload file</label>
-        <input
-          type="submit"
-          //  onClick={this.handleSubmitFile} value="Submit"
-        />
-      </div>
+      <ImageListEditor
+        images={state.images}
+        ref={imageRef}
+        onChange={() => {
+          setState((prevState) => ({
+            ...prevState,
+            changed: true,
+          }));
+        }}
+      />
       <GreenButton
         className="rounded-md"
-        type="button"
-        onClick={handleClick}
         disabled={!state.changed}
+        name="save changes"
+        type="button"
+        onClick={async () => {
+          // Copy product
+          const saveProduct = { ...state.product };
+
+          const images = imageRef.current?.getImages?.();
+
+          // Delete images from remove list
+          for (const binary of images!.remove_images) {
+            await deleteBinary(getAccessToken, binary);
+
+            // Remove binary
+            saveProduct.image_id = saveProduct.image_id.filter(
+              (ids) => ids !== binary._id
+            );
+          }
+
+          // Save all new images
+          for (const binary of images!.new_images) {
+            const newBinary = await addBinary(getAccessToken, binary);
+
+            // Add binary
+            saveProduct.image_id.push(newBinary._id);
+          }
+
+          await updateProduct(saveProduct);
+          setState((prevState) => ({
+            ...prevState,
+            product: saveProduct,
+            changed: false,
+            fetch: false,
+          }));
+        }}
       >
         Save changes
       </GreenButton>

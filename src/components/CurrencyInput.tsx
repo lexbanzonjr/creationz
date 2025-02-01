@@ -1,12 +1,24 @@
 import React, { useState } from "react";
 
-const CurrencyInput = ({ className }: { className?: string }) => {
-  const [value, setValue] = useState("");
+const CurrencyInput = ({
+  name,
+  value,
+  onChange: handleChange,
+}: {
+  name?: string;
+  value?: string;
+  onChange?: (param: any) => void;
+}) => {
+  const [inputValue, setInputValue] = useState(value);
 
   const formatCurrency = (inputValue: string) => {
     // Check if input ends with a "." or has invalid multiple decimals
-    if (inputValue === "" || inputValue === "$") return "";
-    if (inputValue === ".") return "$0.";
+    if (inputValue === "" || inputValue === "$") {
+      return "";
+    }
+    if (inputValue === ".") {
+      return "$0.";
+    }
 
     // Remove non-numeric characters except "."
     const numericValue = inputValue.replace(/[^0-9.]/g, "");
@@ -27,21 +39,6 @@ const CurrencyInput = ({ className }: { className?: string }) => {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const rawValue = e.target.value;
-    const formattedValue = formatCurrency(rawValue);
-    setValue(formattedValue);
-  };
-
-  const handleRef = (ref: HTMLInputElement | null) => {
-    if (!ref) {
-      return;
-    }
-    ref.onkeydown = (e) => {
-      e.stopPropagation();
-    };
-  };
-
   return (
     <div>
       <label
@@ -51,13 +48,29 @@ const CurrencyInput = ({ className }: { className?: string }) => {
         Enter Amount:
       </label>
       <input
-        ref={handleRef}
+        name={name}
+        ref={(ref: HTMLInputElement | null) => {
+          if (!ref) {
+            return;
+          }
+          ref.onkeydown = (e) => {
+            e.stopPropagation();
+          };
+        }}
         id="currencyInput"
         type="text"
-        value={value}
-        onChange={handleChange}
+        value={formatCurrency(inputValue!)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          const rawValue = e.target.value;
+          const formattedValue = formatCurrency(rawValue);
+          setInputValue(formattedValue);
+          if (handleChange) {
+            e.target.value = formattedValue;
+            handleChange(e);
+          }
+        }}
         placeholder="$0.00"
-        className={`${className}`}
+        className="w-full p-2.5 border border-[#bdc3c7] rounded-md text-sm"
       />
     </div>
   );
