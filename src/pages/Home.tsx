@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./Home.module.css";
+import BlueButton from "../components/BlueButton";
 
 const Home: React.FC = () => {
   return (
@@ -29,7 +29,7 @@ const Home: React.FC = () => {
             <img src="/images/graphic-tee.jpg" alt="Graphic Tee" />
             <h3>Graphic Tee</h3>
             <p>$24.99</p>
-            <button>Add to Cart</button>
+            <BlueButton>Add to Cart</BlueButton>
           </div>
         </div>
       </section>
