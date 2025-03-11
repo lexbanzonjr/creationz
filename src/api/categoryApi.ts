@@ -60,7 +60,7 @@ export const getCateogy = async ({
 };
 
 export const getCategories = async (
-  props: { accessToken: string; populate: boolean } = {
+  props: { accessToken?: string; populate: boolean } = {
     accessToken: "",
     populate: false,
   }
@@ -68,9 +68,11 @@ export const getCategories = async (
   try {
     // API call to register the account
     const response = await axios.get("https://localhost:5000/category", {
-      headers: {
-        Authorization: `Bearer ${props.accessToken}`,
-      },
+      headers: !props.accessToken
+        ? {}
+        : {
+            Authorization: `Bearer ${props.accessToken}`,
+          },
       params: {
         populate: props.populate,
       },

@@ -32,13 +32,15 @@ export const deleteProduct = async ({
   });
 };
 
-export const getProducts = async (props: { accessToken: string }) => {
+export const getProducts = async (props?: { accessToken?: string }) => {
   try {
     // API call to register the account
     const response = await axios.get("https://localhost:5000/product", {
-      headers: {
-        Authorization: `Bearer ${props.accessToken}`,
-      },
+      headers: !props?.accessToken
+        ? {}
+        : {
+            Authorization: `Bearer ${props.accessToken}`,
+          },
     });
     return response.data.products as Product[];
   } catch (err: any) {}
