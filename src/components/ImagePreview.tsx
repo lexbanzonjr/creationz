@@ -10,7 +10,7 @@ const ImagePreview = ({
   binary: Binary;
   className?: string;
   id?: string;
-  onImageDelete: (binary: Binary) => void;
+  onImageDelete?: (binary: Binary) => void;
 }) => {
   const [objectURL, setObjectURL] = useState<string | null>(null);
 
@@ -44,7 +44,9 @@ const ImagePreview = ({
             e.stopPropagation();
           };
         }}
-        onClick={() => handleImageDelete(binary)}
+        onClick={
+          !handleImageDelete ? undefined : () => handleImageDelete(binary)
+        }
       >
         X
       </button>

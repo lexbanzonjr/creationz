@@ -44,16 +44,18 @@ export const getBinary = async ({
   accessToken,
   _id,
 }: {
-  accessToken: string;
+  accessToken?: string;
   _id: string;
 }) => {
   const binary = { ...blankBinary };
   try {
     const response = await axios.get(`https://localhost:5000/binary/${_id}`, {
       responseType: "blob", // Ensure the response is a Blob
-      headers: {
-        Authorization: `Basic ${accessToken}`,
-      },
+      headers: !accessToken
+        ? {}
+        : {
+            Authorization: `Basic ${accessToken}`,
+          },
     });
 
     const contentDisposition: Record<string, string> = parseContentDisposition(
