@@ -33,23 +33,23 @@ const ImagePreview = ({
         id={id}
         src={objectURL}
       />
-      <button
-        className="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded-full shadow hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300"
-        id={id}
-        ref={(ref: HTMLButtonElement | null) => {
-          if (!ref) {
-            return;
-          }
-          ref.onkeydown = (e) => {
-            e.stopPropagation();
-          };
-        }}
-        onClick={
-          !handleImageDelete ? undefined : () => handleImageDelete(binary)
-        }
-      >
-        X
-      </button>
+      {handleImageDelete && (
+        <button
+          className="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded-full shadow hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300"
+          id={id}
+          ref={(ref: HTMLButtonElement | null) => {
+            if (!ref) {
+              return;
+            }
+            ref.onkeydown = (e) => {
+              e.stopPropagation();
+            };
+          }}
+          onClick={() => handleImageDelete(binary)}
+        >
+          X
+        </button>
+      )}
     </div>
   ) : null;
 };
