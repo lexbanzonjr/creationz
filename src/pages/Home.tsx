@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import BlueButton from "../components/BlueButton";
 import ImagePreview from "../components/ImagePreview";
 
@@ -12,9 +12,13 @@ const Home: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [binaries, setBinaries] = useState<Record<string, Binary>>({});
+  const hasFetched = useRef(false);
 
   useEffect(() => {
     const fetchData = async () => {
+      if (hasFetched.current) return;
+      hasFetched.current = true;
+
       const cats = await getCateogiesApi();
       const prods = await getProductsApi();
       setCategories(cats);
@@ -32,10 +36,8 @@ const Home: React.FC = () => {
       }, {} as Record<string, Binary>);
       setBinaries(binaryMap);
     };
-    if (!loaded) {
-      fetchData();
-    }
-  }, [loaded]);
+    fetchData();
+  }, []); // Empty dependency array
 
   return !loaded ? null : (
     <div>
