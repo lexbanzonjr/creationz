@@ -19,8 +19,9 @@ const Home: React.FC = () => {
       const prods = await getProductsApi();
       setCategories(cats);
       setProducts(prods);
+      setLoaded(true);
 
-      // Fetch all binary data
+      // Fetch binary data asynchronously
       const binaryPromises = prods.flatMap((product) =>
         product.image_id.map((id) => getBinaryApi({ _id: id }))
       );
@@ -33,7 +34,6 @@ const Home: React.FC = () => {
     };
     if (!loaded) {
       fetchData();
-      setLoaded(true);
     }
   }, [loaded]);
 
