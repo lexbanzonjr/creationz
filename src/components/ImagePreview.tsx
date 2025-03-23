@@ -28,9 +28,12 @@ const ImagePreview = ({
       urlCache.current[binary._id] = url;
       setObjectURL(url);
 
+      // Capture the current value of the cache for cleanup
+      const currentCache = urlCache.current;
+
       return () => {
         // Only revoke URL if it's not in the cache
-        if (!urlCache.current[binary._id]) {
+        if (!currentCache[binary._id]) {
           URL.revokeObjectURL(url);
         }
       };
