@@ -58,7 +58,7 @@ const Home: React.FC = () => {
                   .map((id) => binaries[id])
                   .filter((binary): binary is Binary => binary !== undefined);
 
-                return productBinaries.length > 0 ? (
+                return (
                   <div>
                     <ImageCarousel
                       binaries={productBinaries}
@@ -69,7 +69,7 @@ const Home: React.FC = () => {
                     <p>{product.cost}</p>
                     <BlueButton>Add to Cart</BlueButton>
                   </div>
-                ) : null;
+                );
               })}
             </div>
           );
