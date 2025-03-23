@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Binary } from "../types/global";
 
 const ImagePreview = ({
@@ -13,20 +13,32 @@ const ImagePreview = ({
   onImageDelete?: (binary: Binary) => void;
 }) => {
   const [objectURL, setObjectURL] = useState<string | null>(null);
+  const urlCache = useRef<Record<string, string>>({});
 
   useEffect(() => {
     if (binary.data) {
+      // Check if we already have a URL for this binary
+      if (urlCache.current[binary._id]) {
+        setObjectURL(urlCache.current[binary._id]);
+        return;
+      }
+
+      // Create new URL if not cached
       const url = URL.createObjectURL(binary.data);
+      urlCache.current[binary._id] = url;
       setObjectURL(url);
+
       return () => {
-        // Clean up when the component unmounts
-        URL.revokeObjectURL(url);
+        // Only revoke URL if it's not in the cache
+        if (!urlCache.current[binary._id]) {
+          URL.revokeObjectURL(url);
+        }
       };
     }
-  }, [binary.data]);
+  }, [binary._id, binary.data]);
 
   return objectURL ? (
-    <div className="relative  max-w-sm">
+    <div className="relative max-w-sm">
       <img
         alt="Preview"
         className={`rounded shadow ${className}`}

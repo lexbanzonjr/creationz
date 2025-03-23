@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import BlueButton from "../components/BlueButton";
-import ImagePreview from "../components/ImagePreview";
+import ImageCarousel from "../components/ImageCarousel";
 
 import { getBinary as getBinaryApi } from "../api/binaryApi";
 import { getCategories as getCateogiesApi } from "../api/categoryApi";
@@ -54,12 +54,14 @@ const Home: React.FC = () => {
                 if (product.category_id !== category._id) {
                   return <></>;
                 }
-                const binary = binaries[product.image_id[0]];
-                return binary ? (
+                const productBinaries = product.image_id
+                  .map((id) => binaries[id])
+                  .filter((binary): binary is Binary => binary !== undefined);
+
+                return productBinaries.length > 0 ? (
                   <div>
-                    <ImagePreview
-                      key={binary._id}
-                      binary={binary}
+                    <ImageCarousel
+                      binaries={productBinaries}
                       className="h-48"
                     />
                     <h3>{product.name}</h3>
