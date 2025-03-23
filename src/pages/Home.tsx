@@ -59,15 +59,26 @@ const Home: React.FC = () => {
                   .filter((binary): binary is Binary => binary !== undefined);
 
                 return (
-                  <div>
+                  <div
+                    key={product._id}
+                    className="bg-white rounded-lg shadow-md overflow-hidden m-4 inline-block w-64"
+                  >
                     <ImageCarousel
                       binaries={productBinaries}
-                      className="h-48"
+                      className="w-full h-48 object-cover"
                     />
-                    <h3>{product.name}</h3>
-                    <h4>{product.description}</h4>
-                    <p>{product.cost}</p>
-                    <BlueButton>Add to Cart</BlueButton>
+                    <div className="p-4">
+                      <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                        {product.name}
+                      </h3>
+                      <h4 className="text-sm text-gray-600 mb-2 line-clamp-2">
+                        {product.description}
+                      </h4>
+                      <p className="text-lg font-bold text-blue-600 mb-4">
+                        ${product.cost.toFixed(2)}
+                      </p>
+                      <BlueButton className="w-full">Add to Cart</BlueButton>
+                    </div>
                   </div>
                 );
               })}
