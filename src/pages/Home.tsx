@@ -49,36 +49,46 @@ const Home: React.FC = () => {
         {categories.map((category) => {
           return (
             <div>
-              <h2>{category.name}</h2>
-              {products.map((product) => {
-                if (product.category_id !== category._id) {
-                  return <></>;
-                }
-                const productBinaries = product.image_id
-                  .map((id) => binaries[id])
-                  .filter((binary): binary is Binary => binary !== undefined);
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                {category.name}
+              </h2>
+              <div className="flex flex-wrap gap-4">
+                {products.map((product) => {
+                  if (product.category_id !== category._id) {
+                    return null;
+                  }
+                  const productBinaries = product.image_id
+                    .map((id) => binaries[id])
+                    .filter((binary): binary is Binary => binary !== undefined);
 
-                return (
-                  <div
-                    key={product._id}
-                    className="bg-white rounded-lg shadow-md overflow-hidden m-4 inline-block w-64"
-                  >
-                    <ImageCarousel
-                      binaries={productBinaries}
-                      className="w-full h-48 object-cover"
-                    />
-                    <div className="p-4">
-                      <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                        {product.name}
-                      </h3>
-                      <p className="text-lg font-bold text-blue-600 mb-4">
-                        ${product.cost.toFixed(2)}
-                      </p>
-                      <BlueButton className="w-full">Add to Cart</BlueButton>
+                  return (
+                    <div
+                      key={product._id}
+                      className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col w-64"
+                    >
+                      <div className="flex-shrink-0">
+                        <ImageCarousel
+                          binaries={productBinaries}
+                          className="w-full h-48 object-cover"
+                        />
+                      </div>
+                      <div className="p-4 flex flex-col flex-grow">
+                        <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                          {product.name}
+                        </h3>
+                        <div className="mt-auto">
+                          <p className="text-lg font-bold text-blue-600 mb-4">
+                            ${product.cost.toFixed(2)}
+                          </p>
+                          <BlueButton className="w-full">
+                            Add to Cart
+                          </BlueButton>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           );
         })}
