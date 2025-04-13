@@ -84,7 +84,7 @@ const ProductDetailFrame = ({
         })}
         label="Category:"
         name="category"
-        value={() => state.product.category_id}
+        value={() => state.product.category_id ?? ""}
         onValueChange={(value: string) => {
           setState((prevState) => ({
             ...prevState,
@@ -160,6 +160,11 @@ const ProductDetailFrame = ({
 
             // Add binary
             saveProduct.image_id.push(newBinary._id);
+          }
+
+          // Set category_id to undefined if it is empty
+          if (saveProduct.category_id === "") {
+            saveProduct.category_id = null;
           }
 
           await updateProduct(saveProduct);

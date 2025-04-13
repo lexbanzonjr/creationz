@@ -30,7 +30,7 @@ export interface Product {
   name: string;
   description: string;
   image_id: string[];
-  category_id: string;
+  category_id?: string | null;
 }
 
 export interface Type {
