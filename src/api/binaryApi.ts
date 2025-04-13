@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Binary } from "../types/global";
+import { Binary, Image } from "../types/global";
 import { blankBinary } from "../types/blank";
 import parseContentDisposition from "./utils/parseContentDisposition";
 
@@ -73,4 +73,19 @@ export const getBinary = async ({
     });
   } catch (error: any) {}
   return binary;
+};
+
+export const getImage = async ({
+  accessToken,
+  _id,
+}: {
+  accessToken?: string;
+  _id: string;
+}) => {
+  const binary = await getBinary({
+    accessToken,
+    _id,
+  });
+
+  return binary as Image;
 };

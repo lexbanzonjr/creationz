@@ -2,16 +2,16 @@ import React, { useEffect, useState, useRef } from "react";
 import BlueButton from "../components/BlueButton";
 import ImageCarousel from "../components/ImageCarousel";
 
-import { getBinary as getBinaryApi } from "../api/binaryApi";
+import { getImage as getImageApi } from "../api/binaryApi";
 import { getCategories as getCateogiesApi } from "../api/categoryApi";
 import { getProducts as getProductsApi } from "../api/productApi";
-import { Binary, Category, Product } from "../types/global";
+import { Category, Image, Product } from "../types/global";
 
 const Home: React.FC = () => {
   const [loaded, setLoaded] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
-  const [binaries, setBinaries] = useState<Record<string, Binary>>({});
+  const [images, setImages] = useState<Record<string, Image>>({});
   const hasFetched = useRef(false);
 
   useEffect(() => {
@@ -25,16 +25,16 @@ const Home: React.FC = () => {
       setProducts(prods);
       setLoaded(true);
 
-      // Fetch binary data asynchronously
-      const binaryPromises = prods.flatMap((product) =>
-        product.image_id.map((id) => getBinaryApi({ _id: id }))
+      // Fetch image data asynchronously
+      const imagePromises = prods.flatMap((product) =>
+        product.image_id.map((id) => getImageApi({ _id: id }))
       );
-      const binaryResults = await Promise.all(binaryPromises);
-      const binaryMap = binaryResults.reduce((acc, binary) => {
-        acc[binary._id] = binary;
+      const imageResults = await Promise.all(imagePromises);
+      const imageMap = imageResults.reduce((acc, image) => {
+        acc[image._id] = image;
         return acc;
-      }, {} as Record<string, Binary>);
-      setBinaries(binaryMap);
+      }, {} as Record<string, Image>);
+      setImages(imageMap);
     };
     fetchData();
   }, []); // Empty dependency array
@@ -57,9 +57,13 @@ const Home: React.FC = () => {
                   if (product.category_id !== category._id) {
                     return null;
                   }
-                  const productBinaries = product.image_id
-                    .map((id) => binaries[id])
-                    .filter((binary): binary is Binary => binary !== undefined);
+                  const productImages = product.image_id
+                    .map((id) => images[id])
+                    .filter((image): image is Image => image !== undefined);
+
+                  const productName = () => {
+                    return product.name;
+                  };
 
                   return (
                     <div
@@ -68,13 +72,13 @@ const Home: React.FC = () => {
                     >
                       <div className="flex-shrink-0">
                         <ImageCarousel
-                          binaries={productBinaries}
+                          images={productImages}
                           className="w-full h-48 object-cover"
                         />
                       </div>
                       <div className="p-4 flex flex-col flex-grow">
                         <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                          {product.name}
+                          {productName()}
                         </h3>
                         <div className="mt-auto">
                           <p className="text-lg font-bold text-blue-600 mb-4">

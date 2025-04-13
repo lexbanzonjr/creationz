@@ -1,31 +1,31 @@
 import { useEffect, useState, useRef } from "react";
-import { Binary } from "../types/global";
+import { Image } from "../types/global";
 
 const ImagePreview = ({
-  binary,
+  image,
   className,
   id,
   onImageDelete: handleImageDelete,
 }: {
-  binary: Binary;
+  image: Image;
   className?: string;
   id?: string;
-  onImageDelete?: (binary: Binary) => void;
+  onImageDelete?: (binary: Image) => void;
 }) => {
   const [objectURL, setObjectURL] = useState<string | null>(null);
   const urlCache = useRef<Record<string, string>>({});
 
   useEffect(() => {
-    if (binary.data) {
+    if (image.data) {
       // Check if we already have a URL for this binary
-      if (urlCache.current[binary._id]) {
-        setObjectURL(urlCache.current[binary._id]);
+      if (urlCache.current[image._id]) {
+        setObjectURL(urlCache.current[image._id]);
         return;
       }
 
       // Create new URL if not cached
-      const url = URL.createObjectURL(binary.data);
-      urlCache.current[binary._id] = url;
+      const url = URL.createObjectURL(image.data);
+      urlCache.current[image._id] = url;
       setObjectURL(url);
 
       // Capture the current value of the cache for cleanup
@@ -33,12 +33,12 @@ const ImagePreview = ({
 
       return () => {
         // Only revoke URL if it's not in the cache
-        if (!currentCache[binary._id]) {
+        if (!currentCache[image._id]) {
           URL.revokeObjectURL(url);
         }
       };
     }
-  }, [binary._id, binary.data]);
+  }, [image._id, image.data]);
 
   return objectURL ? (
     <div className="relative max-w-sm">
@@ -60,7 +60,7 @@ const ImagePreview = ({
               e.stopPropagation();
             };
           }}
-          onClick={() => handleImageDelete(binary)}
+          onClick={() => handleImageDelete(image)}
         >
           X
         </button>

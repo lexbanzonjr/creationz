@@ -1,35 +1,35 @@
 import React, { useState } from "react";
 import ImagePreview from "./ImagePreview";
-import { Binary } from "../types/global";
+import { Image } from "../types/global";
 
 interface ImageCarouselProps {
-  binaries: Binary[];
+  images: Image[];
   className?: string;
-  onImageDelete?: (binary: Binary) => void;
+  onImageDelete?: (binary: Image) => void;
 }
 
 const ImageCarousel: React.FC<ImageCarouselProps> = ({
-  binaries,
+  images,
   className,
   onImageDelete,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handlePrevious = () => {
-    if (!binaries.length) return;
-    setCurrentIndex((prev) => (prev === 0 ? binaries.length - 1 : prev - 1));
+    if (!images.length) return;
+    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
-    if (!binaries.length) return;
-    setCurrentIndex((prev) => (prev === binaries.length - 1 ? 0 : prev + 1));
+    if (!images.length) return;
+    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
   return (
     <div className="relative">
-      {binaries.length > 0 ? (
+      {images.length > 0 ? (
         <ImagePreview
-          binary={binaries[currentIndex]}
+          image={images[currentIndex]}
           className={className}
           onImageDelete={onImageDelete}
         />
@@ -52,7 +52,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
           </svg>
         </div>
       )}
-      {binaries.length > 1 && (
+      {images.length > 1 && (
         <>
           <button
             onClick={handlePrevious}
@@ -67,7 +67,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
             →
           </button>
           <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
-            {binaries.map((_, index) => (
+            {images.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentIndex(index)}

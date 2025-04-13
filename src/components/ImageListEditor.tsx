@@ -101,7 +101,7 @@ const ImageListEditor = forwardRef<ImageListEditorHandle, ImageListEditorProps>(
           <div className="flex flex-wrap gap-4">
             {state.images.current_images.map((binary) => (
               <ImagePreview
-                binary={binary}
+                image={binary}
                 className="h-48"
                 id="images"
                 key={binary._id}
@@ -112,7 +112,7 @@ const ImageListEditor = forwardRef<ImageListEditorHandle, ImageListEditorProps>(
               <ImagePreview
                 key={binary._id}
                 onImageDelete={handleImageDelete}
-                binary={binary}
+                image={binary}
                 className="h-48"
               />
             ))}

@@ -5,6 +5,8 @@ export interface Binary {
   "content-type": string;
 }
 
+export interface Image extends Binary {}
+
 export interface Category {
   _id: string;
   name: string;
