@@ -41,8 +41,8 @@ const Home: React.FC = () => {
 
   return !loaded ? null : (
     <div>
-      <section>
-        <img src="/banner.jpg" alt="Banner" />
+      <section className="flex justify-center">
+        <img src="/banner.jpg" alt="Banner" className="max-w-full h-auto" />
       </section>
       {/* Featured Products */}
       <>
