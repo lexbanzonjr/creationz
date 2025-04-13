@@ -38,9 +38,7 @@ const Dropdown = ({
           onValueChange(newvalue);
         }}
       >
-        <option disabled value="">
-          Select an option
-        </option>
+        <option value="">None</option>
         {items.map((item) => (
           <option key={item.key} value={item.value}>
             {item.text}
