@@ -6,6 +6,8 @@ import { getImage as getImageApi } from "../api/binaryApi";
 import { getCategories as getCateogiesApi } from "../api/categoryApi";
 import { getProducts as getProductsApi } from "../api/productApi";
 import { Category, Image, Product } from "../types/global";
+import useCart from "./../hooks/useCart";
+import { useAuth } from "../context/AuthContext";
 
 const Home: React.FC = () => {
   const [loaded, setLoaded] = useState(false);
@@ -13,6 +15,8 @@ const Home: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [images, setImages] = useState<Record<string, Image>>({});
   const hasFetched = useRef(false);
+  const { addItem: addItemToCart } = useCart();
+  const { getAccessToken } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,10 +65,6 @@ const Home: React.FC = () => {
                     .map((id) => images[id])
                     .filter((image): image is Image => image !== undefined);
 
-                  const productName = () => {
-                    return product.name;
-                  };
-
                   return (
                     <div
                       key={product._id}
@@ -78,13 +78,22 @@ const Home: React.FC = () => {
                       </div>
                       <div className="p-4 flex flex-col flex-grow">
                         <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                          {productName()}
+                          {product.name}
                         </h3>
                         <div className="mt-auto">
                           <p className="text-lg font-bold text-blue-600 mb-4">
                             ${product.cost.toFixed(2)}
                           </p>
-                          <BlueButton className="w-full">
+                          <BlueButton
+                            className="w-full"
+                            onClick={() => {
+                              addItemToCart({
+                                accessToken: getAccessToken,
+                                product: product,
+                                quantity: 1,
+                              });
+                            }}
+                          >
                             Add to Cart
                           </BlueButton>
                         </div>
