@@ -1,15 +1,17 @@
 import React, { useState, useMemo, useRef } from "react";
+
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { ICellRendererParams } from "ag-grid-community";
-import RemoveButton from "../../components/RemoveButton";
+
+import CategoryForm from "../../components/admin/CategoryForm";
 import EditButton from "../../components/EditButton";
-import { Category } from "../../types/global";
-import useStore from "../../hooks/useAdminStore";
-import CategoryDetailFrame from "./CategoryDetailFrame";
 import GreenButton from "../../components/GreenButton";
+import RemoveButton from "../../components/RemoveButton";
 import { useAuth } from "../../context/AuthContext";
+import useStore from "../../hooks/useAdminStore";
+import { Category } from "../../types/global";
 
 interface RowData {
   category?: Category;
@@ -20,6 +22,10 @@ const CategoryPage: React.FC = () => {
   const { categories, addCategory, deleteCategory, updateCategory } =
     useStore();
   const { getAccessToken } = useAuth();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingCategory, setEditingCategory] = useState<Category | undefined>(
+    undefined
+  );
   const [rowData, setRowData] = useState<RowData[]>(() => {
     const data: RowData[] = [];
     categories.forEach((category) => {
@@ -31,8 +37,8 @@ const CategoryPage: React.FC = () => {
     return data;
   });
 
+  // Ag-Grid column definitions
   const gridRef = useRef<AgGridReact>(null);
-
   const columnDefs = useMemo(
     () => [
       {
@@ -40,54 +46,13 @@ const CategoryPage: React.FC = () => {
         flex: 4,
         cellRenderer: (params: ICellRendererParams<RowData>) => {
           const category = params.data?.category!;
-          const handleUpdateCategory = async (
-            params: any,
-            category: Category
-          ) => {
-            const updatedCategory = await updateCategory(getAccessToken, {
-              ...category,
-              ...params,
-            });
-            setRowData((prevData) => {
-              const index = prevData.findIndex(
-                (data) => data.category?._id === category._id
-              );
-              if (index > -1) {
-                prevData[index].category = updatedCategory;
-              }
-              return prevData;
-            });
-            gridRef.current?.api.refreshCells();
-          };
-          return (
-            <div className="inline-block w-full">
-              <div className="float-left p-1">{category.name}</div>
-              <br />
-              <CategoryDetailFrame
-                category={category}
-                updateCategory={(params) =>
-                  handleUpdateCategory(params, category)
-                }
-              />
-            </div>
-          );
+          return <div>{category.name}</div>;
         },
       },
       {
         headerName: "Action",
         flex: 1,
         cellRenderer: (params: ICellRendererParams<RowData>) => {
-          const toggleRowHeight = (data: RowData) => {
-            setRowData((prevData) =>
-              prevData.map((row) =>
-                row.category!._id === data.category!._id
-                  ? { ...row, expanded: !row.expanded }
-                  : row
-              )
-            );
-            gridRef.current?.api.resetRowHeights();
-          };
-
           const handleRemove = async (data: RowData) => {
             setRowData((prevData) => {
               return prevData.filter(
@@ -96,6 +61,12 @@ const CategoryPage: React.FC = () => {
             });
             await deleteCategory(getAccessToken, data.category!);
           };
+
+          const handleEditInModal = (data: RowData) => {
+            setEditingCategory(data.category);
+            setIsModalOpen(true);
+          };
+
           return (
             <div className="inline-block">
               <div className="float-left p-1">
@@ -104,26 +75,63 @@ const CategoryPage: React.FC = () => {
                 />
               </div>
               <div className="float-left p-1">
-                <EditButton onClick={() => toggleRowHeight(params.data!)} />
+                <EditButton onClick={() => handleEditInModal(params.data!)} />
               </div>
             </div>
           );
         },
       },
     ],
-    []
+    [deleteCategory, getAccessToken]
   );
 
-  const getRowHeight = (params: any) => {
-    return params.data.expanded ? 225 : 50;
+  const handleAddRow = () => {
+    setEditingCategory(undefined); // Clear editing category to indicate add mode
+    setIsModalOpen(true);
   };
 
-  const handleAddRow = async () => {
-    const data = {
-      category: await addCategory(getAccessToken),
-      expanded: false,
-    };
-    setRowData([...rowData, data]);
+  const handleCancelCategory = () => {
+    setIsModalOpen(false);
+    setEditingCategory(undefined);
+  };
+
+  const handleConfirmCategory = async (name: string, description: string) => {
+    if (editingCategory) {
+      // Editing existing category
+      const updatedCategory = await updateCategory(getAccessToken, {
+        ...editingCategory,
+        name,
+        description,
+      });
+
+      setRowData((prevData) => {
+        const index = prevData.findIndex(
+          (data) => data.category?._id === editingCategory._id
+        );
+        if (index > -1) {
+          prevData[index].category = updatedCategory;
+        }
+        return prevData;
+      });
+      gridRef.current?.api.refreshCells();
+    } else {
+      // Adding new category
+      const newCategory = await addCategory(getAccessToken, {
+        _id: "",
+        name,
+        description,
+        designs: [],
+      });
+
+      const data = {
+        category: newCategory,
+        expanded: false,
+      };
+      setRowData([...rowData, data]);
+    }
+
+    setIsModalOpen(false);
+    setEditingCategory(undefined);
   };
 
   return (
@@ -133,14 +141,15 @@ const CategoryPage: React.FC = () => {
       </GreenButton>
       <br />
       <div className="ag-theme-alpine" style={{ height: 400, width: "100%" }}>
-        <AgGridReact
-          ref={gridRef}
-          rowData={rowData}
-          columnDefs={columnDefs}
-          getRowHeight={getRowHeight}
-          domLayout="autoHeight"
-        />
+        <AgGridReact ref={gridRef} rowData={rowData} columnDefs={columnDefs} />
       </div>
+
+      <CategoryForm
+        isOpen={isModalOpen}
+        onClose={handleCancelCategory}
+        onConfirm={handleConfirmCategory}
+        category={editingCategory}
+      />
     </div>
   );
 };

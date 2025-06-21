@@ -7,9 +7,9 @@ import RemoveButton from "../../components/RemoveButton";
 import EditButton from "../../components/EditButton";
 import { Product } from "../../types/global";
 import useStore from "../../hooks/useAdminStore";
-import ProductDetailFrame from "./ProductDetailFrame";
 import GreenButton from "../../components/GreenButton";
 import { useAuth } from "../../context/AuthContext";
+import ProductForm from "../../components/ProductForm";
 
 interface RowData {
   product?: Product;
@@ -19,6 +19,10 @@ interface RowData {
 const ProductPage: React.FC = () => {
   const { products, addProduct, deleteProduct, updateProduct } = useStore();
   const { getAccessToken } = useAuth();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | undefined>(
+    undefined
+  );
   const [rowData, setRowData] = useState<RowData[]>(() => {
     const data: RowData[] = [];
     products.forEach((product) => {
@@ -39,38 +43,9 @@ const ProductPage: React.FC = () => {
         flex: 4,
         cellRenderer: (params: ICellRendererParams<RowData>) => {
           const currentProduct = params.data?.product!;
-          const handleUpdateProduct = async (
-            newProduct: Product,
-            currentProduct: Product
-          ) => {
-            const updatedProduct = await updateProduct(getAccessToken, {
-              ...currentProduct,
-              ...newProduct,
-            });
-            setRowData((prevData) => {
-              const index = prevData.findIndex(
-                (data) => data.product?._id === currentProduct._id
-              );
-              if (index > -1) {
-                prevData[index].product = updatedProduct;
-              }
-              return prevData;
-            });
-            gridRef.current?.api.refreshCells();
-          };
           return (
-            <div className="inline-block w-full">
-              <div className="float-left p-1">{currentProduct.name}</div>
-              <br />
-              <div className="overflow-y-scroll p-4 h-96 w-full">
-                <ProductDetailFrame
-                  show={params.data!.expanded}
-                  product={currentProduct}
-                  updateProduct={async (newProduct: Product) =>
-                    await handleUpdateProduct(newProduct, currentProduct)
-                  }
-                />
-              </div>
+            <div className="inline-block w-full h-full flex items-center">
+              <div className="p-1">{currentProduct.name}</div>
             </div>
           );
         },
@@ -79,17 +54,6 @@ const ProductPage: React.FC = () => {
         headerName: "Action",
         flex: 1,
         cellRenderer: (params: ICellRendererParams<RowData>) => {
-          const toggleRowHeight = (data: RowData) => {
-            setRowData((prevData) =>
-              prevData.map((row) =>
-                row.product!._id === data.product!._id
-                  ? { ...row, expanded: !row.expanded }
-                  : row
-              )
-            );
-            gridRef.current?.api.resetRowHeights();
-          };
-
           const handleRemove = async (data: RowData) => {
             setRowData((prevData) => {
               return prevData.filter(
@@ -98,35 +62,76 @@ const ProductPage: React.FC = () => {
             });
             await deleteProduct(getAccessToken, data.product!);
           };
+
+          const handleEditInModal = (data: RowData) => {
+            setEditingProduct(data.product);
+            setIsModalOpen(true);
+          };
+
           return (
-            <div className="inline-block">
+            <div className="inline-block w-full h-full flex items-center">
               <div className="float-left p-1">
                 <RemoveButton
                   onClick={async () => await handleRemove(params.data!)}
                 />
               </div>
               <div className="float-left p-1">
-                <EditButton onClick={() => toggleRowHeight(params.data!)} />
+                <EditButton onClick={() => handleEditInModal(params.data!)} />
               </div>
             </div>
           );
         },
       },
     ],
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
   const getRowHeight = (params: any) => {
-    return params.data.expanded ? 500 : 45;
+    return 60; // Fixed height since we're not using expandable rows anymore
   };
 
-  const handleAddRow = async () => {
-    const data = {
-      product: await addProduct(getAccessToken),
-      expanded: false,
-    };
-    setRowData([...rowData, data]);
+  const handleAddRow = () => {
+    setEditingProduct(undefined); // Clear editing product to indicate add mode
+    setIsModalOpen(true);
+  };
+
+  const handleConfirmProduct = async (productData: Product) => {
+    try {
+      if (editingProduct) {
+        // Editing existing product
+        const updatedProduct = await updateProduct(getAccessToken, productData);
+
+        setRowData((prevData) => {
+          const index = prevData.findIndex(
+            (data) => data.product?._id === editingProduct._id
+          );
+          if (index > -1) {
+            prevData[index].product = updatedProduct;
+          }
+          return prevData;
+        });
+        gridRef.current?.api.refreshCells();
+      } else {
+        // Adding new product
+        const newProduct = await addProduct(getAccessToken, productData);
+
+        const data = {
+          product: newProduct,
+          expanded: false,
+        };
+        setRowData([...rowData, data]);
+      }
+      setIsModalOpen(false);
+      setEditingProduct(undefined);
+    } catch (error) {
+      console.error("Failed to save product:", error);
+      // You might want to show an error message to the user here
+    }
+  };
+
+  const handleCancelProduct = () => {
+    setIsModalOpen(false);
+    setEditingProduct(undefined);
   };
 
   return (
@@ -140,10 +145,17 @@ const ProductPage: React.FC = () => {
           ref={gridRef}
           rowData={rowData}
           columnDefs={columnDefs}
-          getRowHeight={getRowHeight}
+          // getRowHeight={getRowHeight}
           domLayout="autoHeight"
         />
       </div>
+
+      <ProductForm
+        isOpen={isModalOpen}
+        onClose={handleCancelProduct}
+        onConfirm={handleConfirmProduct}
+        product={editingProduct}
+      />
     </div>
   );
 };

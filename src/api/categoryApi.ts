@@ -6,7 +6,7 @@ export const addCategory = async ({
   category,
 }: {
   accessToken: string;
-  category: Category;
+  category: Partial<Category>;
 }) => {
   const response = await axios.post(
     "https://localhost:5000/category",
