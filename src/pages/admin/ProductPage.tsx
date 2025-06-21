@@ -40,7 +40,7 @@ const ProductPage: React.FC = () => {
     () => [
       {
         headerName: "Product",
-        flex: 4,
+        flex: 1,
         cellRenderer: (params: ICellRendererParams<RowData>) => {
           const currentProduct = params.data?.product!;
           return (
@@ -48,6 +48,22 @@ const ProductPage: React.FC = () => {
               <div className="p-1">{currentProduct.name}</div>
             </div>
           );
+        },
+      },
+      {
+        headerName: "Cost",
+        flex: 1,
+        cellRenderer: (params: ICellRendererParams<RowData>) => {
+          const currentProduct = params.data?.product!;
+          return <div className="p-1">{currentProduct.cost.toFixed(2)}</div>;
+        },
+      },
+      {
+        headerName: "Description",
+        flex: 4,
+        cellRenderer: (params: ICellRendererParams<RowData>) => {
+          const currentProduct = params.data?.product!;
+          return <div className="p-1">{currentProduct.description}</div>;
         },
       },
       {
