@@ -102,10 +102,6 @@ const ProductPage: React.FC = () => {
     []
   );
 
-  const getRowHeight = (params: any) => {
-    return 60; // Fixed height since we're not using expandable rows anymore
-  };
-
   const handleAddRow = () => {
     setEditingProduct(undefined); // Clear editing product to indicate add mode
     setIsModalOpen(true);
