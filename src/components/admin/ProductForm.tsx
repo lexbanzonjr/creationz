@@ -208,7 +208,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
               }))}
               label="Category"
               name="category"
-              value={() => categoryId}
+              value={categoryId}
               onValueChange={handleCategoryChange}
             />
 

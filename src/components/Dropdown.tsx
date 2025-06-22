@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const Dropdown = ({
   items,
@@ -10,10 +10,14 @@ const Dropdown = ({
   items: { key: string; value: string; text: string }[];
   label: string;
   name: string;
-  value: () => string;
+  value: string;
   onValueChange: (value: string) => void;
 }) => {
   const [selectedValue, setSelectedValue] = useState<string>(value);
+
+  useEffect(() => {
+    setSelectedValue(value);
+  }, [value]);
 
   return (
     <div>
