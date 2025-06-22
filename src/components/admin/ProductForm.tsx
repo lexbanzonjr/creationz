@@ -47,15 +47,15 @@ const ProductForm: React.FC<ProductFormProps> = ({
     if (isOpen) {
       setIsLoading(true);
 
-      if (product) {
-        // Editing mode - populate with existing data
-        setName(product.name);
-        setDescription(product.description);
-        setCost(String(product.cost));
-        setCategoryId(product.category_id || "");
-        setHasChanges(false);
+      // Populate form based on mode
+      setName(product ? product.name : "");
+      setDescription(product ? product.description : "");
+      setCost(product ? String(product.cost) : "0.00");
+      setCategoryId(product ? product.category_id || "" : "");
+      setHasChanges(false);
 
-        // Load existing images
+      if (product) {
+        // Load existing images for editing mode
         const loadImages = async () => {
           const loadedImages: Binary[] = [];
           for (const id of product.image_id) {
@@ -66,13 +66,8 @@ const ProductForm: React.FC<ProductFormProps> = ({
         };
         loadImages();
       } else {
-        // Adding mode - clear form
-        setName("");
-        setDescription("");
-        setCost("0.00");
-        setCategoryId("");
+        // Clear images for adding mode
         setImages([]);
-        setHasChanges(false);
         setIsLoading(false);
       }
 
