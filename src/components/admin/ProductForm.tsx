@@ -7,7 +7,7 @@ import Dropdown from "../Dropdown";
 import ImageListEditor, { ImageListEditorHandle } from "../ImageListEditor";
 import { Product, Binary } from "../../types/global";
 import useStore from "../../hooks/useAdminStore";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../hooks/useAuthStore";
 
 interface ProductFormProps {
   isOpen: boolean;

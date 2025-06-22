@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuthStore";
 import { useCart } from "../context/CartContext"; // Assumes a CartContext is already implemented
 import styles from "./Dashboard.module.css";
 

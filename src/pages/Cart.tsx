@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { Image } from "../types/global";
 import useCart from "../hooks/useCart";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuthStore";
 import { getImage as getImageApi } from "../api/binaryApi";
 import ImageCarousel from "../components/ImageCarousel";
 

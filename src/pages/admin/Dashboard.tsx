@@ -5,7 +5,7 @@ import { IoMdShirt } from "react-icons/io";
 
 import ViewOrders from "./ViewOrders";
 import styles from "./Dashboard.module.css";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../hooks/useAuthStore";
 import { getCategories } from "../../api/categoryApi";
 import { getProducts } from "../../api/productApi";
 import { getTypes } from "../../api/typeApi";

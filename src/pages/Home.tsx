@@ -7,7 +7,7 @@ import { getCategories as getCateogiesApi } from "../api/categoryApi";
 import { getProducts as getProductsApi } from "../api/productApi";
 import { Category, Image, Product } from "../types/global";
 import useCart from "./../hooks/useCart";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuthStore";
 
 const Home: React.FC = () => {
   const [loaded, setLoaded] = useState(false);

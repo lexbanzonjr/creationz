@@ -9,7 +9,7 @@ import CategoryForm from "../../components/admin/CategoryForm";
 import EditButton from "../../components/EditButton";
 import GreenButton from "../../components/GreenButton";
 import RemoveButton from "../../components/RemoveButton";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../hooks/useAuthStore";
 import useStore from "../../hooks/useAdminStore";
 import { Category } from "../../types/global";
 

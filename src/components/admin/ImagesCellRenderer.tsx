@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../hooks/useAuthStore";
 import useStore from "../../hooks/useAdminStore";
 import { Binary } from "../../types/global";
 
