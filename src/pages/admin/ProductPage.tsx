@@ -20,7 +20,8 @@ interface RowData {
 }
 
 const ProductPage: React.FC = () => {
-  const { products, addProduct, deleteProduct, updateProduct } = useStore();
+  const { products, addProduct, deleteProduct, updateProduct, categories } =
+    useStore();
   const { getAccessToken } = useAuth();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -79,6 +80,21 @@ const ProductPage: React.FC = () => {
         },
       },
       {
+        headerName: "Category",
+        flex: 1,
+        cellRenderer: (params: ICellRendererParams<RowData>) => {
+          const currentProduct = params.data?.product!;
+          const category = categories.find(
+            (cat) => cat._id === currentProduct.category_id
+          );
+          return (
+            <div className="w-full h-full flex items-center">
+              <div className="p-1">{category?.name || "No Category"}</div>
+            </div>
+          );
+        },
+      },
+      {
         headerName: "Images",
         flex: 1,
         cellRenderer: (params: ICellRendererParams<RowData>) => {
@@ -122,7 +138,7 @@ const ProductPage: React.FC = () => {
         },
       },
     ],
-    [deleteProduct, getAccessToken]
+    [deleteProduct, getAccessToken, categories]
   );
 
   const handleAddRow = () => {
