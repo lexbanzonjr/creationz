@@ -10,6 +10,7 @@ import useStore from "../../hooks/useAdminStore";
 import GreenButton from "../../components/GreenButton";
 import { useAuth } from "../../context/AuthContext";
 import ProductForm from "../../components/ProductForm";
+import ImagesCellRenderer from "../../components/admin/ImagesCellRenderer";
 
 interface RowData {
   product?: Product;
@@ -64,6 +65,13 @@ const ProductPage: React.FC = () => {
         cellRenderer: (params: ICellRendererParams<RowData>) => {
           const currentProduct = params.data?.product!;
           return <div className="p-1">{currentProduct.description}</div>;
+        },
+      },
+      {
+        headerName: "Images",
+        flex: 1,
+        cellRenderer: (params: ICellRendererParams<RowData>) => {
+          return <ImagesCellRenderer data={params.data!} />;
         },
       },
       {
