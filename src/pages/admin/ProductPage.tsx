@@ -1,16 +1,18 @@
 import React, { useState, useMemo, useRef } from "react";
+
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { ICellRendererParams } from "ag-grid-community";
-import RemoveButton from "../../components/RemoveButton";
-import EditButton from "../../components/EditButton";
-import { Product } from "../../types/global";
-import useStore from "../../hooks/useAdminStore";
-import GreenButton from "../../components/GreenButton";
-import { useAuth } from "../../context/AuthContext";
-import ProductForm from "../../components/ProductForm";
+
 import ImagesCellRenderer from "../../components/admin/ImagesCellRenderer";
+import EditButton from "../../components/EditButton";
+import GreenButton from "../../components/GreenButton";
+import ProductForm from "../../components/admin/ProductForm";
+import RemoveButton from "../../components/RemoveButton";
+import { useAuth } from "../../context/AuthContext";
+import useStore from "../../hooks/useAdminStore";
+import { Product } from "../../types/global";
 
 interface RowData {
   product?: Product;
@@ -20,6 +22,7 @@ interface RowData {
 const ProductPage: React.FC = () => {
   const { products, addProduct, deleteProduct, updateProduct } = useStore();
   const { getAccessToken } = useAuth();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | undefined>(
     undefined
@@ -45,7 +48,7 @@ const ProductPage: React.FC = () => {
         cellRenderer: (params: ICellRendererParams<RowData>) => {
           const currentProduct = params.data?.product!;
           return (
-            <div className="inline-block w-full h-full flex items-center">
+            <div className="w-full h-full flex items-center">
               <div className="p-1">{currentProduct.name}</div>
             </div>
           );
@@ -93,7 +96,7 @@ const ProductPage: React.FC = () => {
           };
 
           return (
-            <div className="inline-block w-full h-full flex items-center">
+            <div className="w-full h-full flex items-center">
               <div className="float-left p-1">
                 <RemoveButton
                   onClick={async () => await handleRemove(params.data!)}
@@ -107,7 +110,7 @@ const ProductPage: React.FC = () => {
         },
       },
     ],
-    []
+    [deleteProduct, getAccessToken]
   );
 
   const handleAddRow = () => {
@@ -115,41 +118,36 @@ const ProductPage: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const handleConfirmProduct = async (productData: Product) => {
-    try {
-      if (editingProduct) {
-        // Editing existing product
-        const updatedProduct = await updateProduct(getAccessToken, productData);
-
-        setRowData((prevData) => {
-          const index = prevData.findIndex(
-            (data) => data.product?._id === editingProduct._id
-          );
-          if (index > -1) {
-            prevData[index].product = updatedProduct;
-          }
-          return prevData;
-        });
-        gridRef.current?.api.refreshCells();
-      } else {
-        // Adding new product
-        const newProduct = await addProduct(getAccessToken, productData);
-
-        const data = {
-          product: newProduct,
-          expanded: false,
-        };
-        setRowData([...rowData, data]);
-      }
-      setIsModalOpen(false);
-      setEditingProduct(undefined);
-    } catch (error) {
-      console.error("Failed to save product:", error);
-      // You might want to show an error message to the user here
-    }
+  const handleCancelProduct = () => {
+    setIsModalOpen(false);
+    setEditingProduct(undefined);
   };
 
-  const handleCancelProduct = () => {
+  const handleConfirmProduct = async (productData: Product) => {
+    if (editingProduct) {
+      // Editing existing product
+      const updatedProduct = await updateProduct(getAccessToken, productData);
+
+      setRowData((prevData) => {
+        const index = prevData.findIndex(
+          (data) => data.product?._id === editingProduct._id
+        );
+        if (index > -1) {
+          prevData[index].product = updatedProduct;
+        }
+        return prevData;
+      });
+      gridRef.current?.api.refreshCells();
+    } else {
+      // Adding new product
+      const newProduct = await addProduct(getAccessToken, productData);
+
+      const data = {
+        product: newProduct,
+        expanded: false,
+      };
+      setRowData([...rowData, data]);
+    }
     setIsModalOpen(false);
     setEditingProduct(undefined);
   };
@@ -165,7 +163,6 @@ const ProductPage: React.FC = () => {
           ref={gridRef}
           rowData={rowData}
           columnDefs={columnDefs}
-          // getRowHeight={getRowHeight}
           domLayout="autoHeight"
         />
       </div>
