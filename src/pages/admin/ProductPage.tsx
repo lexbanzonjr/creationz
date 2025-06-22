@@ -59,7 +59,11 @@ const ProductPage: React.FC = () => {
         flex: 1,
         cellRenderer: (params: ICellRendererParams<RowData>) => {
           const currentProduct = params.data?.product!;
-          return <div className="p-1">{currentProduct.cost.toFixed(2)}</div>;
+          return (
+            <div className="w-full h-full flex items-center">
+              <div className="p-1">{currentProduct.cost.toFixed(2)}</div>
+            </div>
+          );
         },
       },
       {
@@ -67,14 +71,22 @@ const ProductPage: React.FC = () => {
         flex: 4,
         cellRenderer: (params: ICellRendererParams<RowData>) => {
           const currentProduct = params.data?.product!;
-          return <div className="p-1">{currentProduct.description}</div>;
+          return (
+            <div className="w-full h-full flex items-center">
+              <div className="p-1">{currentProduct.description}</div>
+            </div>
+          );
         },
       },
       {
         headerName: "Images",
         flex: 1,
         cellRenderer: (params: ICellRendererParams<RowData>) => {
-          return <ImagesCellRenderer data={params.data!} />;
+          return (
+            <div className="w-full h-full flex items-center">
+              <ImagesCellRenderer data={params.data!} />
+            </div>
+          );
         },
       },
       {
