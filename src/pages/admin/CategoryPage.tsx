@@ -21,7 +21,7 @@ interface RowData {
 const CategoryPage: React.FC = () => {
   const { categories, addCategory, deleteCategory, updateCategory } =
     useStore();
-  const { getAccessToken } = useAuth();
+  const { getToken } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | undefined>(
     undefined
@@ -59,7 +59,7 @@ const CategoryPage: React.FC = () => {
                 (rowData) => rowData.category!._id !== data.category!._id
               );
             });
-            await deleteCategory(getAccessToken, data.category!);
+            await deleteCategory(getToken, data.category!);
           };
 
           const handleEditInModal = (data: RowData) => {
@@ -82,7 +82,7 @@ const CategoryPage: React.FC = () => {
         },
       },
     ],
-    [deleteCategory, getAccessToken]
+    [deleteCategory, getToken]
   );
 
   const handleAddRow = () => {
@@ -98,7 +98,7 @@ const CategoryPage: React.FC = () => {
   const handleConfirmCategory = async (name: string, description: string) => {
     if (editingCategory) {
       // Editing existing category
-      const updatedCategory = await updateCategory(getAccessToken, {
+      const updatedCategory = await updateCategory(getToken, {
         ...editingCategory,
         name,
         description,
@@ -116,7 +116,7 @@ const CategoryPage: React.FC = () => {
       gridRef.current?.api.refreshCells();
     } else {
       // Adding new category
-      const newCategory = await addCategory(getAccessToken, {
+      const newCategory = await addCategory(getToken, {
         _id: "",
         name,
         description,

@@ -8,14 +8,14 @@ import ImageCarousel from "../components/ImageCarousel";
 
 const Cart: React.FC = () => {
   const { cart: myCart, calculateSubTotal, fetch: fetchCart } = useCart();
-  const { getAccessToken } = useAuth();
+  const { getToken } = useAuth();
   const [fetched, setFetched] = useState<boolean>(false);
   const [images, setImages] = useState<Record<string, Image>>({});
   const [subTotal, setSubTotal] = useState<string>("0.0");
 
   useEffect(() => {
     const fetch = async () => {
-      await fetchCart({ accessToken: getAccessToken });
+      await fetchCart({ token: getToken });
 
       const imagePromises = myCart.items.flatMap((item) =>
         item.product.image_id.map((id: string) => getImageApi({ _id: id }))
@@ -29,13 +29,13 @@ const Cart: React.FC = () => {
         {} as Record<string, Image>
       );
       setImages(imageMap);
-      setSubTotal(await calculateSubTotal({ accessToken: getAccessToken }));
+      setSubTotal(await calculateSubTotal({ token: getToken }));
     };
     if (!fetched) {
       fetch();
       setFetched(true);
     }
-  }, [calculateSubTotal, fetchCart, fetched, getAccessToken, myCart]);
+  }, [calculateSubTotal, fetchCart, fetched, getToken, myCart]);
 
   return !fetched ? null : (
     <div>

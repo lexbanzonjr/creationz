@@ -36,7 +36,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
   const imageRef = useRef<ImageListEditorHandle>(null);
 
   const { categories, addBinary, deleteBinary, getBinary } = useStore();
-  const { getAccessToken } = useAuth();
+  const { getToken } = useAuth();
 
   const isEditing = !!product;
   const displayTitle =
@@ -59,7 +59,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
         const loadImages = async () => {
           const loadedImages: Binary[] = [];
           for (const id of product.image_id) {
-            loadedImages.push(await getBinary(getAccessToken, id));
+            loadedImages.push(await getBinary(getToken, id));
           }
           setImages(loadedImages);
           setIsLoading(false);
@@ -84,7 +84,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
     return () => {
       document.body.style.overflow = "unset";
     };
-  }, [isOpen, product, getBinary, getAccessToken]);
+  }, [isOpen, product, getBinary, getToken]);
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     // Only close if clicking the backdrop, not the modal content
@@ -125,7 +125,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
         // Delete removed images
         for (const binary of imageChanges!.remove_images) {
-          await deleteBinary(getAccessToken, binary);
+          await deleteBinary(getToken, binary);
           productData.image_id = productData.image_id!.filter(
             (id) => id !== binary._id
           );
@@ -133,7 +133,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
         // Add new images
         for (const binary of imageChanges!.new_images) {
-          const newBinary = await addBinary(getAccessToken, binary);
+          const newBinary = await addBinary(getToken, binary);
           productData.image_id!.push(newBinary._id);
         }
       }

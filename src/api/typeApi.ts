@@ -2,15 +2,15 @@ import axios from "axios";
 import { Option, Type } from "../types/global";
 
 export const addType = async ({
-  accessToken,
+  token,
   type,
 }: {
-  accessToken: string;
+  token: string;
   type: Type;
 }) => {
   const response = await axios.post("https://localhost:5000/type", type, {
     headers: {
-      Authorization: `Basic ${accessToken}`,
+      Authorization: `Basic ${token}`,
     },
   });
 
@@ -18,7 +18,7 @@ export const addType = async ({
 };
 
 export const addTypeOption = async (
-  accessToken: string,
+  token: string,
   type: Type,
   option: Option
 ) => {
@@ -27,7 +27,7 @@ export const addTypeOption = async (
     { option },
     {
       headers: {
-        Authorization: `Basic ${accessToken}`,
+        Authorization: `Basic ${token}`,
       },
     }
   );
@@ -36,25 +36,25 @@ export const addTypeOption = async (
 };
 
 export const deleteType = async ({
-  accessToken,
+  token,
   type,
 }: {
-  accessToken: string;
+  token: string;
   type: Type;
 }) => {
   try {
     await axios.delete("https://localhost:5000/type", {
       params: { _id: type._id },
       headers: {
-        Authorization: `Basic ${accessToken}`,
+        Authorization: `Basic ${token}`,
       },
     });
   } catch (error: any) {}
 };
 
 export const getTypes = async (
-  props: { accessToken: string; populate: boolean } = {
-    accessToken: "",
+  props: { token: string; populate: boolean } = {
+    token: "",
     populate: false,
   }
 ) => {
@@ -62,7 +62,7 @@ export const getTypes = async (
     // API call to register the account
     const response = await axios.get("https://localhost:5000/type", {
       headers: {
-        Authorization: `Bearer ${props.accessToken}`,
+        Authorization: `Bearer ${props.token}`,
       },
       params: {
         populate: props.populate,

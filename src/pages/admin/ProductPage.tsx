@@ -22,7 +22,7 @@ interface RowData {
 const ProductPage: React.FC = () => {
   const { products, addProduct, deleteProduct, updateProduct, categories } =
     useStore();
-  const { getAccessToken } = useAuth();
+  const { getToken } = useAuth();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | undefined>(
@@ -115,7 +115,7 @@ const ProductPage: React.FC = () => {
                 (rowData) => rowData.product!._id !== data.product!._id
               );
             });
-            await deleteProduct(getAccessToken, data.product!);
+            await deleteProduct(getToken, data.product!);
           };
 
           const handleEditInModal = (data: RowData) => {
@@ -138,7 +138,7 @@ const ProductPage: React.FC = () => {
         },
       },
     ],
-    [deleteProduct, getAccessToken, categories]
+    [deleteProduct, getToken, categories]
   );
 
   const handleAddRow = () => {
@@ -154,7 +154,7 @@ const ProductPage: React.FC = () => {
   const handleConfirmProduct = async (productData: Product) => {
     if (editingProduct) {
       // Editing existing product
-      const updatedProduct = await updateProduct(getAccessToken, productData);
+      const updatedProduct = await updateProduct(getToken, productData);
 
       setRowData((prevData) => {
         const index = prevData.findIndex(
@@ -168,7 +168,7 @@ const ProductPage: React.FC = () => {
       gridRef.current?.api.refreshCells();
     } else {
       // Adding new product
-      const newProduct = await addProduct(getAccessToken, productData);
+      const newProduct = await addProduct(getToken, productData);
 
       const data = {
         product: newProduct,

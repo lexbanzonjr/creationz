@@ -16,7 +16,7 @@ const Home: React.FC = () => {
   const [images, setImages] = useState<Record<string, Image>>({});
   const hasFetched = useRef(false);
   const { addItem: addItemToCart } = useCart();
-  const { getAccessToken } = useAuth();
+  const { getToken } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -88,7 +88,7 @@ const Home: React.FC = () => {
                             className="w-full"
                             onClick={() => {
                               addItemToCart({
-                                accessToken: getAccessToken,
+                                token: getToken,
                                 product: product,
                                 quantity: 1,
                               });

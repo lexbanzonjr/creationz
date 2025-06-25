@@ -15,7 +15,7 @@ interface ImagesCellRendererProps {
 }
 
 const ImagesCellRenderer: React.FC<ImagesCellRendererProps> = ({ data }) => {
-  const { getAccessToken } = useAuth();
+  const { getToken } = useAuth();
   const { getBinary } = useStore();
 
   const [images, setImages] = useState<Binary[]>([]);
@@ -34,7 +34,7 @@ const ImagesCellRenderer: React.FC<ImagesCellRendererProps> = ({ data }) => {
       const urls: Record<string, string> = {};
 
       for (const id of currentProduct.image_id) {
-        const binary = await getBinary(getAccessToken, id);
+        const binary = await getBinary(getToken, id);
         loadedImages.push(binary);
 
         // Create object URL for File data
@@ -58,7 +58,7 @@ const ImagesCellRenderer: React.FC<ImagesCellRendererProps> = ({ data }) => {
         URL.revokeObjectURL(url);
       });
     };
-  }, [currentProduct.image_id, getBinary, getAccessToken, imageUrls]);
+  }, [currentProduct.image_id, getBinary, getToken, imageUrls]);
 
   const handleMouseEnter = (e: React.MouseEvent) => {
     // Calculate popup position based on mouse position

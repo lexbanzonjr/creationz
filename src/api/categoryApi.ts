@@ -2,10 +2,10 @@ import axios from "axios";
 import { Category } from "../types/global";
 
 export const addCategory = async ({
-  accessToken,
+  token,
   category,
 }: {
-  accessToken: string;
+  token: string;
   category: Partial<Category>;
 }) => {
   const response = await axios.post(
@@ -13,7 +13,7 @@ export const addCategory = async ({
     category,
     {
       headers: {
-        Authorization: `Basic ${accessToken}`,
+        Authorization: `Basic ${token}`,
       },
     }
   );
@@ -22,27 +22,27 @@ export const addCategory = async ({
 };
 
 export const deleteCategory = async ({
-  accessToken,
+  token,
   category,
 }: {
-  accessToken: string;
+  token: string;
   category: Category;
 }) => {
   try {
     await axios.delete("https://localhost:5000/category", {
       params: { _id: category._id },
       headers: {
-        Authorization: `Basic ${accessToken}`,
+        Authorization: `Basic ${token}`,
       },
     });
   } catch (error: any) {}
 };
 
 export const getCateogy = async ({
-  accessToken,
+  token,
   __id,
 }: {
-  accessToken: string;
+  token: string;
   __id: string;
 }) => {
   try {
@@ -50,7 +50,7 @@ export const getCateogy = async ({
       `https://localhost:5000/category/${__id}`,
       {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -60,18 +60,18 @@ export const getCateogy = async ({
 };
 
 export const getCategories = async (
-  props: { accessToken?: string; populate: boolean } = {
-    accessToken: "",
+  props: { token?: string; populate: boolean } = {
+    token: "",
     populate: false,
   }
 ) => {
   try {
     // API call to register the account
     const response = await axios.get("https://localhost:5000/category", {
-      headers: !props.accessToken
+      headers: !props.token
         ? {}
         : {
-            Authorization: `Bearer ${props.accessToken}`,
+            Authorization: `Bearer ${props.token}`,
           },
       params: {
         populate: props.populate,
@@ -83,10 +83,10 @@ export const getCategories = async (
 };
 
 export const updateCategory = async ({
-  accessToken,
+  token,
   category,
 }: {
-  accessToken: string;
+  token: string;
   category: Category;
 }) => {
   const response = await axios.put(
@@ -94,7 +94,7 @@ export const updateCategory = async ({
     category,
     {
       headers: {
-        Authorization: `Basic ${accessToken}`,
+        Authorization: `Basic ${token}`,
       },
     }
   );

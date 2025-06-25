@@ -14,13 +14,13 @@ import CategoryPage from "./CategoryPage";
 import ProductPage from "./ProductPage";
 
 const AdminDashboard: React.FC = () => {
-  const { getAccessToken } = useAuth();
+  const { getToken } = useAuth();
   const { pathname } = useLocation();
   const { populate, setAllData } = useAdminStore();
 
   useEffect(() => {
     const fetchData = async () => {
-      const params = { accessToken: getAccessToken, populate: true };
+      const params = { token: getToken, populate: true };
       try {
         // Replace these functions with your actual data-fetching logic
         const [categories, products, types] = await Promise.all([

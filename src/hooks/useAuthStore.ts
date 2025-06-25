@@ -11,19 +11,19 @@ interface IdParams {
 
 interface LoginParams {
   id: IdParams;
-  accessToken: string;
+  token: string;
 }
 
 interface AuthState {
   // State
-  accessToken: string;
+  token: string;
   id: IdParams;
   isAuthenticated: boolean;
 
   // Actions
   login: (params: LoginParams) => void;
   logout: () => void;
-  setAccessToken: (accessToken: string) => void;
+  setToken: (token: string) => void;
   setAuthenticated: (auth: boolean) => void;
   setId: (params: IdParams) => void;
   initialize: () => Promise<void>;
@@ -39,13 +39,13 @@ export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
       // Initial state
-      accessToken: "",
+      token: "",
       id: blankId,
       isAuthenticated: false,
 
       login: (params: LoginParams) => {
         set({
-          accessToken: params.accessToken,
+          token: params.token,
           id: params.id as IdParams,
           isAuthenticated: true,
         });
@@ -53,14 +53,13 @@ export const useAuthStore = create<AuthState>()(
 
       logout: () => {
         set({
-          accessToken: "",
+          token: "",
           id: blankId,
           isAuthenticated: false,
         });
       },
 
-      setAccessToken: (accessToken: string) =>
-        set({ accessToken: accessToken }),
+      setToken: (token: string) => set({ token }),
 
       setAuthenticated: (auth: boolean) => set({ isAuthenticated: auth }),
 
@@ -70,10 +69,10 @@ export const useAuthStore = create<AuthState>()(
         const state = get();
 
         // If there's no access token, try to get a guest token
-        if (!state.accessToken) {
+        if (!state.token) {
           const guestToken = await getGuestToken();
           set({
-            accessToken: guestToken.guestToken,
+            token: guestToken.guestToken,
             id: { ...blankId, name: "Guest User", roles: ["guest"] },
             isAuthenticated: false,
           });
@@ -83,7 +82,7 @@ export const useAuthStore = create<AuthState>()(
     {
       name: "auth-storage",
       partialize: (state) => ({
-        accessToken: state.accessToken,
+        token: state.token,
         id: state.id,
         isAuthenticated: state.isAuthenticated,
       }),
@@ -94,26 +93,26 @@ export const useAuthStore = create<AuthState>()(
 // Convenience hook that maintains the same API as the original useAuth
 export const useAuth = () => {
   const {
-    accessToken,
+    token,
     id,
     isAuthenticated,
 
     login,
     logout,
-    setAccessToken,
+    setToken,
     setId,
     setAuthenticated,
     initialize,
   } = useAuthStore();
 
   return {
-    getAccessToken: accessToken,
+    getToken: token,
     getId: id,
     isAuthenticated,
 
     login,
     logout,
-    setAccessToken,
+    setToken,
     setId,
     setAuthenticated,
     initialize,

@@ -7,17 +7,17 @@ import {
 import { Cart, Product } from "../types/global";
 
 interface AddItemParams {
-  accessToken: string;
+  token: string;
   product: Product;
   quantity: number;
 }
 
 interface CalculateSubtotalParams {
-  accessToken: string;
+  token: string;
 }
 
 interface FetchParams {
-  accessToken: string;
+  token: string;
 }
 
 interface DataState {
@@ -29,15 +29,15 @@ interface DataState {
 
 const useCart = create<DataState>((set) => ({
   cart: { items: [] },
-  addItem: async ({ accessToken, product, quantity }: AddItemParams) => {
-    addProductApi({ accessToken, product, quantity });
+  addItem: async ({ token, product, quantity }: AddItemParams) => {
+    addProductApi({ token, product, quantity });
   },
-  calculateSubTotal: async ({ accessToken }: CalculateSubtotalParams) => {
-    const data = await getSubtotalApi({ accessToken });
+  calculateSubTotal: async ({ token }: CalculateSubtotalParams) => {
+    const data = await getSubtotalApi({ token });
     return data.subTotal.toFixed(2);
   },
-  fetch: async ({ accessToken }: FetchParams) => {
-    const cart = await getApi({ accessToken });
+  fetch: async ({ token }: FetchParams) => {
+    const cart = await getApi({ token });
     set({ cart });
   },
 }));

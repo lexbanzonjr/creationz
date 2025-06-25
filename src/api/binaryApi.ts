@@ -4,10 +4,10 @@ import { blankBinary } from "../types/blank";
 import parseContentDisposition from "./utils/parseContentDisposition";
 
 export const addBinary = async ({
-  accessToken,
+  token,
   binary,
 }: {
-  accessToken: string;
+  token: string;
   binary: Binary;
 }) => {
   const formData = new FormData();
@@ -15,7 +15,7 @@ export const addBinary = async ({
 
   const response = await axios.post("https://localhost:5000/binary", formData, {
     headers: {
-      Authorization: `Basic ${accessToken}`,
+      Authorization: `Basic ${token}`,
       "Content-Type": "multipart/form-data",
     },
   });
@@ -24,37 +24,37 @@ export const addBinary = async ({
 };
 
 export const deleteBinary = async ({
-  accessToken,
+  token,
   binary,
 }: {
-  accessToken: string;
+  token: string;
   binary: Binary;
 }) => {
   try {
     await axios.delete("https://localhost:5000/binary", {
       params: { _id: binary._id },
       headers: {
-        Authorization: `Basic ${accessToken}`,
+        Authorization: `Basic ${token}`,
       },
     });
   } catch (error: any) {}
 };
 
 export const getBinary = async ({
-  accessToken,
+  token,
   _id,
 }: {
-  accessToken?: string;
+  token?: string;
   _id: string;
 }) => {
   const binary = { ...blankBinary };
   try {
     const response = await axios.get(`https://localhost:5000/binary/${_id}`, {
       responseType: "blob", // Ensure the response is a Blob
-      headers: !accessToken
+      headers: !token
         ? {}
         : {
-            Authorization: `Basic ${accessToken}`,
+            Authorization: `Basic ${token}`,
           },
     });
 
@@ -76,14 +76,14 @@ export const getBinary = async ({
 };
 
 export const getImage = async ({
-  accessToken,
+  token,
   _id,
 }: {
-  accessToken?: string;
+  token?: string;
   _id: string;
 }) => {
   const binary = await getBinary({
-    accessToken,
+    token,
     _id,
   });
 

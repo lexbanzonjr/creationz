@@ -2,15 +2,15 @@ import axios from "axios";
 import { Product } from "../types/global";
 
 export const addProduct = async ({
-  accessToken,
+  token,
   product,
 }: {
-  accessToken: string;
+  token: string;
   product: Product;
 }) => {
   const response = await axios.post("https://localhost:5000/product", product, {
     headers: {
-      Authorization: `Basic ${accessToken}`,
+      Authorization: `Basic ${token}`,
     },
   });
 
@@ -18,28 +18,28 @@ export const addProduct = async ({
 };
 
 export const deleteProduct = async ({
-  accessToken,
+  token,
   product,
 }: {
-  accessToken: string;
+  token: string;
   product: Product;
 }) => {
   await axios.delete("https://localhost:5000/product", {
     params: { _id: product._id },
     headers: {
-      Authorization: `Basic ${accessToken}`,
+      Authorization: `Basic ${token}`,
     },
   });
 };
 
-export const getProducts = async (props?: { accessToken?: string }) => {
+export const getProducts = async (props?: { token?: string }) => {
   try {
     // API call to register the account
     const response = await axios.get("https://localhost:5000/product", {
-      headers: !props?.accessToken
+      headers: !props?.token
         ? {}
         : {
-            Authorization: `Bearer ${props.accessToken}`,
+            Authorization: `Bearer ${props.token}`,
           },
     });
     return response.data.products as Product[];
@@ -48,15 +48,15 @@ export const getProducts = async (props?: { accessToken?: string }) => {
 };
 
 export const updateProduct = async ({
-  accessToken,
+  token,
   product,
 }: {
-  accessToken: string;
+  token: string;
   product: Product;
 }) => {
   const response = await axios.put("https://localhost:5000/product", product, {
     headers: {
-      Authorization: `Basic ${accessToken}`,
+      Authorization: `Basic ${token}`,
     },
   });
 
