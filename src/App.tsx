@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AdminDashboard from "./pages/admin/Dashboard";
 import Cart from "./pages/Cart";
@@ -8,8 +8,16 @@ import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
 import Shop from "./pages/Shop";
 import SignUp from "./pages/SignUp";
+import { useAuth } from "./hooks/useAuthStore";
 
 const App: React.FC = () => {
+  const { initialize: initializeAuth } = useAuth();
+
+  // Initialize auth on app startup
+  useEffect(() => {
+    initializeAuth();
+  }, [initializeAuth]);
+
   return (
     <Router>
       <Navbar />

@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+import { getGuestToken } from "../api/guestApi";
+
 interface IdParams {
   email: string;
   name: string;
@@ -8,8 +10,8 @@ interface IdParams {
 }
 
 interface LoginParams {
-  idToken: { roles: string[] };
-  token: string;
+  id: IdParams;
+  accessToken: string;
 }
 
 interface AuthState {
@@ -24,6 +26,7 @@ interface AuthState {
   setAccessToken: (accessToken: string) => void;
   setAuthenticated: (auth: boolean) => void;
   setId: (params: IdParams) => void;
+  initialize: () => Promise<void>;
 }
 
 const blankId = {
@@ -42,8 +45,8 @@ export const useAuthStore = create<AuthState>()(
 
       login: (params: LoginParams) => {
         set({
-          accessToken: params.token,
-          id: params.idToken as IdParams,
+          accessToken: params.accessToken,
+          id: params.id as IdParams,
           isAuthenticated: true,
         });
       },
@@ -56,11 +59,26 @@ export const useAuthStore = create<AuthState>()(
         });
       },
 
-      setAccessToken: (accessToken: string) => set({ accessToken }),
+      setAccessToken: (accessToken: string) =>
+        set({ accessToken: accessToken }),
 
       setAuthenticated: (auth: boolean) => set({ isAuthenticated: auth }),
 
       setId: (params: IdParams) => set({ id: params }),
+
+      initialize: async () => {
+        const state = get();
+
+        // If there's no access token, try to get a guest token
+        if (!state.accessToken) {
+          const guestToken = await getGuestToken();
+          set({
+            accessToken: guestToken.guestToken,
+            id: { ...blankId, name: "Guest User", roles: ["guest"] },
+            isAuthenticated: false,
+          });
+        }
+      },
     }),
     {
       name: "auth-storage",
@@ -85,6 +103,7 @@ export const useAuth = () => {
     setAccessToken,
     setId,
     setAuthenticated,
+    initialize,
   } = useAuthStore();
 
   return {
@@ -97,5 +116,6 @@ export const useAuth = () => {
     setAccessToken,
     setId,
     setAuthenticated,
+    initialize,
   };
 };

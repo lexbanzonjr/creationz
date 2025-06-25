@@ -33,8 +33,8 @@ const Login: React.FC = () => {
       // Handle success (e.g., store token, redirect user)
       alert("Login successful");
       login({
-        token: response.data.accessToken,
-        idToken: response.data.idToken,
+        accessToken: response.data.accessToken,
+        id: response.data.id,
       });
       navigate("/dashboard");
     } catch (err: any) {
