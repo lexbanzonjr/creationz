@@ -21,7 +21,7 @@ const orderHistory = [
 
 const Dashboard: React.FC = () => {
   const { cart } = useCart(); // Retrieve cart data from context
-  const { id } = useAuthStore();
+  const { payload } = useAuthStore();
 
   return (
     <div className={styles.dashboard}>
@@ -31,10 +31,10 @@ const Dashboard: React.FC = () => {
       <section className={styles["user-info"]}>
         <h2>User Information</h2>
         <p>
-          <strong>Name:</strong> {id.name}
+          <strong>Name:</strong> {payload.name}
         </p>
         <p>
-          <strong>Email:</strong> {id.email}
+          <strong>Email:</strong> {payload.email}
         </p>
       </section>
 

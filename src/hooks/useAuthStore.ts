@@ -2,22 +2,22 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 import { getGuestToken } from "../api/guestApi";
+import { jwtDecode } from "jwt-decode";
 
-interface IdParams {
+interface Payload {
   email: string;
   name: string;
   roles: string[];
 }
 
 interface LoginParams {
-  id: IdParams;
   token: string;
 }
 
 interface AuthState {
   // State
   token: string;
-  id: IdParams;
+  payload: Payload;
   isAuthenticated: boolean;
 
   // Actions
@@ -25,11 +25,10 @@ interface AuthState {
   logout: () => void;
   setToken: (token: string) => void;
   setAuthenticated: (auth: boolean) => void;
-  setId: (params: IdParams) => void;
   initialize: () => Promise<void>;
 }
 
-const blankId = {
+const blankPayload = {
   email: "",
   name: "",
   roles: [],
@@ -40,13 +39,14 @@ export const useAuthStore = create<AuthState>()(
     (set, get) => ({
       // Initial state
       token: "",
-      id: blankId,
+      payload: blankPayload,
       isAuthenticated: false,
 
       login: (params: LoginParams) => {
+        const payload = jwtDecode(params.token) as Payload;
         set({
           token: params.token,
-          id: params.id as IdParams,
+          payload,
           isAuthenticated: true,
         });
       },
@@ -54,7 +54,7 @@ export const useAuthStore = create<AuthState>()(
       logout: () => {
         set({
           token: "",
-          id: blankId,
+          payload: blankPayload,
           isAuthenticated: false,
         });
       },
@@ -63,17 +63,16 @@ export const useAuthStore = create<AuthState>()(
 
       setAuthenticated: (auth: boolean) => set({ isAuthenticated: auth }),
 
-      setId: (params: IdParams) => set({ id: params }),
-
       initialize: async () => {
         const state = get();
 
         // If there's no access token, try to get a guest token
         if (!state.token) {
           const guestToken = await getGuestToken();
+          const payload = jwtDecode(guestToken.token) as Payload;
           set({
             token: guestToken.token,
-            id: { ...blankId, name: "Guest User", roles: ["guest"] },
+            payload,
             isAuthenticated: false,
           });
         }
@@ -83,7 +82,7 @@ export const useAuthStore = create<AuthState>()(
       name: "auth-storage",
       partialize: (state) => ({
         token: state.token,
-        id: state.id,
+        payload: state.payload,
         isAuthenticated: state.isAuthenticated,
       }),
     }

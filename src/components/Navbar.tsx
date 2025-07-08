@@ -5,7 +5,7 @@ import { useAuthStore } from "../hooks/useAuthStore";
 import styles from "./Navbar.module.css";
 
 const Navbar: React.FC = () => {
-  const { isAuthenticated, id, logout } = useAuthStore();
+  const { isAuthenticated, payload, logout } = useAuthStore();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -14,7 +14,7 @@ const Navbar: React.FC = () => {
   };
 
   const isAdmin = () => {
-    return id.roles?.includes("admin");
+    return payload.roles?.includes("admin");
   };
 
   return (

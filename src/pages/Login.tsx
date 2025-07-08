@@ -34,7 +34,6 @@ const Login: React.FC = () => {
       alert("Login successful");
       login({
         token: response.data.token,
-        id: response.data.id,
       });
       navigate("/dashboard");
     } catch (err: any) {
