@@ -72,7 +72,7 @@ export const useAuthStore = create<AuthState>()(
         if (!state.token) {
           const guestToken = await getGuestToken();
           set({
-            token: guestToken.guestToken,
+            token: guestToken.token,
             id: { ...blankId, name: "Guest User", roles: ["guest"] },
             isAuthenticated: false,
           });

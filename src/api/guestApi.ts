@@ -1,7 +1,7 @@
 import axios from "axios";
 
 interface GuestToken {
-  guestToken: string;
+  token: string;
 }
 
 export const getGuestToken = async (): Promise<GuestToken> => {
