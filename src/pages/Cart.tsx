@@ -2,20 +2,20 @@ import React, { useEffect, useState } from "react";
 
 import { Image } from "../types/global";
 import useCart from "../hooks/useCart";
-import { useAuth } from "../hooks/useAuthStore";
+import { useAuthStore } from "../hooks/useAuthStore";
 import { getImage as getImageApi } from "../api/binaryApi";
 import ImageCarousel from "../components/ImageCarousel";
 
 const Cart: React.FC = () => {
   const { cart: myCart, calculateSubTotal, fetch: fetchCart } = useCart();
-  const { getToken } = useAuth();
+  const { token } = useAuthStore();
   const [fetched, setFetched] = useState<boolean>(false);
   const [images, setImages] = useState<Record<string, Image>>({});
   const [subTotal, setSubTotal] = useState<string>("0.0");
 
   useEffect(() => {
     const fetch = async () => {
-      await fetchCart({ token: getToken });
+      await fetchCart({ token });
 
       const imagePromises = myCart.items.flatMap((item) =>
         item.product.image_id.map((id: string) => getImageApi({ _id: id }))
@@ -29,13 +29,13 @@ const Cart: React.FC = () => {
         {} as Record<string, Image>
       );
       setImages(imageMap);
-      setSubTotal(await calculateSubTotal({ token: getToken }));
+      setSubTotal(await calculateSubTotal({ token }));
     };
     if (!fetched) {
       fetch();
       setFetched(true);
     }
-  }, [calculateSubTotal, fetchCart, fetched, getToken, myCart]);
+  }, [calculateSubTotal, fetchCart, fetched, token, myCart]);
 
   return !fetched ? null : (
     <div>

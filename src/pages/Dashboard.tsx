@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuth } from "../hooks/useAuthStore";
+import { useAuthStore } from "../hooks/useAuthStore";
 import { useCart } from "../context/CartContext"; // Assumes a CartContext is already implemented
 import styles from "./Dashboard.module.css";
 
@@ -21,7 +21,7 @@ const orderHistory = [
 
 const Dashboard: React.FC = () => {
   const { cart } = useCart(); // Retrieve cart data from context
-  const { getId } = useAuth();
+  const { id } = useAuthStore();
 
   return (
     <div className={styles.dashboard}>
@@ -31,10 +31,10 @@ const Dashboard: React.FC = () => {
       <section className={styles["user-info"]}>
         <h2>User Information</h2>
         <p>
-          <strong>Name:</strong> {getId.name}
+          <strong>Name:</strong> {id.name}
         </p>
         <p>
-          <strong>Email:</strong> {getId.email}
+          <strong>Email:</strong> {id.email}
         </p>
       </section>
 

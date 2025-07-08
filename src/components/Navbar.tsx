@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuthStore";
+import { useAuthStore } from "../hooks/useAuthStore";
 import styles from "./Navbar.module.css";
 
 const Navbar: React.FC = () => {
-  const { isAuthenticated, getId, logout } = useAuth();
+  const { isAuthenticated, id, logout } = useAuthStore();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -14,7 +14,7 @@ const Navbar: React.FC = () => {
   };
 
   const isAdmin = () => {
-    return getId.roles?.includes("admin");
+    return id.roles?.includes("admin");
   };
 
   return (

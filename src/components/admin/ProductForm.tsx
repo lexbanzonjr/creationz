@@ -7,7 +7,7 @@ import Dropdown from "../Dropdown";
 import ImageListEditor, { ImageListEditorHandle } from "../ImageListEditor";
 import { Product, Binary } from "../../types/global";
 import useStore from "../../hooks/useAdminStore";
-import { useAuth } from "../../hooks/useAuthStore";
+import { useAuthStore } from "../../hooks/useAuthStore";
 
 interface ProductFormProps {
   isOpen: boolean;
@@ -36,7 +36,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
   const imageRef = useRef<ImageListEditorHandle>(null);
 
   const { categories, addBinary, deleteBinary, getBinary } = useStore();
-  const { getToken } = useAuth();
+  const { token } = useAuthStore();
 
   const isEditing = !!product;
   const displayTitle =
@@ -59,7 +59,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
         const loadImages = async () => {
           const loadedImages: Binary[] = [];
           for (const id of product.image_id) {
-            loadedImages.push(await getBinary(getToken, id));
+            loadedImages.push(await getBinary(token, id));
           }
           setImages(loadedImages);
           setIsLoading(false);
@@ -84,7 +84,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
     return () => {
       document.body.style.overflow = "unset";
     };
-  }, [isOpen, product, getBinary, getToken]);
+  }, [isOpen, product, getBinary, token]);
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     // Only close if clicking the backdrop, not the modal content
@@ -125,7 +125,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
         // Delete removed images
         for (const binary of imageChanges!.remove_images) {
-          await deleteBinary(getToken, binary);
+          await deleteBinary(token, binary);
           productData.image_id = productData.image_id!.filter(
             (id) => id !== binary._id
           );
@@ -133,7 +133,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
         // Add new images
         for (const binary of imageChanges!.new_images) {
-          const newBinary = await addBinary(getToken, binary);
+          const newBinary = await addBinary(token, binary);
           productData.image_id!.push(newBinary._id);
         }
       }

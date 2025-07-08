@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
-import { useAuth } from "../../hooks/useAuthStore";
+import { useAuthStore } from "../../hooks/useAuthStore";
 import useStore from "../../hooks/useAdminStore";
 import { Binary } from "../../types/global";
 
@@ -15,7 +15,7 @@ interface ImagesCellRendererProps {
 }
 
 const ImagesCellRenderer: React.FC<ImagesCellRendererProps> = ({ data }) => {
-  const { getToken } = useAuth();
+  const { token } = useAuthStore();
   const { getBinary } = useStore();
 
   const [images, setImages] = useState<Binary[]>([]);
@@ -34,7 +34,7 @@ const ImagesCellRenderer: React.FC<ImagesCellRendererProps> = ({ data }) => {
       const urls: Record<string, string> = {};
 
       for (const id of currentProduct.image_id) {
-        const binary = await getBinary(getToken, id);
+        const binary = await getBinary(token, id);
         loadedImages.push(binary);
 
         // Create object URL for File data
@@ -58,7 +58,7 @@ const ImagesCellRenderer: React.FC<ImagesCellRendererProps> = ({ data }) => {
         URL.revokeObjectURL(url);
       });
     };
-  }, [currentProduct.image_id, getBinary, getToken, imageUrls]);
+  }, [currentProduct.image_id, getBinary, token, imageUrls]);
 
   const handleMouseEnter = (e: React.MouseEvent) => {
     // Calculate popup position based on mouse position

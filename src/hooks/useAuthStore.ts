@@ -89,32 +89,3 @@ export const useAuthStore = create<AuthState>()(
     }
   )
 );
-
-// Convenience hook that maintains the same API as the original useAuth
-export const useAuth = () => {
-  const {
-    token,
-    id,
-    isAuthenticated,
-
-    login,
-    logout,
-    setToken,
-    setId,
-    setAuthenticated,
-    initialize,
-  } = useAuthStore();
-
-  return {
-    getToken: token,
-    getId: id,
-    isAuthenticated,
-
-    login,
-    logout,
-    setToken,
-    setId,
-    setAuthenticated,
-    initialize,
-  };
-};

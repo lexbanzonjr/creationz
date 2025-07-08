@@ -5,7 +5,7 @@ import { IoMdShirt } from "react-icons/io";
 
 import ViewOrders from "./ViewOrders";
 import styles from "./Dashboard.module.css";
-import { useAuth } from "../../hooks/useAuthStore";
+import { useAuthStore } from "../../hooks/useAuthStore";
 import { getCategories } from "../../api/categoryApi";
 import { getProducts } from "../../api/productApi";
 import { getTypes } from "../../api/typeApi";
@@ -14,13 +14,13 @@ import CategoryPage from "./CategoryPage";
 import ProductPage from "./ProductPage";
 
 const AdminDashboard: React.FC = () => {
-  const { getToken } = useAuth();
+  const { token } = useAuthStore();
   const { pathname } = useLocation();
   const { populate, setAllData } = useAdminStore();
 
   useEffect(() => {
     const fetchData = async () => {
-      const params = { token: getToken, populate: true };
+      const params = { token, populate: true };
       try {
         // Replace these functions with your actual data-fetching logic
         const [categories, products, types] = await Promise.all([

@@ -10,7 +10,7 @@ import EditButton from "../../components/EditButton";
 import GreenButton from "../../components/GreenButton";
 import ProductForm from "../../components/admin/ProductForm";
 import RemoveButton from "../../components/RemoveButton";
-import { useAuth } from "../../hooks/useAuthStore";
+import { useAuthStore } from "../../hooks/useAuthStore";
 import useStore from "../../hooks/useAdminStore";
 import { Product } from "../../types/global";
 
@@ -22,7 +22,7 @@ interface RowData {
 const ProductPage: React.FC = () => {
   const { products, addProduct, deleteProduct, updateProduct, categories } =
     useStore();
-  const { getToken } = useAuth();
+  const { token } = useAuthStore();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | undefined>(
@@ -115,7 +115,7 @@ const ProductPage: React.FC = () => {
                 (rowData) => rowData.product!._id !== data.product!._id
               );
             });
-            await deleteProduct(getToken, data.product!);
+            await deleteProduct(token, data.product!);
           };
 
           const handleEditInModal = (data: RowData) => {
@@ -138,7 +138,7 @@ const ProductPage: React.FC = () => {
         },
       },
     ],
-    [deleteProduct, getToken, categories]
+    [deleteProduct, token, categories]
   );
 
   const handleAddRow = () => {
@@ -154,7 +154,7 @@ const ProductPage: React.FC = () => {
   const handleConfirmProduct = async (productData: Product) => {
     if (editingProduct) {
       // Editing existing product
-      const updatedProduct = await updateProduct(getToken, productData);
+      const updatedProduct = await updateProduct(token, productData);
 
       setRowData((prevData) => {
         const index = prevData.findIndex(
@@ -168,7 +168,7 @@ const ProductPage: React.FC = () => {
       gridRef.current?.api.refreshCells();
     } else {
       // Adding new product
-      const newProduct = await addProduct(getToken, productData);
+      const newProduct = await addProduct(token, productData);
 
       const data = {
         product: newProduct,

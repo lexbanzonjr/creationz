@@ -8,10 +8,10 @@ import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
 import Shop from "./pages/Shop";
 import SignUp from "./pages/SignUp";
-import { useAuth } from "./hooks/useAuthStore";
+import { useAuthStore } from "./hooks/useAuthStore";
 
 const App: React.FC = () => {
-  const { initialize: initializeAuth } = useAuth();
+  const { initialize: initializeAuth } = useAuthStore();
 
   // Initialize auth on app startup
   useEffect(() => {
