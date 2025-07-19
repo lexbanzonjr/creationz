@@ -4,6 +4,7 @@ import axios, {
   AxiosError,
   InternalAxiosRequestConfig,
 } from "axios";
+import { useAuthStore } from "./hooks/useAuthStore";
 
 // Type for queued request promises
 interface QueuedRequest {
@@ -13,8 +14,7 @@ interface QueuedRequest {
 
 // Type for refresh token response
 interface RefreshTokenResponse {
-  accessToken: string;
-  refreshToken?: string;
+  token: string;
 }
 
 // Type for extended request config with retry flag
@@ -48,14 +48,14 @@ const processQueue = (error: any, token: string | null = null): void => {
 
 // Create axios instance with base configuration
 export const httpClient = axios.create({
-  baseURL: "https://your-api.com",
+  baseURL: "https://localhost:5000",
 });
 
 // Request interceptor: Add authorization header to outgoing requests
 httpClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
-    // Get current access token from localStorage
-    const token: string | null = localStorage.getItem("accessToken");
+    // Get current access token from auth store
+    const token = useAuthStore.getState().token;
     if (token) {
       // Add Bearer token to Authorization header
       config.headers["Authorization"] = `Bearer ${token}`;
@@ -72,13 +72,11 @@ httpClient.interceptors.response.use(
   async (error: AxiosError) => {
     const originalRequest: ExtendedAxiosRequestConfig =
       error.config as ExtendedAxiosRequestConfig;
-    const refreshToken: string | null = localStorage.getItem("refreshToken");
 
     // Check if this is a 401 error that should trigger token refresh
     if (
       error.response?.status === 401 &&
-      !originalRequest._retry && // Prevent infinite retry loops
-      refreshToken // Only attempt refresh if we have a refresh token
+      !originalRequest._retry // Prevent infinite retry loops
     ) {
       // Mark this request as having been retried
       originalRequest._retry = true;
@@ -101,17 +99,21 @@ httpClient.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        // Attempt to refresh the access token
-        const res: AxiosResponse<RefreshTokenResponse> = await axios.post(
-          "https://your-api.com/auth/refresh",
+        // Attempt to refresh the access token with token in the authentication header
+        const token = useAuthStore.getState().token;
+        if (!token) {
+          throw new Error("No access token found");
+        }
+        const res: AxiosResponse<RefreshTokenResponse> = await axios.get(
+          "https://localhost:5000/auth/refresh-token",
           {
-            refreshToken,
+            headers: originalRequest.headers,
           }
         );
-        const newToken: string = res.data.accessToken;
+        const newToken: string = res.data.token;
 
-        // Store the new access token
-        localStorage.setItem("accessToken", newToken);
+        // Store the new access token in auth store
+        useAuthStore.getState().setToken(newToken);
 
         // Process all queued requests with the new token
         processQueue(null, newToken);
@@ -120,9 +122,9 @@ httpClient.interceptors.response.use(
         originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
         return httpClient(originalRequest);
       } catch (err) {
-        // If refresh fails, reject all queued requests
+        // If refresh fails, reject all queued requests and logout
         processQueue(err, null);
-        // Optionally redirect to login page here
+        useAuthStore.getState().logout();
         return Promise.reject(err);
       } finally {
         // Reset the refreshing flag
