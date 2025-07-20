@@ -24,7 +24,7 @@ interface DataState {
   cart: Cart;
   addItem: (item: AddItemParams) => void;
   calculateSubTotal: (params: CalculateSubtotalParams) => Promise<string>;
-  fetch: (params: FetchParams) => Promise<void>;
+  fetch: (params: FetchParams) => Promise<Cart>;
 }
 
 const useCart = create<DataState>((set) => ({
@@ -34,11 +34,13 @@ const useCart = create<DataState>((set) => ({
   },
   calculateSubTotal: async ({ token }: CalculateSubtotalParams) => {
     const data = await getSubtotalApi({ token });
+    if (!data || !data.subTotal) return "0.00";
     return data.subTotal.toFixed(2);
   },
   fetch: async ({ token }: FetchParams) => {
     const cart = await getApi({ token });
     set({ cart });
+    return cart;
   },
 }));
 
