@@ -49,13 +49,13 @@ interface DataState {
 
   addBinary: (token: string, binary: Binary) => Promise<Binary>;
   addCategory: (token: string, category?: Category) => Promise<Category>;
-  addProduct: (token: string, product?: Product) => Promise<Product>;
+  addProduct: (product?: Product) => Promise<Product>;
   addType: (token: string, type: Type) => Promise<Type>;
   addTypeOption: (token: string, type: Type, option: Option) => Promise<Option>;
 
   deleteBinary: (token: string, binary: Binary) => Promise<void>;
   deleteCategory: (token: string, category: Category) => Promise<void>;
-  deleteProduct: (token: string, product: Product) => Promise<void>;
+  deleteProduct: (product: Product) => Promise<void>;
   deleteType: (token: string, type: Type) => Promise<void>;
 
   getBinary: (token: string, _id: string) => Promise<Binary>;
@@ -84,7 +84,7 @@ interface DataState {
   }) => void;
 
   updateCategory: (token: string, category: Category) => Promise<Category>;
-  updateProduct: (token: string, product: Product) => Promise<Product>;
+  updateProduct: (product: Product) => Promise<Product>;
 }
 
 const useStore = create<DataState>((set) => ({
@@ -135,13 +135,12 @@ const useStore = create<DataState>((set) => ({
     });
     return newCategory;
   },
-  addProduct: async (token, product) => {
+  addProduct: async (product) => {
     let newProduct = blankProduct;
     if (product) {
       newProduct = { ...newProduct, ...product };
     }
     newProduct = await addProductApi({
-      token,
       product: newProduct,
     });
     set((state) => ({ products: [...state.products, newProduct] }));
@@ -176,8 +175,8 @@ const useStore = create<DataState>((set) => ({
           : state.activeCategory,
     }));
   },
-  deleteProduct: async (token, product) => {
-    await deleteProductApi({ token, product });
+  deleteProduct: async (product) => {
+    await deleteProductApi({ product });
     set((state) => ({
       products: state.products.filter((item) => item._id !== product._id),
     }));
@@ -230,8 +229,8 @@ const useStore = create<DataState>((set) => ({
     }));
     return updateCategory;
   },
-  updateProduct: async (token: string, product: Product) => {
-    const updateProduct = await updateProductApi({ token, product });
+  updateProduct: async (product: Product) => {
+    const updateProduct = await updateProductApi({ product });
     set((state) => ({
       categories: state.categories.map((cat) =>
         cat._id === product._id ? { ...cat, ...product } : cat

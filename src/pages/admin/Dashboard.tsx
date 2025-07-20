@@ -25,7 +25,7 @@ const AdminDashboard: React.FC = () => {
         // Replace these functions with your actual data-fetching logic
         const [categories, products, types] = await Promise.all([
           getCategories(params),
-          getProducts(params),
+          getProducts(),
           getTypes(params),
         ]);
 
