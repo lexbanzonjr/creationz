@@ -7,7 +7,6 @@ import { getCategories as getCateogiesApi } from "../api/categoryApi";
 import { getProducts as getProductsApi } from "../api/productApi";
 import { Category, Image, Product } from "../types/global";
 import useCart from "./../hooks/useCart";
-import { useAuthStore } from "../hooks/useAuthStore";
 
 const Home: React.FC = () => {
   const [loaded, setLoaded] = useState(false);
@@ -16,7 +15,6 @@ const Home: React.FC = () => {
   const [images, setImages] = useState<Record<string, Image>>({});
   const hasFetched = useRef(false);
   const { addItem: addItemToCart } = useCart();
-  const { token } = useAuthStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -88,7 +86,6 @@ const Home: React.FC = () => {
                             className="w-full"
                             onClick={() => {
                               addItemToCart({
-                                token,
                                 product,
                                 quantity: 1,
                               });

@@ -2,23 +2,19 @@ import React, { useEffect, useState } from "react";
 
 import { Image } from "../types/global";
 import useCart from "../hooks/useCart";
-import { useAuthStore } from "../hooks/useAuthStore";
 import { getImage as getImageApi } from "../api/binaryApi";
 import ImageCarousel from "../components/ImageCarousel";
 
 const Cart: React.FC = () => {
   const { cart: myCart, calculateSubTotal, fetch: fetchCart } = useCart();
-  const { token } = useAuthStore();
   const [isLoading, setIsLoading] = useState(true);
   const [images, setImages] = useState<Record<string, Image>>({});
   const [subTotal, setSubTotal] = useState<string>("0.0");
 
   useEffect(() => {
     const fetchCartData = async () => {
-      if (!token) return;
-
       try {
-        const cart = await fetchCart({ token });
+        const cart = await fetchCart();
         if (!cart?.products) return;
 
         // Fetch all product images
@@ -39,7 +35,7 @@ const Cart: React.FC = () => {
           setImages(imageMap);
         }
 
-        const total = await calculateSubTotal({ token });
+        const total = await calculateSubTotal();
         setSubTotal(total);
       } catch (error) {
         console.error("Failed to fetch cart data:", error);
@@ -49,7 +45,7 @@ const Cart: React.FC = () => {
     };
 
     fetchCartData();
-  }, [calculateSubTotal, fetchCart, token]);
+  }, [calculateSubTotal, fetchCart]);
 
   if (isLoading) {
     return <div>Loading cart...</div>;
