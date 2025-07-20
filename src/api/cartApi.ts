@@ -16,20 +16,13 @@ export const addProduct = async ({
     product,
     quantity,
   };
-  httpClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-  // Use the httpClient instance to make the request
-  httpClient.post("https://localhost:5000/cart", body, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  await httpClient.post("/cart", body);
 };
 
 export interface GetParams {
   token: String;
 }
 export const get = async ({ token }: GetParams) => {
-  httpClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   const response = await httpClient.get("/cart");
   return response.data.cart as Cart;
 };
@@ -41,10 +34,6 @@ export interface GetSubtotalData {
   subTotal: number;
 }
 export const getSubtotal = async ({ token }: GetSubtotalParams) => {
-  const response = await axios.get("https://localhost:5000/cart/subtotal", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await httpClient.get("/cart/subtotal");
   return response.data as GetSubtotalData;
 };
