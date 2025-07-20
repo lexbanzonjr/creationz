@@ -41,7 +41,7 @@ export interface GetSubtotalData {
   subTotal: number;
 }
 export const getSubtotal = async ({ token }: GetSubtotalParams) => {
-  const response = await axios.get("https://localhost:5000/user/subtotal", {
+  const response = await axios.get("https://localhost:5000/cart/subtotal", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
