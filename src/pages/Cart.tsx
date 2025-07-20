@@ -17,7 +17,7 @@ const Cart: React.FC = () => {
     const fetch = async () => {
       await fetchCart({ token });
 
-      const imagePromises = myCart.items.flatMap((item) =>
+      const imagePromises = myCart.products.flatMap((item) =>
         item.product.image_id.map((id: string) => getImageApi({ _id: id }))
       );
       const imageResults = await Promise.all(imagePromises);
@@ -40,11 +40,11 @@ const Cart: React.FC = () => {
   return !fetched ? null : (
     <div>
       <h1>Your Cart</h1>
-      {myCart.items.length === 0 ? (
+      {myCart.products.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
         <div className="space-y-6">
-          {myCart.items.map((item) => {
+          {myCart.products.map((item) => {
             const productImages = item.product.image_id
               .map((id: string) => images[id])
               .filter((image): image is Image => image !== undefined);
