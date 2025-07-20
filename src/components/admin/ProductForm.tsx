@@ -59,7 +59,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
         const loadImages = async () => {
           const loadedImages: Binary[] = [];
           for (const id of product.image_id) {
-            loadedImages.push(await getBinary(token, id));
+            loadedImages.push(await getBinary(id));
           }
           setImages(loadedImages);
           setIsLoading(false);
@@ -125,7 +125,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
         // Delete removed images
         for (const binary of imageChanges!.remove_images) {
-          await deleteBinary(token, binary);
+          await deleteBinary(binary);
           productData.image_id = productData.image_id!.filter(
             (id) => id !== binary._id
           );
@@ -133,7 +133,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
         // Add new images
         for (const binary of imageChanges!.new_images) {
-          const newBinary = await addBinary(token, binary);
+          const newBinary = await addBinary(binary);
           productData.image_id!.push(newBinary._id);
         }
       }

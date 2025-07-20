@@ -47,18 +47,18 @@ interface DataState {
   activeOption: Option;
   activeType: Type;
 
-  addBinary: (token: string, binary: Binary) => Promise<Binary>;
+  addBinary: (binary: Binary) => Promise<Binary>;
   addCategory: (token: string, category?: Category) => Promise<Category>;
   addProduct: (product?: Product) => Promise<Product>;
   addType: (token: string, type: Type) => Promise<Type>;
   addTypeOption: (token: string, type: Type, option: Option) => Promise<Option>;
 
-  deleteBinary: (token: string, binary: Binary) => Promise<void>;
+  deleteBinary: (binary: Binary) => Promise<void>;
   deleteCategory: (token: string, category: Category) => Promise<void>;
   deleteProduct: (product: Product) => Promise<void>;
   deleteType: (token: string, type: Type) => Promise<void>;
 
-  getBinary: (token: string, _id: string) => Promise<Binary>;
+  getBinary: (_id: string) => Promise<Binary>;
 
   resetActiveCategory: () => void;
   resetActiveType: () => void;
@@ -118,8 +118,8 @@ const useStore = create<DataState>((set) => ({
     return option;
   },
 
-  addBinary: async (token, binary) => {
-    return await addBinaryApi({ token, binary });
+  addBinary: async (binary) => {
+    return await addBinaryApi({ binary });
   },
   addCategory: async (token, category) => {
     let newCategory = blankCategory;
@@ -162,8 +162,8 @@ const useStore = create<DataState>((set) => ({
     return newOption;
   },
 
-  deleteBinary: async (token, binary) => {
-    await deleteBinaryApi({ token, binary });
+  deleteBinary: async (binary) => {
+    await deleteBinaryApi({ binary });
   },
   deleteCategory: async (token, category) => {
     await deleteCategoryApi({ token, category });
@@ -192,8 +192,8 @@ const useStore = create<DataState>((set) => ({
     }));
   },
 
-  getBinary: async (token, _id) => {
-    return await getBinary({ token, _id });
+  getBinary: async (_id) => {
+    return await getBinary({ _id });
   },
 
   setCategories: (categories) => {

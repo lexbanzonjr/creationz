@@ -1,21 +1,14 @@
-import axios from "axios";
 import { Binary, Image } from "../types/global";
 import { blankBinary } from "../types/blank";
 import parseContentDisposition from "./utils/parseContentDisposition";
+import { httpClient } from "../httpClient";
 
-export const addBinary = async ({
-  token,
-  binary,
-}: {
-  token: string;
-  binary: Binary;
-}) => {
+export const addBinary = async ({ binary }: { binary: Binary }) => {
   const formData = new FormData();
   formData.append("binary", binary.data!);
 
-  const response = await axios.post("https://localhost:5000/binary", formData, {
+  const response = await httpClient.post("/binary", formData, {
     headers: {
-      Authorization: `Basic ${token}`,
       "Content-Type": "multipart/form-data",
     },
   });
@@ -23,39 +16,19 @@ export const addBinary = async ({
   return response.data.binary as Binary;
 };
 
-export const deleteBinary = async ({
-  token,
-  binary,
-}: {
-  token: string;
-  binary: Binary;
-}) => {
+export const deleteBinary = async ({ binary }: { binary: Binary }) => {
   try {
-    await axios.delete("https://localhost:5000/binary", {
+    await httpClient.delete("/binary", {
       params: { _id: binary._id },
-      headers: {
-        Authorization: `Basic ${token}`,
-      },
     });
   } catch (error: any) {}
 };
 
-export const getBinary = async ({
-  token,
-  _id,
-}: {
-  token?: string;
-  _id: string;
-}) => {
+export const getBinary = async ({ _id }: { _id: string }) => {
   const binary = { ...blankBinary };
   try {
-    const response = await axios.get(`https://localhost:5000/binary/${_id}`, {
+    const response = await httpClient.get(`/binary/${_id}`, {
       responseType: "blob", // Ensure the response is a Blob
-      headers: !token
-        ? {}
-        : {
-            Authorization: `Basic ${token}`,
-          },
     });
 
     const contentDisposition: Record<string, string> = parseContentDisposition(
@@ -75,15 +48,8 @@ export const getBinary = async ({
   return binary;
 };
 
-export const getImage = async ({
-  token,
-  _id,
-}: {
-  token?: string;
-  _id: string;
-}) => {
+export const getImage = async ({ _id }: { _id: string }) => {
   const binary = await getBinary({
-    token,
     _id,
   });
 

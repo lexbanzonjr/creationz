@@ -34,7 +34,7 @@ const ImagesCellRenderer: React.FC<ImagesCellRendererProps> = ({ data }) => {
       const urls: Record<string, string> = {};
 
       for (const id of currentProduct.image_id) {
-        const binary = await getBinary(token, id);
+        const binary = await getBinary(id);
         loadedImages.push(binary);
 
         // Create object URL for File data
