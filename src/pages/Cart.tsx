@@ -15,20 +15,30 @@ const Cart: React.FC = () => {
 
   useEffect(() => {
     const fetch = async () => {
-      await fetchCart({ token });
+      const theCart = await fetchCart({ token });
+      console.log("Fetched cart:", theCart);
 
-      const imagePromises = myCart.products.flatMap((item) =>
-        item.product.image_id.map((id: string) => getImageApi({ _id: id }))
+      if (!theCart || !theCart.products) return;
+      const imagePromises = myCart.products.flatMap(
+        (item) =>
+          // check if image_id is null or undefined
+          item.product &&
+          item.product.image_id &&
+          item.product.image_id.map((id: string) => getImageApi({ _id: id }))
       );
       const imageResults = await Promise.all(imagePromises);
-      const imageMap = imageResults.reduce(
-        (acc: Record<string, Image>, image: Image) => {
-          acc[image._id] = image;
-          return acc;
-        },
-        {} as Record<string, Image>
-      );
-      setImages(imageMap);
+
+      if (imageResults.length > 0) {
+        const imageMap = imageResults.reduce(
+          (acc: Record<string, Image>, image: Image) => {
+            if (!image || !image._id) return acc;
+            acc[image._id] = image;
+            return acc;
+          },
+          {} as Record<string, Image>
+        );
+        setImages(imageMap);
+      }
       setSubTotal(await calculateSubTotal({ token }));
     };
     if (!fetched) {
@@ -45,6 +55,8 @@ const Cart: React.FC = () => {
       ) : (
         <div className="space-y-6">
           {myCart.products.map((item) => {
+            if (!item.product || !item.product.image_id) return null;
+
             const productImages = item.product.image_id
               .map((id: string) => images[id])
               .filter((image): image is Image => image !== undefined);
