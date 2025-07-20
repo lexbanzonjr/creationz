@@ -9,7 +9,6 @@ import CategoryForm from "../../components/admin/CategoryForm";
 import EditButton from "../../components/EditButton";
 import GreenButton from "../../components/GreenButton";
 import RemoveButton from "../../components/RemoveButton";
-import { useAuthStore } from "../../hooks/useAuthStore";
 import useStore from "../../hooks/useAdminStore";
 import { Category } from "../../types/global";
 
@@ -21,7 +20,6 @@ interface RowData {
 const CategoryPage: React.FC = () => {
   const { categories, addCategory, deleteCategory, updateCategory } =
     useStore();
-  const { token } = useAuthStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | undefined>(
     undefined
@@ -59,7 +57,7 @@ const CategoryPage: React.FC = () => {
                 (rowData) => rowData.category!._id !== data.category!._id
               );
             });
-            await deleteCategory(token, data.category!);
+            await deleteCategory(data.category!);
           };
 
           const handleEditInModal = (data: RowData) => {
@@ -82,7 +80,7 @@ const CategoryPage: React.FC = () => {
         },
       },
     ],
-    [deleteCategory, token]
+    [deleteCategory]
   );
 
   const handleAddRow = () => {
@@ -98,7 +96,7 @@ const CategoryPage: React.FC = () => {
   const handleConfirmCategory = async (name: string, description: string) => {
     if (editingCategory) {
       // Editing existing category
-      const updatedCategory = await updateCategory(token, {
+      const updatedCategory = await updateCategory({
         ...editingCategory,
         name,
         description,
@@ -116,7 +114,7 @@ const CategoryPage: React.FC = () => {
       gridRef.current?.api.refreshCells();
     } else {
       // Adding new category
-      const newCategory = await addCategory(token, {
+      const newCategory = await addCategory({
         _id: "",
         name,
         description,

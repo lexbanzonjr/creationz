@@ -48,13 +48,13 @@ interface DataState {
   activeType: Type;
 
   addBinary: (binary: Binary) => Promise<Binary>;
-  addCategory: (token: string, category?: Category) => Promise<Category>;
+  addCategory: (category?: Category) => Promise<Category>;
   addProduct: (product?: Product) => Promise<Product>;
   addType: (token: string, type: Type) => Promise<Type>;
   addTypeOption: (token: string, type: Type, option: Option) => Promise<Option>;
 
   deleteBinary: (binary: Binary) => Promise<void>;
-  deleteCategory: (token: string, category: Category) => Promise<void>;
+  deleteCategory: (category: Category) => Promise<void>;
   deleteProduct: (product: Product) => Promise<void>;
   deleteType: (token: string, type: Type) => Promise<void>;
 
@@ -83,7 +83,7 @@ interface DataState {
     populate: boolean;
   }) => void;
 
-  updateCategory: (token: string, category: Category) => Promise<Category>;
+  updateCategory: (category: Category) => Promise<Category>;
   updateProduct: (product: Product) => Promise<Product>;
 }
 
@@ -121,13 +121,12 @@ const useStore = create<DataState>((set) => ({
   addBinary: async (binary) => {
     return await addBinaryApi({ binary });
   },
-  addCategory: async (token, category) => {
+  addCategory: async (category) => {
     let newCategory = blankCategory;
     if (category) {
       newCategory = { ...newCategory, ...category };
     }
     newCategory = await addCategoryApi({
-      token,
       category: newCategory,
     });
     set((state) => {
@@ -165,8 +164,8 @@ const useStore = create<DataState>((set) => ({
   deleteBinary: async (binary) => {
     await deleteBinaryApi({ binary });
   },
-  deleteCategory: async (token, category) => {
-    await deleteCategoryApi({ token, category });
+  deleteCategory: async (category) => {
+    await deleteCategoryApi({ category });
     set((state) => ({
       categories: state.categories.filter((item) => item._id !== category._id),
       activeCategory:
@@ -220,8 +219,8 @@ const useStore = create<DataState>((set) => ({
     populate: boolean;
   }) => set({ categories, products, types, populate }),
 
-  updateCategory: async (token: string, category: Category) => {
-    const updateCategory = await updateCategoryApi({ token, category });
+  updateCategory: async (category: Category) => {
+    const updateCategory = await updateCategoryApi({ category });
     set((state) => ({
       categories: state.categories.map((cat) =>
         cat._id === category._id ? { ...cat, ...category } : cat

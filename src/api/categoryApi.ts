@@ -1,78 +1,40 @@
-import axios from "axios";
+import { httpClient } from "../httpClient";
 import { Category } from "../types/global";
 
 export const addCategory = async ({
-  token,
   category,
 }: {
-  token: string;
   category: Partial<Category>;
 }) => {
-  const response = await axios.post(
-    "https://localhost:5000/category",
-    category,
-    {
-      headers: {
-        Authorization: `Basic ${token}`,
-      },
-    }
-  );
+  const response = await httpClient.post("/category", category);
 
   return response.data.category as Category;
 };
 
-export const deleteCategory = async ({
-  token,
-  category,
-}: {
-  token: string;
-  category: Category;
-}) => {
+export const deleteCategory = async ({ category }: { category: Category }) => {
   try {
-    await axios.delete("https://localhost:5000/category", {
+    await httpClient.delete("/category", {
       params: { _id: category._id },
-      headers: {
-        Authorization: `Basic ${token}`,
-      },
     });
   } catch (error: any) {}
 };
 
-export const getCateogy = async ({
-  token,
-  __id,
-}: {
-  token: string;
-  __id: string;
-}) => {
+export const getCateogy = async ({ __id }: { __id: string }) => {
   try {
-    const response = await axios.get(
-      `https://localhost:5000/category/${__id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await httpClient.get(`/category/${__id}`);
     return response.data.categories as Category[];
   } catch (err: any) {}
   return null;
 };
 
 export const getCategories = async (
-  props: { token?: string; populate: boolean } = {
-    token: "",
+  props: { populate: boolean } = {
     populate: false,
   }
 ) => {
   try {
     // API call to register the account
-    const response = await axios.get("https://localhost:5000/category", {
-      headers: !props.token
-        ? {}
-        : {
-            Authorization: `Bearer ${props.token}`,
-          },
+    const response = await httpClient.get("https://localhost:5000/category", {
       params: {
         populate: props.populate,
       },
@@ -82,22 +44,8 @@ export const getCategories = async (
   return [];
 };
 
-export const updateCategory = async ({
-  token,
-  category,
-}: {
-  token: string;
-  category: Category;
-}) => {
-  const response = await axios.put(
-    "https://localhost:5000/category",
-    category,
-    {
-      headers: {
-        Authorization: `Basic ${token}`,
-      },
-    }
-  );
+export const updateCategory = async ({ category }: { category: Category }) => {
+  const response = await httpClient.put("/category", category);
 
   return response.data.category as Category;
 };
