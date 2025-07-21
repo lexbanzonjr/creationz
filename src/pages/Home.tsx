@@ -50,7 +50,7 @@ const Home: React.FC = () => {
       <>
         {categories.map((category) => {
           return (
-            <div className="mx-4 my-6">
+            <div key={category._id} className="mx-4 my-6">
               <h2 className="text-2xl font-bold text-gray-800 mb-4">
                 {category.name}
               </h2>
