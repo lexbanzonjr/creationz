@@ -51,65 +51,70 @@ const CartPage: React.FC = () => {
   }, [calculateSubTotal, fetchCart]);
 
   if (isLoading) {
-    return <div>Loading cart...</div>;
+    return <div className="p-4">Loading...</div>;
   }
 
-  const CartItem = ({ item }: { item: any }) => {
-    if (!item.product?.image_id) return null;
-
-    const productImages = item.product.image_id
-      .map((id: string) => images[id])
-      .filter(Boolean);
-
+  if (myCart.items.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col md:flex-row">
-        <div className="flex-shrink-0 w-full md:w-48">
-          <ImageCarousel
-            images={productImages}
-            className="w-full h-48 object-cover"
-          />
-        </div>
-        <div className="p-4 flex flex-col flex-grow">
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">
-            {item.product.name}
-          </h3>
-          <p className="text-gray-600 mb-2">{item.product.description}</p>
-          <div className="mt-auto flex justify-between items-center">
-            <div className="flex items-center space-x-4">
-              <span className="text-gray-600">Quantity: {item.quantity}</span>
-              <span className="text-lg font-bold text-blue-600">
-                ${(item.product.cost * item.quantity).toFixed(2)}
-              </span>
-            </div>
-          </div>
-        </div>
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Cart</h1>
+        <p className="text-gray-500">Your cart is empty</p>
       </div>
     );
-  };
+  }
 
   return (
-    <div>
-      <h1>Your Cart</h1>
-      {myCart.items.length === 0 ? (
-        <p>Your cart is empty.</p>
-      ) : (
-        <div className="space-y-6">
-          {myCart.items.map((item, index) => (
-            <CartItem
+    <div className="p-4 max-w-4xl mx-auto">
+      <h1 className="text-2xl font-bold mb-6">Cart</h1>
+
+      <div className="space-y-6">
+        {myCart.items.map((item, index) => {
+          const productImages = item.product?.image_id
+            ?.map((id: string) => images[id])
+            .filter(Boolean) || [];
+
+          return (
+            <div
               key={item?.product?._id || `cart-item-${index}`}
-              item={item}
-            />
-          ))}
-          <div className="bg-white rounded-lg shadow-md p-4 mt-6">
-            <div className="flex justify-between items-center">
-              <span className="text-xl font-bold">Total:</span>
-              <span className="text-2xl font-bold text-blue-600">
-                ${subTotal}
-              </span>
+              className="bg-white rounded-lg border p-4"
+            >
+              <div className="flex gap-4">
+                <div className="w-32 h-32 flex-shrink-0 overflow-hidden rounded">
+                  {productImages.length > 0 ? (
+                    <div className="w-full h-full">
+                      <ImageCarousel images={productImages} />
+                    </div>
+                  ) : (
+                    <div className="w-32 h-32 bg-gray-200 rounded flex items-center justify-center">
+                      <span className="text-gray-500 text-sm">No image</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex-1 flex justify-between">
+                  <div>
+                    <h3 className="font-semibold text-lg">{item.product.name}</h3>
+                    <p className="text-gray-600 mt-1">Quantity: {item.quantity}</p>
+                  </div>
+
+                  <div className="text-right">
+                    <p className="text-xl font-bold">
+                      ${(item.product.cost * item.quantity).toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+          );
+        })}
+      </div>
+
+      <div className="mt-8 pt-4 border-t-2">
+        <div className="flex justify-between items-center">
+          <span className="text-xl font-bold">Total:</span>
+          <span className="text-2xl font-bold">${subTotal}</span>
         </div>
-      )}
+      </div>
     </div>
   );
 };
