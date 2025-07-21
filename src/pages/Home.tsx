@@ -53,10 +53,12 @@ const Home: React.FC = () => {
             <div key={category._id} className="mx-4 my-6">
               <h2 className="text-2xl font-bold text-gray-800 mb-4">
                 {category.name}
-              </h2>
+              </h2>{" "}
               <div className="flex flex-wrap gap-4">
                 {products.map((product) => {
-                  if (product.category_id !== category._id) {
+                  if (
+                    !product.categories.some((cat) => cat._id === category._id)
+                  ) {
                     return null;
                   }
                   const productImages = product.image_id

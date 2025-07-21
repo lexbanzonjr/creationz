@@ -19,8 +19,7 @@ interface RowData {
 }
 
 const ProductPage: React.FC = () => {
-  const { products, addProduct, deleteProduct, updateProduct, categories } =
-    useStore();
+  const { products, addProduct, deleteProduct, updateProduct } = useStore();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | undefined>(
@@ -82,12 +81,12 @@ const ProductPage: React.FC = () => {
         flex: 1,
         cellRenderer: (params: ICellRendererParams<RowData>) => {
           const currentProduct = params.data?.product!;
-          const category = categories.find(
-            (cat) => cat._id === currentProduct.category_id
-          );
+          const categoryNames =
+            currentProduct.categories?.map((cat) => cat.name).join(", ") ||
+            "No Categories";
           return (
             <div className="w-full h-full flex items-center">
-              <div className="p-1">{category?.name || "No Category"}</div>
+              <div className="p-1">{categoryNames}</div>
             </div>
           );
         },
@@ -136,7 +135,7 @@ const ProductPage: React.FC = () => {
         },
       },
     ],
-    [deleteProduct, categories]
+    [deleteProduct]
   );
 
   const handleAddRow = () => {

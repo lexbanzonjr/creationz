@@ -25,7 +25,7 @@ export const blankProduct: Product = {
   name: "",
   description: "",
   image_id: [],
-  category_id: "",
+  categories: [],
 };
 
 export const blankType: Type = {

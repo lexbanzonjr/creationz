@@ -38,7 +38,7 @@ export interface Product {
   name: string;
   description: string;
   image_id: string[];
-  category_id?: string | null;
+  categories: Category[];
 }
 
 export interface Type {

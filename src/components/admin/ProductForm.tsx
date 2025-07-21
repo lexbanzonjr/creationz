@@ -3,9 +3,8 @@ import TextInput from "../TextInput";
 import GreenButton from "../GreenButton";
 import RedButton from "../RedButton";
 import CurrencyInput from "../CurrencyInput";
-import Dropdown from "../Dropdown";
 import ImageListEditor, { ImageListEditorHandle } from "../ImageListEditor";
-import { Product, Binary } from "../../types/global";
+import { Product, Binary, Category } from "../../types/global";
 import useStore from "../../hooks/useAdminStore";
 import { useAuthStore } from "../../hooks/useAuthStore";
 
@@ -27,7 +26,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [cost, setCost] = useState("0.00");
-  const [categoryId, setCategoryId] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
   const [images, setImages] = useState<Binary[]>([]);
 
   const [hasChanges, setHasChanges] = useState(false);
@@ -47,11 +46,10 @@ const ProductForm: React.FC<ProductFormProps> = ({
     if (isOpen) {
       setIsLoading(true);
 
-      // Populate form based on mode
-      setName(product ? product.name : "");
+      // Populate form based on mode      setName(product ? product.name : "");
       setDescription(product ? product.description : "");
       setCost(product ? String(product.cost) : "0.00");
-      setCategoryId(product ? product.category_id || "" : "");
+      setSelectedCategories(product ? product.categories : []);
       setHasChanges(false);
 
       if (product) {
@@ -96,12 +94,19 @@ const ProductForm: React.FC<ProductFormProps> = ({
   const handleCancel = () => {
     onClose();
   };
-
-  const handleCategoryChange = (value: string) => {
-    setCategoryId(value);
+  const handleCategoryToggle = (category: Category) => {
+    const isSelected = selectedCategories.some(
+      (cat) => cat._id === category._id
+    );
+    if (isSelected) {
+      setSelectedCategories(
+        selectedCategories.filter((cat) => cat._id !== category._id)
+      );
+    } else {
+      setSelectedCategories([...selectedCategories, category]);
+    }
     setHasChanges(true);
   };
-
   const handleConfirm = async () => {
     if (name.trim() && (isEditing ? hasChanges : true)) {
       // Create the product object
@@ -109,7 +114,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
         name: name.trim(),
         description: description.trim(),
         cost: Number(cost),
-        category_id: categoryId || null,
+        categories: selectedCategories,
         image_id: [],
       };
 
@@ -200,17 +205,46 @@ const ProductForm: React.FC<ProductFormProps> = ({
               ref={nameInputRef}
             />
 
-            <Dropdown
-              items={categories.map((category) => ({
-                key: category._id,
-                value: category._id,
-                text: category.name,
-              }))}
-              label="Category"
-              name="category"
-              value={categoryId}
-              onValueChange={handleCategoryChange}
-            />
+            <div>
+              <label className="block mr-4 font-bold text-[#34495e] mb-2">
+                Categories
+              </label>
+              <div className="border border-gray-300 rounded-md p-3 max-h-40 overflow-y-auto">
+                {categories.map((category) => {
+                  const isSelected = selectedCategories.some(
+                    (cat) => cat._id === category._id
+                  );
+                  return (
+                    <div
+                      key={category._id}
+                      className={`flex items-center p-2 rounded cursor-pointer hover:bg-gray-100 ${
+                        isSelected ? "bg-blue-100 border border-blue-300" : ""
+                      }`}
+                      onClick={() => handleCategoryToggle(category)}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => handleCategoryToggle(category)}
+                        className="mr-3"
+                      />
+                      <span
+                        className={
+                          isSelected ? "font-semibold text-blue-700" : ""
+                        }
+                      >
+                        {category.name}
+                      </span>
+                    </div>
+                  );
+                })}
+                {categories.length === 0 && (
+                  <div className="text-gray-500 p-2">
+                    No categories available
+                  </div>
+                )}
+              </div>
+            </div>
 
             <TextInput
               name="description"
