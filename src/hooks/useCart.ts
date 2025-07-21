@@ -19,7 +19,7 @@ interface DataState {
 }
 
 const useCart = create<DataState>((set) => ({
-  cart: { products: [] },
+  cart: { items: [] },
   addItem: async ({ product, quantity }: AddItemParams) => {
     addProductApi({ product, quantity });
   },

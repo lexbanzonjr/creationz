@@ -8,7 +8,7 @@ export interface Binary {
 export interface Image extends Binary {}
 
 export interface Cart {
-  products: {
+  items: {
     product: Product;
     quantity: number;
     note?: string;

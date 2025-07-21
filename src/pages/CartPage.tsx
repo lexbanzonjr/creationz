@@ -9,18 +9,21 @@ const CartPage: React.FC = () => {
   const { cart: myCart, calculateSubTotal, fetch: fetchCart } = useCart();
   const [isLoading, setIsLoading] = useState(true);
   const [images, setImages] = useState<Record<string, Image>>({});
-  const [subTotal, setSubTotal] = useState<string>("0.0");
+  const [subTotal, setSubTotal] = useState<string>("0.00");
 
   useEffect(() => {
     const fetchCartData = async () => {
       try {
         const cart = await fetchCart();
-        if (!cart?.products) return;
+        if (!cart?.items) return;
 
-        // Fetch all product images
-        const imageIds = cart.products
-          .filter((item) => item.product?.image_id)
-          .flatMap((item) => item.product.image_id);
+        const imageIds: string[] = [];
+        for (const item of cart.items) {
+          const product = item.product;
+          for (const image of product.image_id) {
+            imageIds.push(image);
+          }
+        }
 
         if (imageIds.length > 0) {
           const imageResults = await Promise.all(
@@ -87,11 +90,11 @@ const CartPage: React.FC = () => {
   return (
     <div>
       <h1>Your Cart</h1>
-      {myCart.products.length === 0 ? (
+      {myCart.items.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
         <div className="space-y-6">
-          {myCart.products.map((item, index) => (
+          {myCart.items.map((item, index) => (
             <CartItem
               key={item?.product?._id || `cart-item-${index}`}
               item={item}
