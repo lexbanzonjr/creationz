@@ -5,7 +5,7 @@ import useCart from "../hooks/useCart";
 import { getImage as getImageApi } from "../api/binaryApi";
 import ImageCarousel from "../components/ImageCarousel";
 
-const Cart: React.FC = () => {
+const CartPage: React.FC = () => {
   const { cart: myCart, calculateSubTotal, fetch: fetchCart } = useCart();
   const [isLoading, setIsLoading] = useState(true);
   const [images, setImages] = useState<Record<string, Image>>({});
@@ -111,4 +111,4 @@ const Cart: React.FC = () => {
   );
 };
 
-export default Cart;
+export default CartPage;
