@@ -59,9 +59,8 @@ const CartPage: React.FC = () => {
 
   const CartItem = ({ item, index }: { item: any; index: number }) => {
     const productImages =
-      item.product?.image_id
-        ?.map((id: string) => images[id])
-        .filter(Boolean) || [];
+      item.product?.image_id?.map((id: string) => images[id]).filter(Boolean) ||
+      [];
 
     return (
       <div
