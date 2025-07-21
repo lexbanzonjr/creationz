@@ -12,6 +12,11 @@ export const deleteProduct = async ({ product }: { product: Product }) => {
   });
 };
 
+export const getProduct = async ({ _id }: { _id: string }) => {
+  const response = await httpClient.get(`/product/${_id}`);
+  return response.data.product as Product;
+};
+
 export const getProducts = async () => {
   try {
     // API call to register the account
