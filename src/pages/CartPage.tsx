@@ -22,10 +22,10 @@ const CartPage: React.FC = () => {
         const cart = await fetchCart();
         if (!cart?.items?.length) return;
 
-        // Collect all unique image IDs
+        // Collect all unique image IDs and filter out invalid ones
         const imageIds = [
           ...new Set(cart.items.flatMap((item) => item.product.image_id)),
-        ];
+        ].filter((id) => id && id.trim() !== "");
 
         // Fetch images and subtotal in parallel
         const [imageResults, total] = await Promise.all([

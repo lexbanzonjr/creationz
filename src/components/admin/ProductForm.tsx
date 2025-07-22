@@ -56,7 +56,12 @@ const ProductForm: React.FC<ProductFormProps> = ({
         // Load existing images for editing mode
         const loadImages = async () => {
           const loadedImages: Binary[] = [];
-          for (const id of product.image_id) {
+
+          // Filter out undefined, null, or empty image IDs before making API calls
+          const validImageIds = product.image_id.filter(
+            (id) => id && id.trim() !== ""
+          );
+          for (const id of validImageIds) {
             loadedImages.push(await getBinary(id));
           }
           setImages(loadedImages);

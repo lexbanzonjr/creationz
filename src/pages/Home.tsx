@@ -29,7 +29,9 @@ const Home: React.FC = () => {
 
       // Fetch image data asynchronously
       const imagePromises = prods.flatMap((product) =>
-        product.image_id.map((id) => getImageApi({ _id: id }))
+        product.image_id
+          .filter((id) => id && id.trim() !== "")
+          .map((id) => getImageApi({ _id: id }))
       );
       const imageResults = await Promise.all(imagePromises);
       const imageMap = imageResults.reduce((acc, image) => {
