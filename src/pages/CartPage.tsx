@@ -69,7 +69,7 @@ const CartPage: React.FC = () => {
 
     const handleRemove = async () => {
       try {
-        await removeItem(item.product._id);
+        await removeItem(item._id);
         // Refresh cart data after removal
         await fetchCart();
         const total = await calculateSubTotal();

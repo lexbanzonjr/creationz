@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import {
   addProduct as addProductApi,
-  removeProduct as removeProductApi,
+  removeItem as removeProductApi,
   get as getApi,
   getSubtotal as getSubtotalApi,
 } from "../api/cartApi";
