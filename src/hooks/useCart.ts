@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import {
   addProduct as addProductApi,
-  removeItem as removeProductApi,
+  removeItem as removeItemApi,
   get as getApi,
   getSubtotal as getSubtotalApi,
 } from "../api/cartApi";
@@ -23,7 +23,7 @@ const useCart = create<DataState>((set) => ({
     addProductApi({ product, quantity });
   },
   removeItem: async (itemId: string) => {
-    await removeProductApi(itemId);
+    await removeItemApi(itemId);
   },
   calculateSubTotal: async () => {
     const data = await getSubtotalApi();
