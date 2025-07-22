@@ -4,12 +4,9 @@ import {
   get as getApi,
   getSubtotal as getSubtotalApi,
 } from "../api/cartApi";
-import { Cart, Product } from "../types/global";
+import { Cart, CartItem } from "../types/global";
 
-interface AddItemParams {
-  product: Product;
-  quantity: number;
-}
+interface AddItemParams extends CartItem {}
 
 interface DataState {
   cart: Cart;

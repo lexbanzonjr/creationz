@@ -1,10 +1,7 @@
-import { Cart, Product } from "../types/global";
+import { Cart, CartItem } from "../types/global";
 import { httpClient } from "../httpClient";
 
-export interface AddProductParams {
-  product: Product;
-  quantity: number;
-}
+export interface AddProductParams extends CartItem {}
 export const addProduct = async ({ product, quantity }: AddProductParams) => {
   const body = {
     product,

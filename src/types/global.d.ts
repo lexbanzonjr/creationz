@@ -7,12 +7,14 @@ export interface Binary {
 
 export interface Image extends Binary {}
 
+export interface CartItem {
+  product: Product;
+  quantity: number;
+  note?: string;
+}
+
 export interface Cart {
-  items: {
-    product: Product;
-    quantity: number;
-    note?: string;
-  }[];
+  items: CartItem[];
 }
 
 export interface Category {
