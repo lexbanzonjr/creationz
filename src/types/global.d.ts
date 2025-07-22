@@ -34,6 +34,14 @@ export interface Option {
   name: string;
 }
 
+export interface Order {
+  customer: User;
+  cart: Cart;
+  status: string; // e.g., "pending", "completed", "cancelled"
+  orderNumber?: string;
+  orderDate?: Date;
+}
+
 export interface Product {
   _id: string;
   cost: number;
@@ -41,6 +49,13 @@ export interface Product {
   description: string;
   image_id: string[];
   categories: Category[];
+}
+
+export interface User {
+  _id: string;
+  name: string;
+  email: string;
+  role: string; // e.g., "admin", "user"
 }
 
 export interface Type {
