@@ -11,19 +11,18 @@ interface AddItemParams extends CartItem {}
 
 interface DataState {
   cart: Cart;
+
   addItem: (item: AddItemParams) => void;
-  removeItem: (itemId: string) => Promise<void>;
   calculateSubTotal: () => Promise<string>;
   fetch: () => Promise<Cart>;
+  removeItem: (itemId: string) => Promise<void>;
 }
 
 const useCart = create<DataState>((set) => ({
   cart: { items: [] },
+
   addItem: async ({ product, quantity }: AddItemParams) => {
-    addProductApi({ product, quantity });
-  },
-  removeItem: async (itemId: string) => {
-    await removeItemApi(itemId);
+    await addProductApi({ product, quantity });
   },
   calculateSubTotal: async () => {
     const data = await getSubtotalApi();
@@ -34,6 +33,9 @@ const useCart = create<DataState>((set) => ({
     const cart = await getApi();
     set({ cart });
     return cart;
+  },
+  removeItem: async (itemId: string) => {
+    await removeItemApi(itemId);
   },
 }));
 
