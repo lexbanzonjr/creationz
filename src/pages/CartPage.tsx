@@ -3,9 +3,15 @@ import { Image } from "../types/global";
 import useCart from "../hooks/useCart";
 import { getImage as getImageApi } from "../api/binaryApi";
 import ImageCarousel from "../components/ImageCarousel";
+import RemoveButton from "../components/RemoveButton";
 
 const CartPage: React.FC = () => {
-  const { cart: myCart, calculateSubTotal, fetch: fetchCart } = useCart();
+  const {
+    cart: myCart,
+    calculateSubTotal,
+    fetch: fetchCart,
+    removeItem,
+  } = useCart();
   const [isLoading, setIsLoading] = useState(true);
   const [images, setImages] = useState<Record<string, Image>>({});
   const [subTotal, setSubTotal] = useState<string>("0.00");
@@ -56,11 +62,22 @@ const CartPage: React.FC = () => {
       </div>
     );
   }
-
   const CartItem = ({ item, index }: { item: any; index: number }) => {
     const productImages =
       item.product?.image_id?.map((id: string) => images[id]).filter(Boolean) ||
       [];
+
+    const handleRemove = async () => {
+      try {
+        await removeItem(item.product._id);
+        // Refresh cart data after removal
+        await fetchCart();
+        const total = await calculateSubTotal();
+        setSubTotal(total);
+      } catch (error) {
+        console.error("Failed to remove item:", error);
+      }
+    };
 
     return (
       <div
@@ -83,7 +100,8 @@ const CartPage: React.FC = () => {
               <h3 className="font-semibold text-lg">{item.product.name}</h3>
               <p className="text-gray-600 mt-1">Quantity: {item.quantity}</p>
             </div>
-            <div className="text-right">
+            <div className="text-right flex flex-col justify-between items-end">
+              <RemoveButton onClick={handleRemove} />
               <p className="text-xl font-bold">
                 ${(item.product.cost * item.quantity).toFixed(2)}
               </p>

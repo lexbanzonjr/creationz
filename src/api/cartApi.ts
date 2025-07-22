@@ -10,6 +10,10 @@ export const addProduct = async ({ product, quantity }: AddProductParams) => {
   await httpClient.post("/cart", body);
 };
 
+export const removeProduct = async (itemId: string) => {
+  await httpClient.delete(`/cart?item=${itemId}`);
+};
+
 export const get = async () => {
   const response = await httpClient.get("/cart");
   return response.data.cart as Cart;

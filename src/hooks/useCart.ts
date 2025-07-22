@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import {
   addProduct as addProductApi,
+  removeProduct as removeProductApi,
   get as getApi,
   getSubtotal as getSubtotalApi,
 } from "../api/cartApi";
@@ -11,6 +12,7 @@ interface AddItemParams extends CartItem {}
 interface DataState {
   cart: Cart;
   addItem: (item: AddItemParams) => void;
+  removeItem: (itemId: string) => Promise<void>;
   calculateSubTotal: () => Promise<string>;
   fetch: () => Promise<Cart>;
 }
@@ -19,6 +21,9 @@ const useCart = create<DataState>((set) => ({
   cart: { items: [] },
   addItem: async ({ product, quantity }: AddItemParams) => {
     addProductApi({ product, quantity });
+  },
+  removeItem: async (itemId: string) => {
+    await removeProductApi(itemId);
   },
   calculateSubTotal: async () => {
     const data = await getSubtotalApi();
