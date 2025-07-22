@@ -3,12 +3,9 @@ import { persist } from "zustand/middleware";
 
 import { getGuestToken } from "../api/guestApi";
 import { jwtDecode } from "jwt-decode";
+import { User } from "../types/global";
 
-interface Payload {
-  email: string;
-  name: string;
-  roles: string[];
-}
+interface Payload extends User {}
 
 interface LoginParams {
   token: string;
@@ -28,7 +25,7 @@ interface AuthState {
   initialize: () => Promise<void>;
 }
 
-const blankPayload = {
+const blankPayload: Payload = {
   email: "",
   name: "",
   roles: [],

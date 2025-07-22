@@ -52,10 +52,10 @@ export interface Product {
 }
 
 export interface User {
-  _id: string;
+  _id?: string;
   name: string;
   email: string;
-  role: string; // e.g., "admin", "user"
+  roles: string[];
 }
 
 export interface Type {
