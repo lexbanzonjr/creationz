@@ -35,6 +35,7 @@ export interface Option {
 }
 
 export interface Order {
+  _id: string;
   customer: User;
   cart: Cart;
   status: string; // e.g., "pending", "completed", "cancelled"
