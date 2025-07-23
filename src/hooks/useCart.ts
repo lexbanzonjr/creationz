@@ -15,6 +15,7 @@ interface DataState {
 
   addItem: (item: AddItemParams) => void;
   calculateSubTotal: () => Promise<string>;
+  clearCart: () => void;
   createOrder: (order: Order) => Promise<Order>;
   fetch: () => Promise<Cart>;
   removeItem: (itemId: string) => Promise<void>;
@@ -30,6 +31,9 @@ const useCart = create<DataState>((set) => ({
     const data = await getSubtotalApi();
     if (!data || !data.subTotal) return "0.00";
     return data.subTotal.toFixed(2);
+  },
+  clearCart: () => {
+    set({ cart: { items: [] } });
   },
   createOrder: async (order: Order) => {
     const createdOrder = await createOrderApi({ order });
