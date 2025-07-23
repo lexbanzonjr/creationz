@@ -1,9 +1,11 @@
 import { httpClient } from "../httpClient";
-import { Order } from "../types/global";
+import { Cart, Order } from "../types/global";
 
 export const createOrder = async ({ order }: { order: Order }) => {
   const response = await httpClient.post("/order", order);
-  return response.data.order as Order;
+
+  // A new cart is returned after creating a new order
+  return response.data.order as { order: Order; newCart: Cart };
 };
 
 export const getOrder = async ({ _id }: { _id: string }) => {

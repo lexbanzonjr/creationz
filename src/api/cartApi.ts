@@ -7,11 +7,13 @@ export const addProduct = async ({ product, quantity }: AddProductParams) => {
     product,
     quantity,
   };
-  await httpClient.post("/cart", body);
+  const response = await httpClient.post("/cart", body);
+  return response.data.cart as Cart;
 };
 
 export const removeItem = async (item_Id: string) => {
-  await httpClient.delete(`/cart?item_id=${item_Id}`);
+  const response = await httpClient.delete(`/cart?item_id=${item_Id}`);
+  return response.data.cart as Cart;
 };
 
 export const get = async () => {

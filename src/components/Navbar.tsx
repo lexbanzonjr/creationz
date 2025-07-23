@@ -2,17 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../hooks/useAuthStore";
-import useCart from "../hooks/useCart";
 import styles from "./Navbar.module.css";
 
 const Navbar: React.FC = () => {
   const { isAuthenticated, payload, logout } = useAuthStore();
-  const { clearCart } = useCart();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
-    clearCart();
     navigate("/login"); // Redirect to the login page
   };
 

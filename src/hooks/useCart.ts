@@ -11,41 +11,34 @@ import { createOrder as createOrderApi } from "./../api/orderApi";
 interface AddItemParams extends CartItem {}
 
 interface DataState {
-  cart: Cart;
-
-  addItem: (item: AddItemParams) => void;
+  addItem: (item: AddItemParams) => Promise<Cart>;
   calculateSubTotal: () => Promise<string>;
-  clearCart: () => void;
   createOrder: (order: Order) => Promise<Order>;
   fetch: () => Promise<Cart>;
-  removeItem: (itemId: string) => Promise<void>;
+  removeItem: (itemId: string) => Promise<Cart>;
 }
 
-const useCart = create<DataState>((set) => ({
-  cart: { items: [] },
-
+const useCart = create<DataState>(() => ({
   addItem: async ({ product, quantity }: AddItemParams) => {
-    await addProductApi({ product, quantity });
+    const cart = await addProductApi({ product, quantity });
+    return cart;
   },
   calculateSubTotal: async () => {
     const data = await getSubtotalApi();
     if (!data || !data.subTotal) return "0.00";
     return data.subTotal.toFixed(2);
   },
-  clearCart: () => {
-    set({ cart: { items: [] } });
-  },
   createOrder: async (order: Order) => {
-    const createdOrder = await createOrderApi({ order });
+    const { order: createdOrder } = await createOrderApi({ order });
     return createdOrder;
   },
   fetch: async () => {
     const cart = await getApi();
-    set({ cart });
     return cart;
   },
   removeItem: async (itemId: string) => {
-    await removeItemApi(itemId);
+    const cart = await removeItemApi(itemId);
+    return cart;
   },
 }));
 

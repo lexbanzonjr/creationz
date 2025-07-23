@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Image, Order } from "../types/global";
+import { Cart, CartItem, Image, Order } from "../types/global";
 import useCart from "../hooks/useCart";
 import { getImage as getImageApi } from "../api/binaryApi";
 import ImageCarousel from "../components/ImageCarousel";
@@ -10,12 +10,12 @@ import GreenButton from "../components/GreenButton";
 const CartPage: React.FC = () => {
   const navigate = useNavigate();
   const {
-    cart: myCart,
     calculateSubTotal,
     fetch: fetchCart,
     removeItem,
     createOrder,
   } = useCart();
+  const [cart, setCart] = useState<Cart>({ items: [] });
   const [isLoading, setIsLoading] = useState(true);
   const [isOrdering, setIsOrdering] = useState(false);
   const [images, setImages] = useState<Record<string, Image>>({});
@@ -25,6 +25,7 @@ const CartPage: React.FC = () => {
     const fetchCartData = async () => {
       try {
         const cart = await fetchCart();
+        setCart(cart);
         if (!cart?.items?.length) return; // Collect all unique image IDs and filter out invalid ones
         const imageIds = Array.from(
           new Set(cart.items.flatMap((item) => item.product.image_id))
@@ -75,7 +76,7 @@ const CartPage: React.FC = () => {
     return <div className="p-4">Loading...</div>;
   }
 
-  if (!myCart.items.length) {
+  if (!cart.items || cart.items.length === 0) {
     return (
       <div className="p-4">
         <h1 className="text-2xl font-bold mb-4">Cart</h1>
@@ -83,16 +84,15 @@ const CartPage: React.FC = () => {
       </div>
     );
   }
-  const CartItem = ({ item, index }: { item: any; index: number }) => {
+  const CartItem = ({ item, index }: { item: CartItem; index: number }) => {
     const productImages =
       item.product?.image_id?.map((id: string) => images[id]).filter(Boolean) ||
       [];
 
     const handleRemove = async () => {
       try {
-        await removeItem(item._id);
-        // Refresh cart data after removal
-        await fetchCart();
+        const updatedCart = await removeItem(item._id!);
+        setCart(updatedCart);
         const total = await calculateSubTotal();
         setSubTotal(total);
       } catch (error) {
@@ -137,7 +137,7 @@ const CartPage: React.FC = () => {
     <div className="p-4 max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold mb-6">Cart</h1>
       <div className="space-y-6">
-        {myCart.items.map((item, index) => (
+        {cart.items.map((item: CartItem, index: number) => (
           <CartItem
             key={item?.product?._id || `cart-item-${index}`}
             item={item}
@@ -154,7 +154,7 @@ const CartPage: React.FC = () => {
         <div className="flex justify-end">
           <GreenButton
             onClick={handleCreateOrder}
-            disabled={isOrdering || myCart.items.length === 0}
+            disabled={isOrdering || cart.items.length === 0}
             className="px-8 py-3 text-lg"
           >
             {isOrdering ? "Processing..." : "Place Order"}
