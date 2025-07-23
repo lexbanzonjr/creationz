@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
+import OrderSummaryPage from "./pages/OrderSummaryPage";
 import Shop from "./pages/Shop";
 import SignUp from "./pages/SignUp";
 import { useAuthStore } from "./hooks/useAuthStore";
@@ -26,6 +27,7 @@ const App: React.FC = () => {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/order-summary" element={<OrderSummaryPage />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/shop" element={<Shop />} />
 

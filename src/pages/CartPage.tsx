@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Image } from "../types/global";
+import { useNavigate } from "react-router-dom";
+import { Image, Order } from "../types/global";
 import useCart from "../hooks/useCart";
 import { getImage as getImageApi } from "../api/binaryApi";
 import ImageCarousel from "../components/ImageCarousel";
 import RemoveButton from "../components/RemoveButton";
+import GreenButton from "../components/GreenButton";
 
 const CartPage: React.FC = () => {
+  const navigate = useNavigate();
   const {
     cart: myCart,
     calculateSubTotal,
     fetch: fetchCart,
     removeItem,
+    createOrder,
   } = useCart();
   const [isLoading, setIsLoading] = useState(true);
+  const [isOrdering, setIsOrdering] = useState(false);
   const [images, setImages] = useState<Record<string, Image>>({});
   const [subTotal, setSubTotal] = useState<string>("0.00");
 
@@ -20,12 +25,10 @@ const CartPage: React.FC = () => {
     const fetchCartData = async () => {
       try {
         const cart = await fetchCart();
-        if (!cart?.items?.length) return;
-
-        // Collect all unique image IDs and filter out invalid ones
-        const imageIds = [
-          ...new Set(cart.items.flatMap((item) => item.product.image_id)),
-        ].filter((id) => id && id.trim() !== "");
+        if (!cart?.items?.length) return; // Collect all unique image IDs and filter out invalid ones
+        const imageIds = Array.from(
+          new Set(cart.items.flatMap((item) => item.product.image_id))
+        ).filter((id) => id && id.trim() !== "");
 
         // Fetch images and subtotal in parallel
         const [imageResults, total] = await Promise.all([
@@ -46,9 +49,27 @@ const CartPage: React.FC = () => {
         setIsLoading(false);
       }
     };
-
     fetchCartData();
   }, [calculateSubTotal, fetchCart]);
+  const handleCreateOrder = async () => {
+    setIsOrdering(true);
+    try {
+      const orderData: Order = {
+        _id: "",
+        status: "pending",
+      };
+
+      const createdOrder = await createOrder(orderData);
+
+      // Navigate to order summary page with the order data
+      navigate("/order-summary", { state: { order: createdOrder } });
+    } catch (error) {
+      console.error("Failed to create order:", error);
+      alert("Failed to create order. Please try again.");
+    } finally {
+      setIsOrdering(false);
+    }
+  };
 
   if (isLoading) {
     return <div className="p-4">Loading...</div>;
@@ -115,7 +136,6 @@ const CartPage: React.FC = () => {
   return (
     <div className="p-4 max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold mb-6">Cart</h1>
-
       <div className="space-y-6">
         {myCart.items.map((item, index) => (
           <CartItem
@@ -124,12 +144,21 @@ const CartPage: React.FC = () => {
             index={index}
           />
         ))}
-      </div>
-
+      </div>{" "}
       <div className="mt-8 pt-4 border-t-2">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center mb-6">
           <span className="text-xl font-bold">Total:</span>
           <span className="text-2xl font-bold">${subTotal}</span>
+        </div>
+
+        <div className="flex justify-end">
+          <GreenButton
+            onClick={handleCreateOrder}
+            disabled={isOrdering || myCart.items.length === 0}
+            className="px-8 py-3 text-lg"
+          >
+            {isOrdering ? "Processing..." : "Place Order"}
+          </GreenButton>
         </div>
       </div>
     </div>
