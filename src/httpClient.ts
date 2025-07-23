@@ -12,11 +12,6 @@ interface QueuedRequest {
   reject: (reason: any) => void;
 }
 
-// Type for refresh token response
-interface RefreshTokenResponse {
-  token: string;
-}
-
 // Type for extended request config with retry flag
 interface ExtendedAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
@@ -97,23 +92,9 @@ httpClient.interceptors.response.use(
 
       // Set flag to indicate refresh is in progress
       isRefreshing = true;
-
       try {
-        // Attempt to refresh the access token with token in the authentication header
-        const token = useAuthStore.getState().token;
-        if (!token) {
-          throw new Error("No access token found");
-        }
-        const res: AxiosResponse<RefreshTokenResponse> = await axios.get(
-          "https://localhost:5000/auth/refresh-token",
-          {
-            headers: originalRequest.headers,
-          }
-        );
-        const newToken: string = res.data.token;
-
-        // Store the new access token in auth store
-        useAuthStore.getState().setToken(newToken);
+        // Attempt to refresh the access token using the auth store
+        const newToken = await useAuthStore.getState().refreshToken();
 
         // Process all queued requests with the new token
         processQueue(null, newToken);
@@ -122,9 +103,8 @@ httpClient.interceptors.response.use(
         originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
         return httpClient(originalRequest);
       } catch (err) {
-        // If refresh fails, reject all queued requests and logout
+        // If refresh fails, reject all queued requests
         processQueue(err, null);
-        useAuthStore.getState().logout();
         return Promise.reject(err);
       } finally {
         // Reset the refreshing flag

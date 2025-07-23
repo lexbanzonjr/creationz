@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import axios, { AxiosResponse } from "axios";
 
 import { getGuestToken } from "../api/guestApi";
 import { jwtDecode } from "jwt-decode";
@@ -8,6 +9,10 @@ import { User } from "../types/global";
 interface Payload extends User {}
 
 interface LoginParams {
+  token: string;
+}
+
+interface RefreshTokenResponse {
   token: string;
 }
 
@@ -23,6 +28,7 @@ interface AuthState {
   setToken: (token: string) => void;
   setAuthenticated: (auth: boolean) => void;
   initialize: () => Promise<void>;
+  refreshToken: () => Promise<string>;
 }
 
 const blankPayload: Payload = {
@@ -72,6 +78,35 @@ export const useAuthStore = create<AuthState>()(
             payload,
             isAuthenticated: false,
           });
+        }
+      },
+      refreshToken: async (): Promise<string> => {
+        const state = get();
+
+        if (!state.token) {
+          throw new Error("No access token found");
+        }
+
+        try {
+          const res: AxiosResponse<RefreshTokenResponse> = await axios.get(
+            "https://localhost:5000/auth/refresh-token",
+            {
+              headers: {
+                Authorization: `Bearer ${state.token}`,
+              },
+            }
+          );
+
+          const newToken: string = res.data.token;
+
+          // Update the token in the store
+          set({ token: newToken });
+
+          return newToken;
+        } catch (error) {
+          // If refresh fails, logout the user
+          get().logout();
+          throw error;
         }
       },
     }),
