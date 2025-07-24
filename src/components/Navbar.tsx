@@ -32,9 +32,6 @@ const Navbar: React.FC = () => {
         {isAuthenticated ? (
           <>
             <li>
-              <Link to="/dashboard">Dashboard</Link>
-            </li>
-            <li>
               <Link to="/orders">Orders</Link>
             </li>
             <li>
