@@ -43,7 +43,7 @@ const processQueue = (error: any, token: string | null = null): void => {
 
 // Create axios instance with base configuration
 export const httpClient = axios.create({
-  baseURL: "https://localhost:5000",
+  baseURL: process.env.API_BASE_URL,
 });
 
 // Request interceptor: Add authorization header to outgoing requests
